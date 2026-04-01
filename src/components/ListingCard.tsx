@@ -56,7 +56,7 @@ export default function ListingCard({ listing, index }: Props) {
               <span className="category-badge">
                 {listing.category}
               </span>
-              <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+              <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-secondary)' }}>
                 <span className={`condition-dot ${conditionClass}`} />
                 {listing.condition}
               </span>
@@ -73,8 +73,8 @@ export default function ListingCard({ listing, index }: Props) {
             {/* Price + Location */}
             <div className="mt-auto flex flex-wrap items-center justify-between gap-2.5">
               <span className="price-tag text-lg">${listing.price}</span>
-              <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-                <MapPin size={10} />
+              <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-muted)' }}>
+                <MapPin size={12} />
                 {listing.seller.campus}
               </span>
             </div>

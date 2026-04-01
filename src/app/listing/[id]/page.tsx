@@ -72,7 +72,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           {/* Category + Condition */}
           <div className="flex items-center gap-3 mb-4">
             <span className="category-badge">{listing.category}</span>
-            <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-secondary)' }}>
+            <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-secondary)' }}>
               <span className={`condition-dot ${conditionClass}`} />
               {listing.condition}
             </span>
@@ -120,8 +120,8 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                     {listing.seller.rating}
                   </span>
                   <span className="text-xs" style={{ color: 'var(--text-muted)' }}>•</span>
-                  <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
-                    <MapPin size={10} />
+                  <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-muted)' }}>
+                    <MapPin size={12} />
                     {listing.seller.campus}
                   </span>
                 </div>
@@ -131,15 +131,15 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 mt-8">
-            <button className="pill-btn flex-1">
-              <MessageCircle size={16} className="mr-2" />
-              Message Seller
+            <button className="pill-btn ui-icon-label flex-1 min-h-10">
+              <MessageCircle size={16} />
+              <span>Message Seller</span>
             </button>
-            <button className="pill-btn pill-btn-outline">
-              <Heart size={16} className="mr-2" />
-              Save
+            <button className="pill-btn pill-btn-outline ui-icon-label min-h-10">
+              <Heart size={16} />
+              <span>Save</span>
             </button>
-            <button className="pill-btn pill-btn-outline">
+            <button className="pill-btn pill-btn-outline ui-icon-label min-h-10">
               <Share2 size={16} />
             </button>
           </div>

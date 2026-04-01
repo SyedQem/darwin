@@ -46,9 +46,9 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <Link href="/browse" className="pill-btn">
-              <Search size={16} className="mr-2" />
-              Browse Listings
+            <Link href="/browse" className="pill-btn ui-icon-label min-h-10">
+              <Search size={16} />
+              <span>Browse Listings</span>
             </Link>
             <Link href="/sell" className="pill-btn pill-btn-outline">
               Start Selling
