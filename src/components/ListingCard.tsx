@@ -20,12 +20,13 @@ export default function ListingCard({ listing, index }: Props) {
 
   return (
     <motion.div
+      className="h-full"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
     >
-      <Link href={`/listing/${listing.id}`} className="block">
-        <div className="vspr-card">
+      <Link href={`/listing/${listing.id}`} className="block h-full">
+        <div className="vspr-card h-full flex flex-col">
           {/* Image */}
           <div className="listing-image-container">
             <div
@@ -49,9 +50,9 @@ export default function ListingCard({ listing, index }: Props) {
           </div>
 
           {/* Info */}
-          <div className="p-5">
+          <div className="flex h-full flex-col gap-3 p-6">
             {/* Category + Condition */}
-            <div className="flex flex-wrap items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="category-badge">
                 {listing.category}
               </span>
@@ -62,12 +63,15 @@ export default function ListingCard({ listing, index }: Props) {
             </div>
 
             {/* Title */}
-            <h3 className="text-sm font-medium leading-snug mb-2 line-clamp-2" style={{ minHeight: '2.5rem' }}>
+            <h3
+              className="text-sm font-medium leading-relaxed line-clamp-2 max-[420px]:line-clamp-3"
+              style={{ minBlockSize: '2.9rem' }}
+            >
               {listing.title}
             </h3>
 
             {/* Price + Location */}
-            <div className="flex items-center justify-between mt-3">
+            <div className="mt-auto flex flex-wrap items-center justify-between gap-2.5">
               <span className="price-tag text-lg">${listing.price}</span>
               <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-muted)' }}>
                 <MapPin size={10} />

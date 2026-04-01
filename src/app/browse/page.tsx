@@ -109,7 +109,7 @@ function BrowseContent() {
         </p>
 
         {filtered.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {filtered.map((listing, i) => (
               <ListingCard key={listing.id} listing={listing} index={i} />
             ))}
