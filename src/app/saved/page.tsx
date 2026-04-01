@@ -25,7 +25,7 @@ export default function SavedPage() {
       </motion.div>
 
       {savedListings.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div className="mt-12 grid grid-cols-1 auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {savedListings.map((listing, i) => (
             <ListingCard key={listing.id} listing={listing} index={i} />
           ))}
