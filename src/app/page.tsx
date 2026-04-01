@@ -9,7 +9,7 @@ export default function HomePage() {
   return (
     <>
       {/* ── HERO ── */}
-      <section className="min-h-screen flex flex-col justify-center relative">
+      <section className="min-h-screen flex flex-col justify-center relative py-24 md:py-28">
         <div className="container-vspr">
           <motion.div
             initial={{ opacity: 0 }}
@@ -57,7 +57,7 @@ export default function HomePage() {
 
           {/* Scroll indicator */}
           <motion.div
-            className="scroll-indicator absolute bottom-12 left-6 md:left-12"
+            className="scroll-indicator absolute bottom-8 left-6 md:left-12 hidden sm:flex"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.8 }}

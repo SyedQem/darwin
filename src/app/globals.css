@@ -29,7 +29,11 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-primary);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(46, 110, 210, 0.16) 0%, transparent 32%),
+    radial-gradient(circle at 88% 10%, rgba(120, 74, 255, 0.12) 0%, transparent 28%),
+    radial-gradient(circle at 50% 78%, rgba(25, 108, 161, 0.13) 0%, transparent 34%),
+    linear-gradient(180deg, #020202 0%, #05070b 55%, #020202 100%);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -48,6 +52,18 @@ body::before {
     radial-gradient(ellipse at 100% 0%, var(--vignette-color) 0%, transparent 50%),
     radial-gradient(ellipse at 0% 100%, var(--vignette-color) 0%, transparent 50%),
     radial-gradient(ellipse at 100% 100%, var(--vignette-color) 0%, transparent 50%);
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.16;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 0.6px, transparent 0.6px);
+  background-size: 3px 3px;
+  mix-blend-mode: soft-light;
 }
 
 /* ── Section numbering labels ── */
@@ -161,7 +177,38 @@ body::before {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.13;
+}
+
+.matrix-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.32;
+  animation: glow-drift 18s ease-in-out infinite;
+}
+
+.matrix-glow--1 {
+  width: clamp(280px, 35vw, 520px);
+  height: clamp(280px, 35vw, 520px);
+  left: -12%;
+  top: 8%;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 72%);
+}
+
+.matrix-glow--2 {
+  width: clamp(260px, 32vw, 500px);
+  height: clamp(260px, 32vw, 500px);
+  right: -10%;
+  bottom: 6%;
+  background: radial-gradient(circle, rgba(129, 88, 255, 0.46) 0%, transparent 72%);
+  animation-delay: -6s;
+}
+
+@keyframes glow-drift {
+  0%,
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(0, -12px, 0) scale(1.05); }
 }
 .matrix-char {
   position: absolute;
@@ -261,7 +308,7 @@ body::before {
 .mobile-menu {
   position: fixed;
   inset: 0;
-  z-index: 99;
+  z-index: 120;
   background: var(--bg-primary);
   display: flex;
   flex-direction: column;
@@ -281,6 +328,8 @@ body::before {
 .footer-vspr {
   border-top: 1px solid var(--border-color);
   padding: 3rem 0 2rem;
+  position: relative;
+  z-index: 10;
 }
 
 /* ── Scrollbar ── */
