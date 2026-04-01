@@ -170,6 +170,20 @@ body::after {
   background: transparent;
 }
 
+/* ── Reusable icon + label spacing ── */
+.ui-icon-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ui-icon-label-tight {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
 /* ── Matrix background ── */
 .matrix-bg {
   position: fixed;
