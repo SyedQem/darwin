@@ -51,7 +51,7 @@ export default function ListingCard({ listing, index }: Props) {
           {/* Info */}
           <div className="p-5">
             {/* Category + Condition */}
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="category-badge">
                 {listing.category}
               </span>
