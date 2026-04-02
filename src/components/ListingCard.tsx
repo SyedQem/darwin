@@ -31,7 +31,7 @@ export default function ListingCard({ listing, index }: Props) {
           <div className="listing-image-container">
             <div
               className="w-full h-full flex items-center justify-center"
-              style={{ background: 'var(--bg-elevated)', color: 'var(--text-secondary)' }}
+              style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))', color: 'var(--text-primary)' }}
             >
               {categoryIcons[listing.category]}
             </div>
