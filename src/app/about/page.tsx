@@ -4,19 +4,23 @@ import { Shield, Users, Zap, Globe } from 'lucide-react';
 
 export default function AboutPage() {
   return (
-    <div className="container-vspr py-12 md:py-20">
+    <div className="container-vspr page-shell">
       {/* Hero */}
       <motion.div
+        className="page-hero"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <span className="section-label">ABOUT</span>
-        <h1 className="text-4xl md:text-7xl font-bold mt-4 leading-tight">
+        <h1 className="section-title max-w-5xl">
           Built for students.
           <br />
-          <span style={{ color: 'var(--text-muted)' }}>By students.</span>
+          <span className="text-muted">By students.</span>
         </h1>
+        <p className="page-hero-copy">
+          Darwin brings campus buying and selling into one calm, image-first marketplace built for trust, speed, and everyday student life.
+        </p>
       </motion.div>
 
       <div className="divider my-16" />
@@ -24,8 +28,8 @@ export default function AboutPage() {
       {/* Mission */}
       <section>
         <span className="section-label">01 // MISSION</span>
-        <div className="max-w-3xl mt-6">
-          <p className="text-lg leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+        <div className="surface-panel mt-6 max-w-4xl p-6 md:p-8">
+          <p className="page-hero-copy max-w-3xl">
             Darwin was created to solve a simple problem: campus marketplaces are fragmented
             across WhatsApp groups, Facebook posts, and bulletin boards. We built one unified
             platform where students can find, buy, and sell everything they need — fast,
@@ -74,11 +78,11 @@ export default function AboutPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <div style={{ color: 'var(--text-muted)' }} className="mb-4">
+              <div className="text-muted mb-4">
                 {item.icon}
               </div>
               <h3 className="text-xl font-bold">{item.title}</h3>
-              <p className="text-sm mt-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              <p className="text-secondary mt-2 text-sm leading-relaxed">
                 {item.desc}
               </p>
             </motion.div>
@@ -91,7 +95,7 @@ export default function AboutPage() {
       {/* Numbers */}
       <section>
         <span className="section-label">03 // BY THE NUMBERS</span>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-8">
+        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
             { num: '2.4K+', label: 'Active Students' },
             { num: '8.1K', label: 'Items Listed' },
@@ -100,13 +104,14 @@ export default function AboutPage() {
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
+              className="surface-inset p-5 md:p-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
               <p className="text-4xl md:text-5xl font-bold">{stat.num}</p>
-              <p className="text-xs mt-2 uppercase tracking-widest" style={{ color: 'var(--text-muted)' }}>
+              <p className="text-muted mt-2 text-xs uppercase tracking-widest">
                 {stat.label}
               </p>
             </motion.div>

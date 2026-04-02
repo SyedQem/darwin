@@ -3,7 +3,8 @@ import { use } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Heart, MapPin, Star, MessageCircle, Share2 } from 'lucide-react';
 import Link from 'next/link';
-import { sampleListings, categoryIcons } from '@/lib/data';
+import { sampleListings } from '@/lib/data';
+import Image from 'next/image';
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -11,9 +12,9 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
 
   if (!listing) {
     return (
-      <div className="container-vspr py-24 text-center">
+      <div className="container-vspr page-shell text-center">
         <h1 className="text-4xl font-bold">Not found</h1>
-        <p className="mt-4" style={{ color: 'var(--text-secondary)' }}>This listing doesn&apos;t exist.</p>
+        <p className="text-secondary mt-4">This listing doesn&apos;t exist.</p>
         <Link href="/browse" className="pill-btn mt-8 inline-flex">
           Back to Browse
         </Link>
@@ -30,7 +31,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
         : 'condition-fair';
 
   return (
-    <div className="container-vspr py-8 md:py-16">
+    <div className="container-vspr page-shell">
       {/* Back */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -39,14 +40,13 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
       >
         <Link
           href="/browse"
-          className="inline-flex items-center gap-2 text-sm mb-8"
-          style={{ color: 'var(--text-secondary)' }}
+          className="text-secondary mb-8 inline-flex items-center gap-2 text-sm"
         >
           <ArrowLeft size={16} /> Back to listings
         </Link>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2">
         {/* Image */}
         <motion.div
           className="vspr-card"
@@ -54,11 +54,18 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div
-            className="w-full flex items-center justify-center text-8xl"
-            style={{ aspectRatio: '1', background: 'var(--bg-elevated)' }}
-          >
-            {categoryIcons[listing.category]}
+          <div className="media-frame aspect-square rounded-none border-0">
+            <Image
+              src={listing.image}
+              alt={listing.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover"
+            />
+            <div className="media-overlay-lg flex items-end justify-between gap-4 px-6 py-6">
+              <span className="category-badge">{listing.category}</span>
+              <span className="listing-image-label">Ready for pickup</span>
+            </div>
           </div>
         </motion.div>
 
@@ -72,7 +79,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           {/* Category + Condition */}
           <div className="flex items-center gap-3 mb-4">
             <span className="category-badge">{listing.category}</span>
-            <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-secondary)' }}>
+            <span className="ui-icon-label-tight text-secondary text-xs">
               <span className={`condition-dot ${conditionClass}`} />
               {listing.condition}
             </span>
@@ -94,7 +101,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           {/* Description */}
           <div>
             <span className="section-label block mb-2">Description</span>
-            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+            <p className="text-secondary text-sm leading-relaxed">
               {listing.description}
             </p>
           </div>
@@ -106,21 +113,18 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
           <div>
             <span className="section-label block mb-3">Seller</span>
             <div className="flex items-center gap-4">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold"
-                style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border-color)' }}
-              >
+              <div className="detail-avatar">
                 {listing.seller.name.charAt(0)}
               </div>
               <div>
                 <p className="font-medium text-sm">{listing.seller.name}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <Star size={12} fill="#facc15" color="#facc15" />
-                  <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  <span className="text-secondary text-xs">
                     {listing.seller.rating}
                   </span>
-                  <span className="text-xs" style={{ color: 'var(--text-muted)' }}>•</span>
-                  <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-muted)' }}>
+                  <span className="text-muted text-xs">•</span>
+                  <span className="ui-icon-label-tight text-muted text-xs">
                     <MapPin size={12} />
                     {listing.seller.campus}
                   </span>

@@ -1,0 +1,18 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="900" rx="48" fill="#090A0F"/>
+<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
+<circle cx="956" cy="202" r="140" fill="#7DD2FF" fill-opacity="0.18"/>
+<circle cx="238" cy="694" r="160" fill="#6C7DFF" fill-opacity="0.16"/>
+<rect x="214" y="118" width="772" height="604" rx="36" fill="#0E131D" stroke="rgba(255,255,255,0.12)"/>
+<path d="M410 222H788L748 590H622L600 456L578 590H450L410 222Z" fill="#252A37"/>
+<path d="M478 222H722L698 404H502L478 222Z" fill="#343C4C"/>
+<rect x="484" y="278" width="232" height="18" rx="9" fill="#7FD2FF"/>
+<text x="164" y="792" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">Nike Dri-FIT Shorts</text>
+<text x="164" y="838" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Brand new • Size M • Dorm workout staple</text>
+<defs>
+<linearGradient id="paint0_linear" x1="86" y1="84" x2="1088" y2="812" gradientUnits="userSpaceOnUse">
+<stop stop-color="#111722"/>
+<stop offset="1" stop-color="#070A10"/>
+</linearGradient>
+</defs>
+</svg>

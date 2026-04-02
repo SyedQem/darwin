@@ -9,17 +9,18 @@ export default function SavedPage() {
   const savedListings = sampleListings.filter((l) => l.saved);
 
   return (
-    <div className="container-vspr py-12 md:py-20">
+    <div className="container-vspr page-shell">
       <motion.div
+        className="page-hero"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <span className="section-label">SAVED</span>
-        <h1 className="text-4xl md:text-6xl font-bold mt-4">
+        <h1 className="section-title-md max-w-3xl">
           Your saved items.
         </h1>
-        <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+        <p className="page-hero-copy max-w-2xl">
           Items you&apos;ve bookmarked for later.
         </p>
       </motion.div>
@@ -32,16 +33,16 @@ export default function SavedPage() {
         </div>
       ) : (
         <motion.div
-          className="py-24 text-center"
+          className="empty-state mt-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <Heart size={48} style={{ color: 'var(--text-muted)', margin: '0 auto' }} />
-          <p className="text-xl font-medium mt-6" style={{ color: 'var(--text-secondary)' }}>
+          <Heart size={48} className="text-muted mx-auto" />
+          <p className="text-secondary mt-6 text-xl font-medium">
             Nothing saved yet.
           </p>
-          <p className="text-sm mt-2" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-muted mt-2 text-sm">
             Browse listings and tap the heart icon to save.
           </p>
           <Link href="/browse" className="pill-btn mt-8 inline-flex">

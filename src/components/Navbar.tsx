@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Heart, PlusCircle, Menu, X, User } from 'lucide-react';
+import { Heart, PlusCircle, Menu, X, ArrowRight } from 'lucide-react';
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -12,23 +12,23 @@ export default function Navbar() {
       <nav className="navbar-vspr">
         <div className="container-vspr flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="text-xl font-bold tracking-tight" style={{ letterSpacing: '-0.02em' }}>
-            darwin<span style={{ color: 'var(--text-muted)' }}>.</span>
+          <Link href="/" className="logo-wordmark">
+            darwin<span className="logo-dot">.</span>
           </Link>
 
           {/* Desktop links */}
           <div className="hidden md:flex items-center gap-8">
-            <Link href="/browse" className="text-sm text-gray-400 hover:text-white transition-colors tracking-wide uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.15em' }}>
+            <Link href="/browse" className="nav-link">
               Browse
             </Link>
-            <Link href="/sell" className="text-sm text-gray-400 hover:text-white transition-colors tracking-wide uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.15em' }}>
+            <Link href="/sell" className="nav-link">
               Sell
             </Link>
-            <Link href="/saved" className="text-gray-400 hover:text-white transition-colors">
+            <Link href="/saved" className="text-secondary transition-colors hover:text-white">
               <Heart size={18} />
             </Link>
-            <Link href="/sell" className="pill-btn" style={{ padding: '0.5rem 1.5rem', fontSize: '0.7rem' }}>
-              <PlusCircle size={14} className="mr-2" />
+            <Link href="/sell" className="pill-btn pill-btn-sm">
+              <PlusCircle size={14} />
               List Item
             </Link>
           </div>
@@ -54,10 +54,43 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <Link href="/" onClick={() => setMobileOpen(false)}>Home</Link>
-            <Link href="/browse" onClick={() => setMobileOpen(false)}>Browse</Link>
-            <Link href="/sell" onClick={() => setMobileOpen(false)}>Sell</Link>
-            <Link href="/saved" onClick={() => setMobileOpen(false)}>Saved</Link>
+            <div className="mobile-menu-panel">
+              <div className="mobile-menu-sheet">
+                <div className="flex items-center justify-between">
+                  <Link href="/" className="logo-wordmark" onClick={() => setMobileOpen(false)}>
+                    darwin<span className="logo-dot">.</span>
+                  </Link>
+                  <button
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white"
+                    onClick={() => setMobileOpen(false)}
+                    aria-label="Close menu"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+
+                <div className="mobile-menu-links">
+                  {[
+                    { href: '/', label: 'Home' },
+                    { href: '/browse', label: 'Browse' },
+                    { href: '/sell', label: 'Sell' },
+                    { href: '/saved', label: 'Saved' },
+                  ].map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="mobile-menu-link"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span>{link.label}</span>
+                      <ArrowRight size={18} />
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="mobile-menu-meta">Campus marketplace</div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

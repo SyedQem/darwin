@@ -1,0 +1,29 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="900" rx="48" fill="#0B0D12"/>
+<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
+<circle cx="978" cy="204" r="170" fill="#8BC5FF" fill-opacity="0.18"/>
+<circle cx="266" cy="164" r="124" fill="#FF8478" fill-opacity="0.18"/>
+<rect x="130" y="164" width="512" height="572" rx="28" fill="#121722" stroke="rgba(255,255,255,0.12)"/>
+<rect x="176" y="210" width="420" height="22" rx="11" fill="#A8D5FF" fill-opacity="0.92"/>
+<rect x="176" y="254" width="266" height="12" rx="6" fill="#B7C1CF" fill-opacity="0.75"/>
+<rect x="176" y="334" width="420" height="242" rx="20" fill="url(#paint1_linear)"/>
+<path d="M337 406C367 363.333 443.5 338.4 509.5 404C575.5 469.6 564.333 547.333 540 580H256C248 536.5 257 448.667 337 406Z" fill="#E8F4FF"/>
+<rect x="176" y="610" width="198" height="14" rx="7" fill="#C9D2DE" fill-opacity="0.72"/>
+<rect x="176" y="638" width="260" height="14" rx="7" fill="#C9D2DE" fill-opacity="0.45"/>
+<rect x="730" y="240" width="296" height="404" rx="28" fill="#101521" stroke="rgba(255,255,255,0.12)"/>
+<text x="780" y="334" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="700">Organic Chemistry</text>
+<text x="780" y="384" fill="#9AA8BA" font-family="Inter, Arial, sans-serif" font-size="22">8th Edition</text>
+<text x="780" y="430" fill="#9AA8BA" font-family="Inter, Arial, sans-serif" font-size="22">Annotated copy</text>
+<text x="780" y="528" fill="#A8D5FF" font-family="Inter, Arial, sans-serif" font-size="68" font-weight="700">$45</text>
+<text x="780" y="594" fill="#F4F7FB" fill-opacity="0.84" font-family="Inter, Arial, sans-serif" font-size="22">Main Campus</text>
+<defs>
+<linearGradient id="paint0_linear" x1="122" y1="112" x2="1062" y2="794" gradientUnits="userSpaceOnUse">
+<stop stop-color="#121724"/>
+<stop offset="1" stop-color="#090C13"/>
+</linearGradient>
+<linearGradient id="paint1_linear" x1="220" y1="334" x2="612" y2="576" gradientUnits="userSpaceOnUse">
+<stop stop-color="#78B6FF"/>
+<stop offset="1" stop-color="#305E94"/>
+</linearGradient>
+</defs>
+</svg>

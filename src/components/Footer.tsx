@@ -6,17 +6,25 @@ export default function Footer() {
     <footer className="footer-vspr">
       <div className="container-vspr">
         {/* CTA */}
-        <div className="py-16 md:py-24">
-          <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-            Have something to sell?
-          </h2>
-          <p className="text-3xl md:text-5xl font-bold leading-tight" style={{ color: 'var(--text-muted)' }}>
-            List it now.
-          </p>
-          <div className="mt-8">
-            <Link href="/sell" className="pill-btn">
-              Start Listing
-            </Link>
+        <div className="py-8 md:py-12">
+          <div className="footer-cta-panel">
+            <div className="footer-grid">
+              <div>
+                <span className="section-label">05 // START SELLING</span>
+                <h2 className="section-title-md mt-4 max-w-2xl">
+                  Ready to turn unused stuff into cash?
+                </h2>
+                <p className="text-secondary mt-5 max-w-xl text-base leading-8">
+                  Publish a listing in minutes and keep every exchange inside the campus community.
+                </p>
+              </div>
+
+              <div className="md:justify-self-end">
+                <Link href="/sell" className="pill-btn">
+                  Start Listing
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -24,35 +32,34 @@ export default function Footer() {
         <div className="divider" />
 
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pt-6 pb-4">
+        <div className="flex flex-col gap-8 pt-6 pb-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="font-bold text-sm tracking-tight">
-              darwin<span style={{ color: 'var(--text-muted)' }}>.</span>
+            <p className="text-base font-bold tracking-tight">
+              darwin<span className="logo-dot">.</span>
             </p>
-            <p className="text-xs mt-1" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-muted mt-2 max-w-sm text-sm leading-6">
               Campus marketplace for students.
             </p>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col items-start gap-4 md:items-end">
+            <div className="flex flex-wrap gap-4 md:justify-end">
+              {['Browse', 'Sell', 'Saved', 'About'].map((link) => (
+                <Link
+                  key={link}
+                  href={`/${link.toLowerCase()}`}
+                  className="nav-link"
+                >
+                  {link}
+                </Link>
+              ))}
+            </div>
+
             <span className="vesper-badge">
               <span className="vesper-dot" />
               Built by Vesper Labs
             </span>
           </div>
-        </div>
-
-        <div className="flex flex-wrap gap-4 mt-4">
-          {['Browse', 'Sell', 'Saved', 'About'].map((link) => (
-            <Link
-              key={link}
-              href={`/${link.toLowerCase()}`}
-              className="text-xs uppercase tracking-widest"
-              style={{ color: 'var(--text-secondary)', fontSize: '0.65rem', letterSpacing: '0.15em' }}
-            >
-              {link}
-            </Link>
-          ))}
         </div>
       </div>
     </footer>

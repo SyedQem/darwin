@@ -1,0 +1,21 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="900" rx="48" fill="#090A0F"/>
+<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
+<circle cx="916" cy="182" r="154" fill="#FF8D76" fill-opacity="0.18"/>
+<circle cx="298" cy="702" r="174" fill="#7BC7FF" fill-opacity="0.16"/>
+<g transform="rotate(-8 382 212)">
+<rect x="382" y="212" width="468" height="256" rx="28" fill="#141B26" stroke="rgba(255,255,255,0.12)"/>
+<path d="M520 212V468" stroke="#2E3A4B" stroke-width="4" stroke-dasharray="14 12"/>
+<text x="438" y="324" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700">CAMPUS FEST</text>
+<text x="438" y="374" fill="#A8D5FF" font-family="JetBrains Mono, monospace" font-size="24">GENERAL ADMISSION</text>
+<text x="566" y="360" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="800">x2</text>
+</g>
+<text x="146" y="790" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">Campus Fest Tickets</text>
+<text x="146" y="836" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Two GA passes for the spring music festival</text>
+<defs>
+<linearGradient id="paint0_linear" x1="88" y1="86" x2="1088" y2="814" gradientUnits="userSpaceOnUse">
+<stop stop-color="#121823"/>
+<stop offset="1" stop-color="#070A10"/>
+</linearGradient>
+</defs>
+</svg>

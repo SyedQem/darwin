@@ -1,0 +1,20 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="900" rx="48" fill="#090A10"/>
+<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
+<circle cx="954" cy="214" r="150" fill="#7FC8FF" fill-opacity="0.16"/>
+<circle cx="246" cy="680" r="172" fill="#B97CFF" fill-opacity="0.18"/>
+<rect x="188" y="154" width="824" height="540" rx="40" fill="#101722" stroke="rgba(255,255,255,0.12)"/>
+<g transform="rotate(-8 250 490)">
+<rect x="250" y="490" width="668" height="126" rx="63" fill="#8355C8"/>
+<rect x="264" y="504" width="640" height="98" rx="49" fill="#9D6EF0"/>
+<circle cx="864" cy="553" r="36" fill="#7F58C5"/>
+</g>
+<text x="150" y="792" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">Extra-Thick Yoga Mat</text>
+<text x="150" y="838" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Comfortable 6mm mat for dorm workouts</text>
+<defs>
+<linearGradient id="paint0_linear" x1="86" y1="84" x2="1090" y2="812" gradientUnits="userSpaceOnUse">
+<stop stop-color="#121822"/>
+<stop offset="1" stop-color="#070A11"/>
+</linearGradient>
+</defs>
+</svg>

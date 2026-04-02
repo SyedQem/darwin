@@ -1,8 +1,9 @@
 'use client';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, Camera, DollarSign, Tag, ChevronRight } from 'lucide-react';
+import { Camera, ChevronRight } from 'lucide-react';
 import { categories, Category } from '@/lib/data';
+import Link from 'next/link';
 
 type Condition = 'New' | 'Like New' | 'Good' | 'Fair';
 
@@ -21,23 +22,23 @@ export default function SellPage() {
 
   if (submitted) {
     return (
-      <div className="container-vspr py-24 md:py-32 text-center">
+      <div className="container-vspr page-shell text-center">
         <motion.div
+          className="surface-panel mx-auto max-w-2xl p-8 md:p-12"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
           <div className="text-6xl mb-6">✓</div>
           <h1 className="text-4xl md:text-5xl font-bold">Listed.</h1>
-          <p className="mt-4 text-lg" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-secondary mt-4 text-lg">
             Your item is now live on Darwin.
           </p>
-          <div className="flex justify-center gap-4 mt-8">
-            <a href="/browse" className="pill-btn" style={{ fontSize: '0.75rem', padding: '0.75rem 2rem' }}>View Listings</a>
+          <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
+            <Link href="/browse" className="pill-btn pill-btn-sm">View Listings</Link>
             <button
               onClick={() => setSubmitted(false)}
-              className="pill-btn pill-btn-outline"
-              style={{ fontSize: '0.75rem', padding: '0.75rem 2rem' }}
+              className="pill-btn pill-btn-outline pill-btn-sm"
             >
               List Another
             </button>
@@ -48,36 +49,36 @@ export default function SellPage() {
   }
 
   return (
-    <div className="container-vspr py-12 md:py-20">
+    <div className="container-vspr page-shell">
       <motion.div
+        className="page-hero"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
         <span className="section-label">SELL</span>
-        <h1 className="text-4xl md:text-6xl font-bold mt-4">
+        <h1 className="section-title-md max-w-3xl">
           List your item.
         </h1>
-        <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+        <p className="page-hero-copy max-w-2xl">
           Fill in the details below and your listing will go live instantly.
         </p>
       </motion.div>
 
-      <form onSubmit={handleSubmit} className="mt-12 max-w-2xl space-y-6">
+      <form onSubmit={handleSubmit} className="surface-panel mt-12 max-w-3xl space-y-6 p-5 md:p-8">
         {/* Photo upload area */}
         <motion.div
-          className="vspr-card p-8 flex flex-col items-center justify-center gap-3 cursor-pointer"
-          style={{ minHeight: '200px' }}
+          className="surface-inset flex min-h-[200px] cursor-pointer flex-col items-center justify-center gap-3 p-8"
           whileHover={{ borderColor: 'var(--border-hover)' }}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Camera size={32} style={{ color: 'var(--text-muted)' }} />
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+          <Camera size={32} className="text-muted" />
+          <p className="text-secondary text-sm">
             Click to upload photos
           </p>
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-muted text-xs">
             PNG, JPG up to 10MB
           </p>
         </motion.div>
@@ -110,10 +111,9 @@ export default function SellPage() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Describe condition, usage, defects, etc."
-            className="vspr-input"
+            className="vspr-input resize-y"
             rows={4}
             required
-            style={{ resize: 'vertical' }}
           />
         </motion.div>
 
@@ -166,12 +166,11 @@ export default function SellPage() {
                 key={c}
                 type="button"
                 onClick={() => setCondition(c)}
-                className={`px-5 py-2.5 rounded-full text-xs uppercase tracking-widest border transition-all ${
+                className={`filter-chip ${
                   condition === c
-                    ? 'bg-white text-black border-white'
-                    : 'bg-transparent border-gray-800 text-gray-400 hover:border-gray-600'
+                    ? 'filter-chip-active'
+                    : ''
                 }`}
-                style={{ fontSize: '0.65rem' }}
               >
                 {c}
               </button>

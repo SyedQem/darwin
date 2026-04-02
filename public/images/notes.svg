@@ -1,0 +1,23 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="900" rx="48" fill="#090A0F"/>
+<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
+<circle cx="904" cy="214" r="152" fill="#76C9FF" fill-opacity="0.16"/>
+<circle cx="274" cy="710" r="168" fill="#8490FF" fill-opacity="0.18"/>
+<rect x="232" y="118" width="736" height="610" rx="34" fill="#F7FAFD"/>
+<rect x="306" y="206" width="350" height="18" rx="9" fill="#9ACFFF"/>
+<rect x="306" y="250" width="566" height="10" rx="5" fill="#C6D3E0"/>
+<rect x="306" y="292" width="530" height="10" rx="5" fill="#C6D3E0"/>
+<rect x="306" y="334" width="410" height="10" rx="5" fill="#C6D3E0"/>
+<path d="M306 426C382.5 354 442 390.5 482 430.5C522 470.5 546.5 531 546.5 531H306V426Z" fill="#A6D6FF"/>
+<path d="M572 426L646.5 531H838C838 531 804 443 724 426H572Z" fill="#6F8CFF"/>
+<rect x="306" y="590" width="224" height="12" rx="6" fill="#C6D3E0"/>
+<rect x="306" y="620" width="330" height="12" rx="6" fill="#C6D3E0"/>
+<text x="144" y="792" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">CS201 Study Notes</text>
+<text x="144" y="836" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Lecture summaries, diagrams, and code examples</text>
+<defs>
+<linearGradient id="paint0_linear" x1="90" y1="84" x2="1092" y2="814" gradientUnits="userSpaceOnUse">
+<stop stop-color="#111924"/>
+<stop offset="1" stop-color="#070A10"/>
+</linearGradient>
+</defs>
+</svg>
