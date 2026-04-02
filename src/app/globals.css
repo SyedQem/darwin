@@ -96,19 +96,53 @@ body {
 
 /* ── Card styles ── */
 .vspr-card {
+  position: relative;
   background: rgba(13, 13, 13, 0.4);
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 36%),
+    linear-gradient(145deg, rgba(26, 58, 92, 0.08) 0%, rgba(13, 13, 13, 0) 55%);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: border-color 240ms ease, transform 240ms ease, box-shadow 260ms ease;
+}
+.vspr-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.42) 50%, transparent 100%);
+  opacity: 0.7;
+  pointer-events: none;
 }
 .vspr-card:hover {
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2), 0 0 20px rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(125, 183, 255, 0.22),
+    0 0 36px rgba(78, 138, 230, 0.14);
+}
+
+.vspr-card-featured {
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(78, 138, 230, 0.16) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 36%),
+    linear-gradient(145deg, rgba(26, 58, 92, 0.08) 0%, rgba(13, 13, 13, 0) 55%);
+}
+.vspr-card-featured:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 24px 56px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(132, 190, 255, 0.28),
+    0 0 46px rgba(95, 162, 255, 0.2);
 }
 
 /* ── Listing card image ── */
@@ -123,10 +157,23 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 260ms ease;
 }
 .vspr-card:hover .listing-image-container img {
   transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vspr-card,
+  .listing-image-container img {
+    transition: none;
+  }
+
+  .vspr-card:hover,
+  .vspr-card-featured:hover,
+  .vspr-card:hover .listing-image-container img {
+    transform: none;
+  }
 }
 
 /* ── Price tag ── */

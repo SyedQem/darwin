@@ -91,7 +91,7 @@ export default function HomePage() {
               >
                 <Link
                   href={`/browse?category=${encodeURIComponent(cat)}`}
-                  className="vspr-card p-6 flex flex-col items-start gap-3 hover:border-gray-700 transition-all block"
+                  className="vspr-card vspr-card-featured p-6 flex flex-col items-start gap-3 block"
                 >
                   <div className="mb-2" style={{ color: 'var(--text-primary)' }}>
                     {categoryIcons[cat]}
