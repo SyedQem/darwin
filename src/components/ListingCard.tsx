@@ -26,7 +26,7 @@ export default function ListingCard({ listing, index }: Props) {
       transition={{ duration: 0.5, delay: index * 0.08 }}
     >
       <Link href={`/listing/${listing.id}`} className="block h-full">
-        <div className="vspr-card h-full flex flex-col">
+        <div className="vspr-card vspr-card-featured h-full flex flex-col">
           {/* Image */}
           <div className="listing-image-container">
             <div

@@ -68,7 +68,7 @@ export default function AboutPage() {
           ].map((item, i) => (
             <motion.div
               key={item.title}
-              className="vspr-card p-8"
+              className="vspr-card vspr-card-featured p-8"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
