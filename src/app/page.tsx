@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ArrowDown, ArrowRight, Search } from 'lucide-react';
 import { categories, categoryIcons, sampleListings } from '@/lib/data';
 import ListingCard from '@/components/ListingCard';
+import Reviews from '@/components/Reviews';
 
 export default function HomePage() {
   return (
@@ -30,7 +31,7 @@ export default function HomePage() {
               >
                 Buy what you need.
                 <br />
-                <span className="text-primary">Sell what you don&apos;t.</span>
+                <span className="text-white">Sell what you don&apos;t.</span>
               </motion.h1>
 
               <motion.p
@@ -158,6 +159,10 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="mt-40 mb-32 md:mt-48 md:mb-40">
+        <Reviews />
+      </section>
+
       {/* ── DIVIDER ── */}
       <div className="container-vspr"><div className="divider" /></div>
 
@@ -182,7 +187,7 @@ export default function HomePage() {
                   href={`/browse?category=${encodeURIComponent(cat)}`}
                   className="vspr-card vspr-card-featured block h-full p-6 md:p-7"
                 >
-                  <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/4 text-white">
+                  <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-white">
                     {categoryIcons[cat]}
                   </div>
                   <div className="flex items-end justify-between gap-4">
