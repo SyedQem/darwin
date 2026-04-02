@@ -50,7 +50,7 @@ export default function ListingCard({ listing, index }: Props) {
           </div>
 
           {/* Info */}
-          <div className="flex h-full flex-col gap-3 p-6">
+          <div className="flex h-full flex-col gap-4 p-7 max-[420px]:p-6">
             {/* Category + Condition */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="category-badge">
@@ -64,14 +64,14 @@ export default function ListingCard({ listing, index }: Props) {
 
             {/* Title */}
             <h3
-              className="text-sm font-medium leading-relaxed line-clamp-2 max-[420px]:line-clamp-3"
-              style={{ minBlockSize: '2.9rem' }}
+              className="text-sm font-medium leading-7 line-clamp-2 max-[420px]:line-clamp-3"
+              style={{ minBlockSize: '3.15rem' }}
             >
               {listing.title}
             </h3>
 
             {/* Price + Location */}
-            <div className="mt-auto flex flex-wrap items-center justify-between gap-2.5">
+            <div className="mt-auto flex flex-wrap items-start justify-between gap-x-4 gap-y-2.5 max-[360px]:flex-col max-[360px]:items-start">
               <span className="price-tag text-lg">${listing.price}</span>
               <span className="ui-icon-label-tight text-xs" style={{ color: 'var(--text-muted)' }}>
                 <MapPin size={12} />
