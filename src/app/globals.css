@@ -940,6 +940,22 @@ textarea {
   border-radius: 50%;
   background: #4ade80;
 }
+/* ── Star rating accent ── */
+.accent-text {
+  color: #facc15;
+}
+
+/* ── Select option dark-mode fix ── */
+.vspr-select option {
+  background: #111111;
+  color: var(--text-primary);
+}
+
+/* ── Text selection ── */
+::selection {
+  background: rgba(126, 174, 248, 0.3);
+  color: var(--text-primary);
+}
 
 @media (max-width: 767px) {
   .section-title {

@@ -3,7 +3,7 @@ import { use } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Heart, MapPin, Star, MessageCircle, Share2 } from 'lucide-react';
 import Link from 'next/link';
-import { sampleListings } from '@/lib/data';
+import { sampleListings, getConditionClass } from '@/lib/data';
 import Image from 'next/image';
 
 export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -22,13 +22,7 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
     );
   }
 
-  const conditionClass = listing.condition === 'New'
-    ? 'condition-new'
-    : listing.condition === 'Like New'
-      ? 'condition-like-new'
-      : listing.condition === 'Good'
-        ? 'condition-good'
-        : 'condition-fair';
+  const conditionClass = getConditionClass(listing.condition);
 
   return (
     <div className="container-vspr page-shell">

@@ -2,10 +2,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, ChevronRight } from 'lucide-react';
-import { categories, Category } from '@/lib/data';
+import { categories, Category, Condition } from '@/lib/data';
 import Link from 'next/link';
-
-type Condition = 'New' | 'Like New' | 'Good' | 'Fair';
 
 export default function SellPage() {
   const [title, setTitle] = useState('');

@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="footer-cta-panel">
             <div className="footer-grid">
               <div>
-                <span className="section-label">05 // START SELLING</span>
+                <span className="section-label">START SELLING</span>
                 <h2 className="section-title-md mt-4 max-w-2xl">
                   Ready to turn unused stuff into cash?
                 </h2>

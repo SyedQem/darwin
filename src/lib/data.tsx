@@ -1,5 +1,8 @@
 // ── Darwin Marketplace Data Layer ──
 
+import React from 'react';
+import { Book, Laptop, Armchair, Shirt, Ticket, NotebookText, Dumbbell, Package } from 'lucide-react';
+
 export type Category =
   | 'Textbooks'
   | 'Electronics'
@@ -30,6 +33,15 @@ export interface Listing {
   saved: boolean;
 }
 
+export function getConditionClass(condition: Condition): string {
+  switch (condition) {
+    case 'New': return 'condition-new';
+    case 'Like New': return 'condition-like-new';
+    case 'Good': return 'condition-good';
+    case 'Fair': return 'condition-fair';
+  }
+}
+
 export const categories: Category[] = [
   'Textbooks',
   'Electronics',
@@ -40,9 +52,6 @@ export const categories: Category[] = [
   'Sports & Fitness',
   'Other',
 ];
-
-import React from 'react';
-import { Book, Laptop, Armchair, Shirt, Ticket, NotebookText, Dumbbell, Package } from 'lucide-react';
 
 export const categoryIcons: Record<Category, React.ReactNode> = {
   'Textbooks': <Book size={48} strokeWidth={1.5} />,
@@ -153,5 +162,3 @@ export const sampleListings: Listing[] = [
     saved: false,
   },
 ];
-
-export const matrixChars = 'アイウエオカキクケコサシスセソΩΔΣΦΨβγδθλπABCDEF0123456789'.split('');

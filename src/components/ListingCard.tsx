@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Heart, MapPin } from 'lucide-react';
-import { Listing } from '@/lib/data';
+import { Listing, getConditionClass } from '@/lib/data';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -11,13 +11,7 @@ interface Props {
 }
 
 export default function ListingCard({ listing, index }: Props) {
-  const conditionClass = listing.condition === 'New'
-    ? 'condition-new'
-    : listing.condition === 'Like New'
-      ? 'condition-like-new'
-      : listing.condition === 'Good'
-        ? 'condition-good'
-        : 'condition-fair';
+  const conditionClass = getConditionClass(listing.condition);
 
   return (
     <motion.div
