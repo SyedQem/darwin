@@ -175,7 +175,7 @@ export default function HomePage() {
             </h2>
           </AnimatedSection>
 
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((cat, i) => (
               <motion.div
                 key={cat}
@@ -209,7 +209,7 @@ export default function HomePage() {
       <section className="home-how-it-works py-20 md:py-28">
         <div className="container-vspr">
           <AnimatedSection>
-            <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="mb-14 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="section-label">FEATURED</span>
                 <h2 className="section-title-md mt-4">Recently Listed</h2>
@@ -241,7 +241,7 @@ export default function HomePage() {
             </h2>
           </AnimatedSection>
 
-          <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+          <div className="mt-16 grid grid-cols-1 gap-5 md:grid-cols-3">
             {[
               { num: '01', title: 'List', desc: 'Snap a photo, set a price, and publish your listing in seconds.' },
               { num: '02', title: 'Connect', desc: 'Chat with buyers and sellers directly. All within your campus.' },
