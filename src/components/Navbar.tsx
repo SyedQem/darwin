@@ -9,7 +9,12 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar-vspr">
+      <motion.nav 
+        className="navbar-vspr"
+        initial={{ y: '-100%' }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="container-vspr flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="logo-wordmark">
@@ -42,7 +47,7 @@ export default function Navbar() {
             {mobileOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Mobile menu */}
       <AnimatePresence>

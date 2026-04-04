@@ -1,56 +1,67 @@
+'use client';
+import { motion } from 'framer-motion';
+import AnimatedSection from '@/components/AnimatedSection';
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+const reviews = [
+  {
+    name: 'Sarah',
+    school: 'McMaster',
+    text: 'Sold my textbooks in 2 hours. Way easier than Facebook.',
+    stars: 5,
+  },
+  {
+    name: 'Ahmed',
+    school: 'UofT',
+    text: 'Finally something built for students. Clean and actually useful.',
+    stars: 5,
+  },
+  {
+    name: 'Maya',
+    school: 'Waterloo',
+    text: 'Feels safe and fast. I use it every week now.',
+    stars: 5,
+  },
+];
+
 export default function Reviews() {
-  const reviews = [
-    {
-      name: "Sarah",
-      school: "McMaster",
-      text: "Sold my textbooks in 2 hours. Way easier than Facebook.",
-    },
-    {
-      name: "Ahmed",
-      school: "UofT",
-      text: "Finally something built for students. Clean and actually useful.",
-    },
-    {
-      name: "Maya",
-      school: "Waterloo",
-      text: "Feels safe and fast. I use it every week now.",
-    },
-  ];
-
   return (
-    <section className="container-vspr flex w-full flex-col items-center py-4">
-      <div className="mx-auto flex w-full max-w-6xl flex-col items-center">
-        <div className="max-w-3xl text-center">
-          <p className="section-label">
-          TRUSTED BY STUDENTS
-          </p>
-
+    <div className="container-vspr">
+      <AnimatedSection>
+        <div className="max-w-3xl">
+          <span className="section-label">TRUSTED BY STUDENTS</span>
           <h2 className="section-title-md mt-4">
-            4.9 / 5 from 1,200+ student exchanges
+            4.9 / 5 from 1,200+ exchanges
           </h2>
-          <p className="section-copy mx-auto mt-6 max-w-2xl">
-            Fast listings and cleaner profiles matter, but trust is what makes students actually use the marketplace every week.
+          <p className="section-copy mt-5">
+            Trust is what makes students use the marketplace every week.
           </p>
         </div>
+      </AnimatedSection>
 
-        <div className="mt-16 grid w-full max-w-6xl gap-6 md:grid-cols-3">
-          {reviews.map((review, i) => (
-            <div
-              key={i}
-              className="surface-panel rounded-[24px] p-7 transition-transform duration-200 hover:-translate-y-0.5 hover:border-white/14"
-            >
-              <div className="accent-text text-sm tracking-[0.18em]">★★★★★</div>
-              <p className="mt-5 text-base leading-8 text-white/84">“{review.text}”</p>
-
-              <div className="mt-6 border-t border-white/8 pt-4 text-sm text-white/64">
-                <span className="font-medium text-white/88">{review.name}</span>
-                {' · '}
-                {review.school}
-              </div>
+      <div className="mt-12 grid gap-4 md:grid-cols-3">
+        {reviews.map((review, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ delay: i * 0.08, duration: 0.5, ease }}
+            className="vspr-card home-review-card p-7 md:p-8 transition-all duration-200 hover:border-[rgba(255,255,255,0.14)]"
+          >
+            <div className="accent-text text-sm tracking-widest">★★★★★</div>
+            <p className="mt-5 text-base leading-8 text-white/90">
+              &ldquo;{review.text}&rdquo;
+            </p>
+            <div className="mt-6 flex items-center gap-2 border-t border-white/6 pt-5 text-sm">
+              <span className="font-medium">{review.name}</span>
+              <span className="text-muted">·</span>
+              <span className="text-muted">{review.school}</span>
             </div>
-          ))}
-        </div>
+          </motion.div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 export default function Footer() {
   return (
@@ -7,7 +8,13 @@ export default function Footer() {
       <div className="container-vspr">
         {/* CTA */}
         <div className="py-8 md:py-12">
-          <div className="footer-cta-panel">
+          <motion.div 
+            className="footer-cta-panel"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="footer-grid">
               <div>
                 <span className="section-label">START SELLING</span>
@@ -20,12 +27,22 @@ export default function Footer() {
               </div>
 
               <div className="md:justify-self-end">
-                <Link href="/sell" className="pill-btn">
-                  Start Listing
+                <Link href="/sell" className="pill-btn group relative overflow-hidden">
+                  <span className="relative z-10 flex items-center gap-2">
+                    Start Listing
+                    <motion.span 
+                      className="inline-block"
+                      initial={{ x: 0 }}
+                      whileHover={{ x: 4 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    >
+                      →
+                    </motion.span>
+                  </span>
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Divider */}
