@@ -232,7 +232,7 @@ export default function HomePage() {
       <div className="container-vspr"><div className="divider" /></div>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="py-20 md:py-28">
+      <section className="py-20 md:py-28 pb-28 md:pb-36">
         <div className="container-vspr">
           <AnimatedSection>
             <span className="section-label">HOW IT WORKS</span>
