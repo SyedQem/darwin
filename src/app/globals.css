@@ -359,6 +359,59 @@ button, input, select, textarea { font: inherit; }
   min-height: 13.5rem;
   border-radius: 20px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.015) 100%),
+    var(--bg-card);
+  transition:
+    border-color 240ms ease,
+    transform 240ms ease,
+    box-shadow 240ms ease,
+    background 240ms ease;
+}
+
+.home-category-card:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-6px) scale(1.015);
+  box-shadow:
+    0 22px 54px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 0 28px rgba(167, 139, 250, 0.14);
+  background:
+    linear-gradient(180deg, rgba(167, 139, 250, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
+    var(--bg-card);
+}
+
+.home-how-it-works {
+  padding-bottom: 6rem;
+}
+
+@media (min-width: 768px) {
+  .home-how-it-works {
+    padding-bottom: 8rem;
+  }
+}
+
+.home-process-card {
+  text-align: center;
+  align-items: center;
+}
+
+.home-process-card h3 {
+  width: 100%;
+}
+
+.home-process-card p {
+  max-width: 20rem;
+}
+
+.home-section-tail {
+  height: clamp(4.5rem, 8vw, 7rem);
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(12, 12, 14, 0.72) 100%);
+}
+
+.browse-results-grid {
+  align-items: stretch;
 }
 
 .home-cta-row {

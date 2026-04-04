@@ -7,7 +7,6 @@ import { Search, Compass, Sparkles, ArrowUpRight } from 'lucide-react';
 import { sampleListings, categories, Category } from '@/lib/data';
 import ListingCard from '@/components/ListingCard';
 import PageTransition from '@/components/PageTransition';
-import AnimatedSection from '@/components/AnimatedSection';
 
 function BrowseContent() {
   const searchParams = useSearchParams();
@@ -172,7 +171,7 @@ function BrowseContent() {
         {/* Results */}
         <div className="mt-10">
           {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 auto-rows-fr gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10">
               {filtered.map((listing, i) => (
                 <ListingCard key={listing.id} listing={listing} index={i} />
               ))}

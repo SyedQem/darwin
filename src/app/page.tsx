@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowDown, ArrowRight, Search, Star, MapPin } from 'lucide-react';
+import { ArrowDown, ArrowRight, Search, MapPin } from 'lucide-react';
 import { categories, categoryIcons, sampleListings } from '@/lib/data';
 import ListingCard from '@/components/ListingCard';
 import Reviews from '@/components/Reviews';
@@ -186,14 +186,14 @@ export default function HomePage() {
               >
                 <Link
                   href={`/browse?category=${encodeURIComponent(cat)}`}
-                  className="vspr-card vspr-card-featured home-category-card group block h-full p-6 md:p-7"
+                  className="vspr-card vspr-card-featured home-category-card group flex h-full flex-col items-center justify-center p-6 text-center md:p-7"
                 >
-                  <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/80 transition-all duration-300 group-hover:scale-110 group-hover:text-white">
+                  <div className="mb-7 flex h-14 w-14 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/80 transition-all duration-300 group-hover:scale-[1.14] group-hover:text-white">
                     {categoryIcons[cat]}
                   </div>
-                  <div className="flex items-end justify-between gap-4">
-                    <span className="text-base font-medium leading-tight">{cat}</span>
-                    <ArrowRight size={14} className="text-muted transition-transform duration-300 group-hover:translate-x-1" />
+                  <div className="flex flex-col items-center gap-3">
+                    <span className="max-w-[11rem] text-base font-medium leading-tight">{cat}</span>
+                    <ArrowRight size={14} className="text-muted transition-all duration-300 group-hover:translate-y-0.5 group-hover:text-white" />
                   </div>
                 </Link>
               </motion.div>
@@ -206,7 +206,7 @@ export default function HomePage() {
       <div className="container-vspr"><div className="divider" /></div>
 
       {/* ── FEATURED LISTINGS ── */}
-      <section className="py-20 md:py-28">
+      <section className="home-how-it-works py-20 md:py-28">
         <div className="container-vspr">
           <AnimatedSection>
             <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -253,7 +253,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ delay: i * 0.1, duration: 0.5, ease }}
-                className="vspr-card flex flex-col gap-5 p-6 md:p-7"
+                className="vspr-card home-process-card flex flex-col gap-5 p-6 md:p-7"
               >
                 <div className="flex items-center justify-between">
                   <span className="section-label">Step {step.num}</span>
@@ -268,6 +268,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <div className="home-section-tail" aria-hidden="true" />
     </div>
   );
 }
