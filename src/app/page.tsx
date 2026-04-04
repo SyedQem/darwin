@@ -18,7 +18,6 @@ export default function HomePage() {
     target: heroRef,
     offset: ['start start', 'end start'],
   });
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const phoneY = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
 
   /* Phone listings data */
@@ -28,7 +27,7 @@ export default function HomePage() {
     <div className="home-page">
       {/* ── HERO ── */}
       <section ref={heroRef} className="home-hero relative flex flex-col justify-center overflow-hidden">
-        <motion.div style={{ opacity: heroOpacity }}>
+        <div>
           <div className="container-vspr">
             <div className="home-hero-grid">
               {/* Left — Copy */}
@@ -154,7 +153,7 @@ export default function HomePage() {
               </motion.span>
             </motion.div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ── REVIEWS ── */}
