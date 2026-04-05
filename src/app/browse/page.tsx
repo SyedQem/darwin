@@ -48,11 +48,11 @@ function BrowseContent() {
 
   return (
     <PageTransition>
-      <div className="container-vspr pt-6 pb-12 md:pt-8 md:pb-20">
+      <div className="container-vspr pt-12 pb-12 md:pt-16 md:pb-20">
         <motion.section
-          className="surface-panel overflow-hidden p-5 sm:p-6 md:p-8"
-          initial={{ opacity: 0, y: 30, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+          className="surface-panel mt-2 overflow-hidden p-5 sm:mt-4 sm:p-6 md:p-8"
+          initial={{ opacity: 0, scale: 0.985 }}
+          animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)]">
