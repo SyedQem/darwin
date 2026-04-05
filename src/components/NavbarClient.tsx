@@ -40,7 +40,7 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
             </Link>
 
             {isLoggedIn ? (
-              <form action="/auth/signout" method="post">
+              <form action="/signout" method="post">
                 <button
                   type="submit"
                   className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
@@ -111,7 +111,7 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   ))}
 
                   {isLoggedIn ? (
-                    <form action="/auth/signout" method="post">
+                    <form action="/signout" method="post">
                       <button
                         type="submit"
                         className="mobile-menu-link w-full text-left"

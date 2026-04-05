@@ -2,10 +2,18 @@ import { createClient } from '@/lib/supabase/server';
 import NavbarClient from './NavbarClient';
 
 export default async function Navbar() {
-    const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
+    let isLoggedIn = false;
 
-    return <NavbarClient isLoggedIn={!!user} />;
+    try {
+        const supabase = await createClient();
+        const {
+            data: { user },
+        } = await supabase.auth.getUser();
+
+        isLoggedIn = !!user;
+    } catch {
+        isLoggedIn = false;
+    }
+
+    return <NavbarClient isLoggedIn={isLoggedIn} />;
 }
