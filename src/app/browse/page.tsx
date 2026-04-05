@@ -56,7 +56,7 @@ function BrowseContent() {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)]">
-            <div>
+            <header>
               <span className="section-label">Browse</span>
               <h1 className="section-title-md mt-4 max-w-3xl">
                 Find what you need without digging through chaos.
@@ -86,7 +86,7 @@ function BrowseContent() {
                   </motion.div>
                 ))}
               </div>
-            </div>
+            </header>
 
             <div className="vspr-card flex flex-col h-full rounded-[26px]">
               <div className="relative w-full h-[220px] sm:h-[260px] bg-elevated border-b border-white/5">
@@ -170,29 +170,31 @@ function BrowseContent() {
           </motion.section>
 
           {/* Results */}
-          <div>
-            {filtered.length > 0 ? (
-              <div className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10">
-                {filtered.map((listing, i) => (
-                  <ListingCard key={listing.id} listing={listing} index={i} />
-                ))}
-              </div>
-            ) : (
-              <motion.div
-                className="empty-state"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4 }}
-              >
-                <p className="text-secondary text-xl font-medium">
-                  No listings match your search.
-                </p>
-                <p className="text-muted mt-2 text-sm">
-                  Try different keywords or clear your filters.
-                </p>
-              </motion.div>
-            )}
-          </div>
+          {filtered.length > 0 ? (
+            <section
+              aria-label="Results"
+              className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10"
+            >
+              {filtered.map((listing, i) => (
+                <ListingCard key={listing.id} listing={listing} index={i} />
+              ))}
+            </section>
+          ) : (
+            <motion.section
+              aria-label="No results"
+              className="empty-state"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              <p className="text-secondary text-xl font-medium">
+                No listings match your search.
+              </p>
+              <p className="text-muted mt-2 text-sm">
+                Try different keywords or clear your filters.
+              </p>
+            </motion.section>
+          )}
         </div>
       </div>
     </PageTransition>
