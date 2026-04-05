@@ -9,7 +9,7 @@ export default function Navbar() {
 
   return (
     <>
-      <motion.nav 
+      <motion.nav
         className="navbar-vspr"
         initial={false}
         animate={{ y: 0 }}
@@ -32,9 +32,18 @@ export default function Navbar() {
             <Link href="/saved" className="text-secondary transition-colors hover:text-white">
               <Heart size={18} />
             </Link>
-            <Link href="/sell" className="pill-btn pill-btn-sm">
-              <PlusCircle size={14} />
+            <Link
+              href="/sell"
+              className="rounded-full bg-white px-4 py-2 text-sm font-medium text-black transition hover:opacity-90"
+            >
               List Item
+            </Link>
+
+            <Link
+              href="/login"
+              className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
+            >
+              Log in
             </Link>
           </div>
 
