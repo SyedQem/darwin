@@ -1,44 +1,118 @@
+"use client";
+import { useSearchParams } from "next/navigation";
+import { useFormStatus } from "react-dom";
+import { useMemo, useState } from "react";
 import { signIn, signUp } from "./actions";
 
+function AuthActionButton({
+  children,
+  mode,
+  formAction,
+}: {
+  children: string;
+  mode: "primary" | "outline";
+  formAction: (formData: FormData) => void | Promise<void>;
+}) {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      formAction={formAction}
+      className={`pill-btn w-full ${mode === "outline" ? "pill-btn-outline" : ""}`}
+      disabled={pending}
+      aria-disabled={pending}
+    >
+      {pending ? "Working…" : children}
+    </button>
+  );
+}
+
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const searchParams = useSearchParams();
+
+  const authMessage = useMemo(
+    () => searchParams.get("error") ?? searchParams.get("message") ?? "",
+    [searchParams],
+  );
+
+  const hasError = Boolean(searchParams.get("error"));
+
   return (
     <div className="surface-panel browse-hero-panel w-full max-w-md p-5 md:p-6">
       <div className="mb-8 space-y-3">
         <p className="section-label">Darwin</p>
         <h1 className="section-title-md max-w-none">Welcome back</h1>
-        <p className="text-sm text-[var(--text-secondary)]">
+        <p className="text-sm text-secondary">
           Sign in to buy, sell, and manage your listings.
         </p>
       </div>
 
-      <form className="space-y-4">
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          required
-          className="vspr-input"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          required
-          className="vspr-input"
-        />
+      <form className="space-y-4" noValidate>
+        <div className="auth-form-field">
+          <label htmlFor="login-email" className="auth-form-label">
+            Email address
+          </label>
+          <input
+            id="login-email"
+            name="email"
+            type="email"
+            placeholder="name@school.edu"
+            autoComplete="email"
+            required
+            className="vspr-input auth-form-input"
+          />
+          <p className="auth-form-helper text-secondary">Use your campus or marketplace email.</p>
+        </div>
 
-        <button type="submit" formAction={signIn} className="pill-btn w-full">
-          Sign in
-        </button>
+        <div className="auth-form-field">
+          <label htmlFor="login-password" className="auth-form-label">
+            Password
+          </label>
+          <div className="auth-password-wrap">
+            <input
+              id="login-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+              className="vspr-input auth-form-input auth-password-input"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((current) => !current)}
+              className="auth-password-toggle"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          <p className="auth-form-helper text-muted">At least 8 characters with a mix of letters and numbers.</p>
+        </div>
 
-        <button
-          type="submit"
-          formAction={signUp}
-          className="pill-btn pill-btn-outline w-full"
+        <p
+          className={`auth-status ${hasError ? "auth-status-error" : "auth-status-muted"}`}
+          aria-live="polite"
+          role="status"
         >
+          {authMessage || "\u00A0"}
+        </p>
+
+        <AuthActionButton mode="primary" formAction={signIn}>
+          Sign in
+        </AuthActionButton>
+
+        <AuthActionButton mode="outline" formAction={signUp}>
           Create account
-        </button>
+        </AuthActionButton>
       </form>
+
+      <div className="auth-alt-action" aria-hidden="true" />
+      <p className="auth-alt-copy text-secondary">
+        New here? <span className="auth-alt-link">Create account with the button above.</span>
+      </p>
     </div>
   );
 }
