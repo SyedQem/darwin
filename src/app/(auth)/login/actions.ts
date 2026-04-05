@@ -9,7 +9,7 @@ export async function signUp(formData: FormData): Promise<void> {
   const email = String(formData.get("email") || "");
   const password = String(formData.get("password") || "");
 
-  const { data, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
   });
@@ -18,9 +18,28 @@ export async function signUp(formData: FormData): Promise<void> {
     throw new Error(error.message);
   }
 
-  if (data.user) {
+  redirect("/login");
+}
+
+export async function signIn(formData: FormData): Promise<void> {
+  const supabase = await createClient();
+
+  const email = String(formData.get("email") || "");
+  const password = String(formData.get("password") || "");
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const user = data.user;
+  if (user) {
     const { error: profileError } = await supabase.from("profiles").upsert({
-      id: data.user.id,
+      id: user.id,
       username: email.split("@")[0],
       full_name: null,
       school: null,
@@ -32,34 +51,4 @@ export async function signUp(formData: FormData): Promise<void> {
   }
 
   redirect("/browse");
-}
-
-export async function signIn(formData: FormData): Promise<void> {
-  const supabase = await createClient();
-
-  const email = String(formData.get("email") || "");
-  const password = String(formData.get("password") || "");
-
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  redirect("/browse");
-}
-
-export async function signOut(): Promise<void> {
-  const supabase = await createClient();
-
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  redirect("/");
 }

@@ -15,9 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SmoothScroll />
         <Navbar />
-        <main className="main-content relative z-10">
-          {children}
-        </main>
+        <main className="main-content relative z-10">{children}</main>
         <Footer />
       </body>
     </html>
