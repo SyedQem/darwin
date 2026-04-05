@@ -2,13 +2,11 @@ import { signIn, signUp } from "./actions";
 
 export default function LoginPage() {
   return (
-    <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-xl">
-      <div className="mb-8">
-        <p className="mb-2 text-xs uppercase tracking-[0.25em] text-white/40">
-          Darwin
-        </p>
-        <h1 className="text-3xl font-semibold text-white">Welcome back</h1>
-        <p className="mt-2 text-sm text-white/60">
+    <div className="surface-panel browse-hero-panel w-full max-w-md p-5 md:p-6">
+      <div className="mb-8 space-y-3">
+        <p className="section-label">Darwin</p>
+        <h1 className="section-title-md max-w-none">Welcome back</h1>
+        <p className="text-sm text-[var(--text-secondary)]">
           Sign in to buy, sell, and manage your listings.
         </p>
       </div>
@@ -19,28 +17,24 @@ export default function LoginPage() {
           type="email"
           placeholder="Email"
           required
-          className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-white/30"
+          className="vspr-input"
         />
         <input
           name="password"
           type="password"
           placeholder="Password"
           required
-          className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none placeholder:text-white/30"
+          className="vspr-input"
         />
 
-        <button
-          type="submit"
-          formAction={signIn}
-          className="w-full rounded-2xl bg-white px-4 py-3 font-medium text-black transition hover:opacity-90"
-        >
+        <button type="submit" formAction={signIn} className="pill-btn w-full">
           Sign in
         </button>
 
         <button
           type="submit"
           formAction={signUp}
-          className="w-full rounded-2xl border border-white/10 px-4 py-3 font-medium text-white transition hover:bg-white/5"
+          className="pill-btn pill-btn-outline w-full"
         >
           Create account
         </button>
