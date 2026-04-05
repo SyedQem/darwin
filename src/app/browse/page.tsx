@@ -48,7 +48,7 @@ function BrowseContent() {
 
   return (
     <PageTransition>
-      <div className="container-vspr pt-14 pb-12 md:pt-20 md:pb-20">
+      <div className="container-vspr page-shell">
         <motion.section
           className="surface-panel mt-2 overflow-hidden p-5 sm:mt-4 sm:p-6 md:p-8"
           initial={{ opacity: 0, scale: 0.985 }}
@@ -202,7 +202,7 @@ function BrowseContent() {
 export default function BrowsePage() {
   return (
     <Suspense fallback={
-      <div className="container-vspr pt-6 pb-12 md:pt-8 md:pb-20">
+      <div className="container-vspr page-shell">
         <span className="section-label">BROWSE</span>
         <h1 className="section-title-md mt-4">Find what you need.</h1>
         <p className="text-muted mt-4 text-sm">Loading...</p>
