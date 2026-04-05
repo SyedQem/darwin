@@ -48,7 +48,7 @@ function BrowseContent() {
 
   return (
     <PageTransition>
-      <div className="container-vspr py-12 md:py-20">
+      <div className="container-vspr pt-16 pb-12 md:pt-24 md:pb-20">
         <motion.section
           className="surface-panel overflow-hidden p-5 sm:p-6 md:p-8"
           initial={{ opacity: 0, y: 30, scale: 0.98 }}
@@ -116,7 +116,7 @@ function BrowseContent() {
 
         {/* Search + Filters */}
         <motion.section
-          className="surface-panel mt-8 p-4 sm:p-5 md:p-6"
+          className="surface-panel mt-6 p-4 sm:p-5 md:mt-7 md:p-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15, duration: 0.6 }}
@@ -169,7 +169,7 @@ function BrowseContent() {
         </motion.section>
 
         {/* Results */}
-        <div className="mt-10">
+        <div className="mt-14 md:mt-16">
           {filtered.length > 0 ? (
             <div className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10">
               {filtered.map((listing, i) => (
@@ -200,7 +200,7 @@ function BrowseContent() {
 export default function BrowsePage() {
   return (
     <Suspense fallback={
-      <div className="container-vspr py-12 md:py-20">
+      <div className="container-vspr pt-16 pb-12 md:pt-24 md:pb-20">
         <span className="section-label">BROWSE</span>
         <h1 className="section-title-md mt-4">Find what you need.</h1>
         <p className="text-muted mt-4 text-sm">Loading...</p>
