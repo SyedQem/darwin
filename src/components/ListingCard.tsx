@@ -49,25 +49,21 @@ export default function ListingCard({ listing, index, variant = 'default' }: Pro
             </button>
           </div>
 
-          {/* Info */}
           <div className={`flex flex-1 flex-col gap-3 p-5 ${isBrowse ? 'browse-listing-info' : ''}`}>
-            {/* Condition */}
-            <div className="flex items-center gap-2">
+            <div className={`flex items-center gap-2 ${isBrowse ? 'browse-listing-meta-row' : ''}`}>
               <span className={`condition-dot ${conditionClass}`} />
               <span className="text-xs text-muted">{listing.condition}</span>
               <span className="text-muted text-xs">·</span>
               <span className="text-xs text-muted">{listing.category}</span>
             </div>
 
-            {/* Title */}
-            <h3 className={`font-semibold leading-snug tracking-tight line-clamp-2 ${isBrowse ? 'text-base' : 'text-sm'}`}>
+            <h3 className={`font-semibold leading-snug tracking-tight line-clamp-2 ${isBrowse ? 'browse-listing-title' : 'text-sm'}`}>
               {listing.title}
             </h3>
 
-            {/* Price + Location */}
-            <div className="mt-auto flex items-center justify-between gap-3 pt-2">
-              <span className="price-tag text-lg">${listing.price}</span>
-              <span className="ui-icon-label-tight text-muted text-xs">
+            <div className={`mt-auto flex items-center justify-between gap-3 pt-2 ${isBrowse ? 'browse-listing-footer' : ''}`}>
+              <span className={`price-tag ${isBrowse ? 'browse-listing-price' : 'text-lg'}`}>${listing.price}</span>
+              <span className={`ui-icon-label-tight text-muted text-xs ${isBrowse ? 'browse-listing-campus' : ''}`}>
                 <MapPin size={11} />
                 {listing.seller.campus}
               </span>
