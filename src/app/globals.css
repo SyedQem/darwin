@@ -15,6 +15,14 @@
   --border-hover: rgba(255, 255, 255, 0.16);
   --accent: #a78bfa;
   --accent-glow: rgba(167, 139, 250, 0.12);
+  --nav-height: 4rem;
+  --nav-offset: 4.75rem;
+}
+@media (min-width: 768px) {
+  :root {
+    --nav-height: 5rem;
+    --nav-offset: 5.75rem;
+  }
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -619,11 +627,18 @@ button, input, select, textarea { font: inherit; }
   top: 0;
   left: 0;
   right: 0;
+  height: var(--nav-height);
   z-index: 100;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   background: rgba(9, 9, 11, 0.8);
   border-bottom: 1px solid var(--border-color);
+}
+
+.browse-search-shell {
+  position: sticky;
+  top: var(--nav-offset);
+  z-index: 30;
 }
 
 .nav-link {

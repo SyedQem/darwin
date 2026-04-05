@@ -15,7 +15,7 @@ export default function Navbar() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="container-vspr flex items-center justify-between h-16 md:h-20">
+        <div className="container-vspr flex h-full items-center justify-between">
           {/* Logo */}
           <Link href="/" className="logo-wordmark">
             darwin<span className="logo-dot">.</span>
