@@ -114,83 +114,85 @@ function BrowseContent() {
           </div>
         </motion.section>
 
-        {/* Search + Filters */}
-        <motion.section
-          className="browse-search-shell surface-panel mt-6 p-4 sm:p-5 md:mt-7 md:p-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.6 }}
-        >
-          <div className="grid gap-5">
-            <div className="relative">
-              <Search size={18} className="text-muted absolute left-4 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Search by item, course, brand, or keyword"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="vspr-input pl-12"
-              />
-            </div>
+        <div className="browse-content-stack mt-6 md:mt-7">
+          {/* Search + Filters */}
+          <motion.section
+            className="browse-search-shell surface-panel p-4 sm:p-5 md:p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.6 }}
+          >
+            <div className="grid gap-5">
+              <div className="relative">
+                <Search size={18} className="text-muted absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search by item, course, brand, or keyword"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="vspr-input pl-12"
+                />
+              </div>
 
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-              <div className="flex flex-wrap gap-2.5">
-                {['All', ...categories].map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCat(cat as Category | 'All')}
-                    className={`filter-chip ${
-                      selectedCat === cat
-                        ? 'filter-chip-active'
-                        : ''
-                    }`}
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div className="flex flex-wrap gap-2.5">
+                  {['All', ...categories].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCat(cat as Category | 'All')}
+                      className={`filter-chip ${
+                        selectedCat === cat
+                          ? 'filter-chip-active'
+                          : ''
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <p className="text-muted text-xs uppercase tracking-[0.18em]">
+                    {filtered.length} listing{filtered.length !== 1 ? 's' : ''} found
+                  </p>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                    className="vspr-select min-w-[200px]"
                   >
-                    {cat}
-                  </button>
+                    <option value="newest">Newest First</option>
+                    <option value="price-low">Price: Low → High</option>
+                    <option value="price-high">Price: High → Low</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </motion.section>
+
+          {/* Results */}
+          <div>
+            {filtered.length > 0 ? (
+              <div className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10">
+                {filtered.map((listing, i) => (
+                  <ListingCard key={listing.id} listing={listing} index={i} />
                 ))}
               </div>
-
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <p className="text-muted text-xs uppercase tracking-[0.18em]">
-                  {filtered.length} listing{filtered.length !== 1 ? 's' : ''} found
+            ) : (
+              <motion.div
+                className="empty-state"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+              >
+                <p className="text-secondary text-xl font-medium">
+                  No listings match your search.
                 </p>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                  className="vspr-select min-w-[200px]"
-                >
-                  <option value="newest">Newest First</option>
-                  <option value="price-low">Price: Low → High</option>
-                  <option value="price-high">Price: High → Low</option>
-                </select>
-              </div>
-            </div>
+                <p className="text-muted mt-2 text-sm">
+                  Try different keywords or clear your filters.
+                </p>
+              </motion.div>
+            )}
           </div>
-        </motion.section>
-
-        {/* Results */}
-        <div className="mt-20 md:mt-24">
-          {filtered.length > 0 ? (
-            <div className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10">
-              {filtered.map((listing, i) => (
-                <ListingCard key={listing.id} listing={listing} index={i} />
-              ))}
-            </div>
-          ) : (
-            <motion.div
-              className="empty-state"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-            >
-              <p className="text-secondary text-xl font-medium">
-                No listings match your search.
-              </p>
-              <p className="text-muted mt-2 text-sm">
-                Try different keywords or clear your filters.
-              </p>
-            </motion.div>
-          )}
         </div>
       </div>
     </PageTransition>

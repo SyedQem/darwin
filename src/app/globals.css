@@ -17,11 +17,13 @@
   --accent-glow: rgba(167, 139, 250, 0.12);
   --nav-height: 4rem;
   --nav-offset: 4.75rem;
+  --browse-sticky-gap: 5rem;
 }
 @media (min-width: 768px) {
   :root {
     --nav-height: 5rem;
     --nav-offset: 5.75rem;
+    --browse-sticky-gap: 6rem;
   }
 }
 
@@ -648,6 +650,11 @@ button, input, select, textarea { font: inherit; }
   top: var(--nav-offset);
   z-index: 30;
   scroll-margin-top: calc(var(--nav-offset) + 1rem);
+}
+
+.browse-content-stack {
+  display: grid;
+  gap: var(--browse-sticky-gap);
 }
 
 .nav-link {
