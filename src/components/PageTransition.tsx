@@ -7,8 +7,8 @@ interface Props {
 }
 
 const variants = {
-  hidden: { opacity: 0, y: 16 },
-  enter: { opacity: 1, y: 0 },
+  hidden: { opacity: 0 },
+  enter: { opacity: 1 },
 };
 
 export default function PageTransition({ children }: Props) {

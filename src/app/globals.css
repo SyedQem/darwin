@@ -263,6 +263,20 @@ button, input, select, textarea { font: inherit; }
 }
 .vspr-card:hover .listing-image-container img { transform: scale(1.05); }
 
+.browse-listing-card {
+  border-radius: 22px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+}
+
+.browse-listing-image-container {
+  aspect-ratio: 5 / 4;
+}
+
+.browse-listing-info {
+  gap: 0.9rem;
+  padding: 1.25rem 1.25rem 1.35rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .vspr-card, .listing-image-container img { transition: none; }
   .vspr-card:hover, .vspr-card-featured:hover, .vspr-card:hover .listing-image-container img { transform: none; }

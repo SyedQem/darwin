@@ -10,10 +10,12 @@ const ease = [0.16, 1, 0.3, 1] as const;
 interface Props {
   listing: Listing;
   index: number;
+  variant?: 'default' | 'browse';
 }
 
-export default function ListingCard({ listing, index }: Props) {
+export default function ListingCard({ listing, index, variant = 'default' }: Props) {
   const conditionClass = getConditionClass(listing.condition);
+  const isBrowse = variant === 'browse';
 
   return (
     <motion.div
@@ -24,9 +26,9 @@ export default function ListingCard({ listing, index }: Props) {
       transition={{ duration: 0.5, delay: index * 0.07, ease }}
     >
       <Link href={`/listing/${listing.id}`} className="block h-full">
-        <div className="vspr-card vspr-card-featured h-full flex flex-col">
+        <div className={`vspr-card vspr-card-featured h-full flex flex-col ${isBrowse ? 'browse-listing-card' : ''}`}>
           {/* Image */}
-          <div className="listing-image-container">
+          <div className={`listing-image-container ${isBrowse ? 'browse-listing-image-container' : ''}`}>
             <Image
               src={listing.image}
               alt={listing.title}
@@ -48,7 +50,7 @@ export default function ListingCard({ listing, index }: Props) {
           </div>
 
           {/* Info */}
-          <div className="flex flex-1 flex-col gap-3 p-5">
+          <div className={`flex flex-1 flex-col gap-3 p-5 ${isBrowse ? 'browse-listing-info' : ''}`}>
             {/* Condition */}
             <div className="flex items-center gap-2">
               <span className={`condition-dot ${conditionClass}`} />
@@ -58,7 +60,7 @@ export default function ListingCard({ listing, index }: Props) {
             </div>
 
             {/* Title */}
-            <h3 className="text-sm font-semibold leading-snug tracking-tight line-clamp-2">
+            <h3 className={`font-semibold leading-snug tracking-tight line-clamp-2 ${isBrowse ? 'text-base' : 'text-sm'}`}>
               {listing.title}
             </h3>
 
