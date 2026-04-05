@@ -26,47 +26,55 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
           </Link>
 
           <div className="hidden md:flex items-center gap-6">
-  <Link href="/browse" className="nav-link">
-    Browse
-  </Link>
+            <Link href="/browse" className="nav-link">
+              Browse
+            </Link>
 
-  <Link href="/saved" className="text-secondary transition-colors hover:text-white">
-    <Heart size={18} />
-  </Link>
+            <Link
+              href="/saved"
+              className="text-secondary transition-colors hover:text-white"
+              aria-label="Saved items"
+            >
+              <Heart size={18} />
+            </Link>
 
-  <div className="ml-3 flex items-center gap-3">
-    <Link
-      href="/sell"
-      className="group inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-white px-5 text-sm font-semibold tracking-[-0.01em] text-black shadow-[0_10px_30px_rgba(255,255,255,0.10)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/95 hover:shadow-[0_16px_36px_rgba(255,255,255,0.16)]"
-    >
-      <span className="flex items-center gap-2">
-        List Item
-        <ArrowRight
-          size={16}
-          className="transition-transform duration-200 group-hover:translate-x-0.5"
-        />
-      </span>
-    </Link>
+            <div className="ml-3 flex items-center gap-3">
+              <Link
+                href="/sell"
+                className="group inline-flex h-[50px] min-w-[158px] cursor-pointer items-center justify-center rounded-full border border-white/12 bg-[linear-gradient(180deg,rgba(255,255,255,0.09),rgba(255,255,255,0.03))] px-7 text-[14px] font-semibold tracking-[-0.01em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.10),0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.05))] hover:text-white"
+              >
+                <span className="flex w-full items-center justify-center gap-2.5 text-center">
+                  <span>List Item</span>
+                  <ArrowRight
+                    size={15}
+                    className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5"
+                  />
+                </span>
+              </Link>
 
-    {isLoggedIn ? (
-      <form action="/signout" method="post">
-        <button
-          type="submit"
-          className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm font-medium tracking-[-0.01em] text-white/80 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
-        >
-          Log out
-        </button>
-      </form>
-    ) : (
-      <Link
-        href="/login"
-        className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] px-5 text-sm font-medium tracking-[-0.01em] text-white/80 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.08] hover:text-white"
-      >
-        Log in
-      </Link>
-    )}
-  </div>
-</div>
+              {isLoggedIn ? (
+                <form action="/signout" method="post">
+                  <button
+                    type="submit"
+                    className="inline-flex h-[50px] min-w-[118px] cursor-pointer items-center justify-center rounded-full border border-white/8 bg-transparent px-6 text-center text-[14px] font-medium tracking-[-0.01em] text-white/72 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/14 hover:bg-white/[0.04] hover:text-white"
+                  >
+                    <span className="flex w-full items-center justify-center text-center">
+                      Log out
+                    </span>
+                  </button>
+                </form>
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex h-[50px] min-w-[108px] cursor-pointer items-center justify-center rounded-full border border-white/8 bg-transparent px-6 text-center text-[14px] font-medium tracking-[-0.01em] text-white/72 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/14 hover:bg-white/[0.04] hover:text-white"
+                >
+                  <span className="flex w-full items-center justify-center text-center">
+                    Log in
+                  </span>
+                </Link>
+              )}
+            </div>
+          </div>
 
           <button
             className="md:hidden text-white"
@@ -93,6 +101,7 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   <Link href="/" className="logo-wordmark" onClick={() => setMobileOpen(false)}>
                     darwin<span className="logo-dot">.</span>
                   </Link>
+
                   <button
                     className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white"
                     onClick={() => setMobileOpen(false)}
@@ -106,7 +115,7 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   {[
                     { href: '/', label: 'Home' },
                     { href: '/browse', label: 'Browse' },
-                    { href: '/sell', label: 'Sell' },
+                    { href: '/sell', label: 'List Item' },
                     { href: '/saved', label: 'Saved' },
                   ].map((link) => (
                     <Link
@@ -121,26 +130,26 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   ))}
 
                   {isLoggedIn ? (
-  <form action="/signout" method="post">
-    <button
-      type="submit"
-      className="mobile-menu-link w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-white/90 transition-all duration-200 hover:bg-white/[0.08]"
-      onClick={() => setMobileOpen(false)}
-    >
-      <span>Log out</span>
-      <ArrowRight size={18} />
-    </button>
-  </form>
-) : (
-  <Link
-    href="/login"
-    className="mobile-menu-link rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white/90 transition-all duration-200 hover:bg-white/[0.08]"
-    onClick={() => setMobileOpen(false)}
-  >
-    <span>Log in</span>
-    <ArrowRight size={18} />
-  </Link>
-)}
+                    <form action="/signout" method="post">
+                      <button
+                        type="submit"
+                        className="mobile-menu-link w-full cursor-pointer rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-left text-white/90 transition-all duration-200 hover:bg-white/[0.08]"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <span>Log out</span>
+                        <ArrowRight size={18} />
+                      </button>
+                    </form>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="mobile-menu-link cursor-pointer rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-white/90 transition-all duration-200 hover:bg-white/[0.08]"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      <span>Log in</span>
+                      <ArrowRight size={18} />
+                    </Link>
+                  )}
                 </div>
 
                 <div className="mobile-menu-meta">Campus marketplace</div>
