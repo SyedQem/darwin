@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <SmoothScroll />
         <Navbar />
-        <main className="relative z-10 pt-[var(--nav-offset)]">
+        <main className="main-content relative z-10">
           {children}
         </main>
         <Footer />
