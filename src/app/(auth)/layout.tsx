@@ -16,7 +16,7 @@ export default function AuthLayout({
         <div className="auth-shell__layout">
           <section className="auth-shell__trust">
             <p className="section-label">Trusted marketplace</p>
-            <h1 className="section-title-md mt-4">Welcome back to Darwin</h1>
+            <h1 className="section-title-md mt-4">The New Way to Shop</h1>
             <p className="auth-shell__copy mt-5">
               Securely access your dashboard to manage listings, track saved
               items, and keep every conversation in one place.
