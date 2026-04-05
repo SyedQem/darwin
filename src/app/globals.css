@@ -320,6 +320,17 @@ button, input, select, textarea { font: inherit; }
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(167, 139, 250, 0.15);
 }
+.pill-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow), 0 8px 24px rgba(167, 139, 250, 0.15);
+}
+.pill-btn:disabled,
+.pill-btn[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
 
 .pill-btn-outline {
   background: transparent;
@@ -1022,6 +1033,109 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 .vspr-input::placeholder { color: var(--text-muted); }
+
+/* ── Auth Form ── */
+.auth-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.auth-form-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.auth-form-helper {
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.auth-form-input {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.auth-form-input:hover {
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.032);
+}
+
+.auth-form-input:focus,
+.auth-form-input:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.auth-password-wrap {
+  position: relative;
+}
+
+.auth-password-input {
+  padding-right: 4.65rem;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.6rem;
+  transform: translateY(-50%);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  min-height: 2.1rem;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.auth-password-toggle:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
+.auth-password-toggle:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  color: var(--text-primary);
+}
+
+.auth-status {
+  min-height: 1.45rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.auth-status-muted {
+  color: var(--text-muted);
+}
+
+.auth-status-error {
+  color: #fca5a5;
+}
+
+.auth-alt-action {
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.auth-alt-copy {
+  margin-top: 0.65rem;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.auth-alt-link {
+  color: var(--text-primary);
+  font-weight: 500;
+}
 
 /* ── Select ── */
 .vspr-select {
