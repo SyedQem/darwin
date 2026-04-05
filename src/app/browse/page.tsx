@@ -48,7 +48,7 @@ function BrowseContent() {
 
   return (
     <PageTransition>
-      <div className="container-vspr pt-12 pb-12 md:pt-16 md:pb-20">
+      <div className="container-vspr pt-14 pb-12 md:pt-20 md:pb-20">
         <motion.section
           className="surface-panel mt-2 overflow-hidden p-5 sm:mt-4 sm:p-6 md:p-8"
           initial={{ opacity: 0, scale: 0.985 }}
@@ -169,7 +169,7 @@ function BrowseContent() {
         </motion.section>
 
         {/* Results */}
-        <div className="mt-14 md:mt-16">
+        <div className="mt-20 md:mt-24">
           {filtered.length > 0 ? (
             <div className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-8 sm:grid-cols-2 lg:grid-cols-4 xl:gap-10">
               {filtered.map((listing, i) => (
