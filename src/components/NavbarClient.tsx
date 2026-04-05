@@ -33,29 +33,35 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
             </Link>
 
             <Link
-              href="/sell"
-              className="rounded-full bg-white px-4 py-2 text-sm font-medium text-black transition hover:opacity-90"
-            >
-              List Item
-            </Link>
+  href="/sell"
+  className="group inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white px-5 text-sm font-semibold text-black shadow-[0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/95 hover:shadow-[0_12px_30px_rgba(255,255,255,0.12)]"
+>
+  <span className="flex items-center gap-2">
+    List Item
+    <ArrowRight
+      size={16}
+      className="transition-transform duration-200 group-hover:translate-x-0.5"
+    />
+  </span>
+</Link>
 
-            {isLoggedIn ? (
-              <form action="/signout" method="post">
-                <button
-                  type="submit"
-                  className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
-                >
-                  Log out
-                </button>
-              </form>
-            ) : (
-              <Link
-                href="/login"
-                className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
-              >
-                Log in
-              </Link>
-            )}
+{isLoggedIn ? (
+  <form action="/auth/signout" method="post">
+    <button
+      type="submit"
+      className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] px-5 text-sm font-medium text-white/80 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
+    >
+      Log out
+    </button>
+  </form>
+) : (
+  <Link
+    href="/login"
+    className="inline-flex h-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.03] px-5 text-sm font-medium text-white/80 backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/[0.07] hover:text-white"
+  >
+    Log in
+  </Link>
+)}
           </div>
 
           <button
@@ -111,26 +117,26 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   ))}
 
                   {isLoggedIn ? (
-                    <form action="/signout" method="post">
-                      <button
-                        type="submit"
-                        className="mobile-menu-link w-full text-left"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        <span>Log out</span>
-                        <ArrowRight size={18} />
-                      </button>
-                    </form>
-                  ) : (
-                    <Link
-                      href="/login"
-                      className="mobile-menu-link"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      <span>Log in</span>
-                      <ArrowRight size={18} />
-                    </Link>
-                  )}
+  <form action="/auth/signout" method="post">
+    <button
+      type="submit"
+      className="mobile-menu-link w-full text-left rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 transition-colors hover:bg-white/[0.06]"
+      onClick={() => setMobileOpen(false)}
+    >
+      <span>Log out</span>
+      <ArrowRight size={18} />
+    </button>
+  </form>
+) : (
+  <Link
+    href="/login"
+    className="mobile-menu-link rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 transition-colors hover:bg-white/[0.06]"
+    onClick={() => setMobileOpen(false)}
+  >
+    <span>Log in</span>
+    <ArrowRight size={18} />
+  </Link>
+)}
                 </div>
 
                 <div className="mobile-menu-meta">Campus marketplace</div>
