@@ -1417,3 +1417,344 @@ button, input, select, textarea { font: inherit; }
     padding: 1.2rem 1.25rem 1rem;
   }
 }
+
+/* ══════════════════════════════════════════
+   Onboarding Wizard
+   ══════════════════════════════════════════ */
+
+.onboarding-shell {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  min-height: calc(100svh - var(--nav-offset));
+  background:
+    radial-gradient(circle at 15% 18%, rgba(255, 255, 255, 0.03), transparent 42%),
+    linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+}
+
+.onboarding-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 3vw, 2.5rem) 1.5rem clamp(2rem, 4vw, 3rem);
+  min-height: calc(100svh - var(--nav-offset));
+}
+
+/* ── Progress ── */
+
+.onboarding-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+
+.onboarding-progress-track {
+  width: 100%;
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.onboarding-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--accent), #c4b5fd);
+  box-shadow: 0 0 14px rgba(167, 139, 250, 0.45);
+}
+
+.onboarding-step-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ── Panel ── */
+
+.onboarding-panel-wrap {
+  width: 100%;
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.onboarding-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.onboarding-step-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.onboarding-title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+/* ── Fields ── */
+
+.onboarding-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.onboarding-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.onboarding-required {
+  color: #f87171;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.onboarding-optional {
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  padding: 0.12rem 0.55rem;
+}
+
+.onboarding-error {
+  font-size: 0.84rem;
+  color: #fca5a5;
+  line-height: 1.4;
+}
+
+/* ── University Cards ── */
+
+.university-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.university-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-primary);
+  transition:
+    border-color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.university-card:hover {
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.university-card--selected {
+  border-color: var(--accent) !important;
+  background: rgba(167, 139, 250, 0.06) !important;
+  box-shadow: 0 0 0 1px var(--accent), 0 8px 28px rgba(167, 139, 250, 0.12);
+}
+
+.university-card__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  border: 1px solid;
+  flex-shrink: 0;
+}
+
+.university-card__initial {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* University accent colours */
+.university-card[data-accent="carleton"] .university-card__icon {
+  background: rgba(204, 0, 51, 0.12);
+  border-color: rgba(204, 0, 51, 0.25);
+}
+.university-card[data-accent="carleton"] .university-card__initial {
+  color: #e6335c;
+}
+
+.university-card[data-accent="uottawa"] .university-card__icon {
+  background: rgba(143, 0, 26, 0.14);
+  border-color: rgba(143, 0, 26, 0.3);
+}
+.university-card[data-accent="uottawa"] .university-card__initial {
+  color: #c4264a;
+}
+
+.university-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.university-card__name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.university-card__location {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.university-card__check {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+/* ── Interest Chips ── */
+
+.interests-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.interest-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 0.95rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.interest-chip:hover {
+  border-color: var(--border-hover);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.interest-chip--selected {
+  border-color: var(--accent);
+  background: rgba(167, 139, 250, 0.1);
+  color: var(--text-primary);
+  box-shadow: 0 0 18px rgba(167, 139, 250, 0.14);
+}
+
+.interest-chip__check {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent);
+  overflow: hidden;
+}
+
+/* ── Actions ── */
+
+.onboarding-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-color);
+  min-height: 3.5rem;
+}
+
+.onboarding-actions__left {
+  min-width: 0;
+}
+
+.onboarding-actions__right {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin-left: auto;
+}
+
+.onboarding-skip {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 0.25rem;
+  transition: color 180ms ease;
+  letter-spacing: 0.02em;
+}
+
+.onboarding-skip:hover {
+  color: var(--text-primary);
+}
+
+/* ── Responsive ── */
+
+@media (min-width: 768px) {
+  .onboarding-container {
+    padding: clamp(2.5rem, 4vw, 3.5rem) 2rem clamp(3rem, 5vw, 4rem);
+  }
+
+  .onboarding-panel-wrap {
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .university-card {
+    padding: 1.35rem 1.5rem;
+  }
+}
