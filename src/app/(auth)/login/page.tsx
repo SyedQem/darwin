@@ -2,15 +2,14 @@
 import { useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
 import { Suspense, useMemo, useState } from "react";
-import { signIn, signUp } from "./actions";
+import Link from "next/link";
+import { signIn } from "./actions";
 
 function AuthActionButton({
   children,
-  mode,
   formAction,
 }: {
   children: string;
-  mode: "primary" | "outline";
   formAction: (formData: FormData) => void | Promise<void>;
 }) {
   const { pending } = useFormStatus();
@@ -19,11 +18,11 @@ function AuthActionButton({
     <button
       type="submit"
       formAction={formAction}
-      className={`pill-btn w-full ${mode === "outline" ? "pill-btn-outline" : ""}`}
+      className="pill-btn w-full"
       disabled={pending}
       aria-disabled={pending}
     >
-      {pending ? "Working…" : children}
+      {pending ? "Working\u2026" : children}
     </button>
   );
 }
@@ -100,18 +99,17 @@ function LoginContent() {
           {authMessage || "\u00A0"}
         </p>
 
-        <AuthActionButton mode="primary" formAction={signIn}>
+        <AuthActionButton formAction={signIn}>
           Sign in
-        </AuthActionButton>
-
-        <AuthActionButton mode="outline" formAction={signUp}>
-          Create account
         </AuthActionButton>
       </form>
 
       <div className="auth-alt-action" aria-hidden="true" />
       <p className="auth-alt-copy text-secondary">
-        New here? <span className="auth-alt-link">Create account with the button above.</span>
+        New here?{" "}
+        <Link href="/onboarding" className="auth-alt-link" style={{ textDecoration: "underline", cursor: "pointer" }}>
+          Create an account
+        </Link>
       </p>
     </div>
   );

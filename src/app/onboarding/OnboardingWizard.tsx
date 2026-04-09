@@ -19,12 +19,15 @@ import {
   Music,
   Smartphone,
   Bike,
+  Mail,
+  Eye,
+  EyeOff,
 } from "lucide-react";
-import { saveOnboardingProfile } from "./actions";
+import { createAccountAndProfile } from "./actions";
 
 /* ── Constants ── */
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 const INTERESTS = [
   { id: "textbooks", label: "Textbooks", icon: BookOpen },
@@ -57,6 +60,7 @@ const STEP_META = [
     description: "Help us personalize your experience",
   },
   { label: "Your Interests", description: "What are you looking for?" },
+  { label: "Create Account", description: "You\u2019re almost there" },
 ];
 
 /* ── Framer Motion Variants ── */
@@ -84,7 +88,10 @@ const stepVariants = {
     x: direction > 0 ? -80 : 80,
     opacity: 0,
     filter: "blur(6px)",
-    transition: { duration: 0.22, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] },
+    transition: {
+      duration: 0.22,
+      ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
+    },
   }),
 };
 
@@ -131,13 +138,19 @@ export default function OnboardingWizard() {
   const [direction, setDirection] = useState(1);
   const [isPending, startTransition] = useTransition();
 
-  /* Form state */
+  /* Profile state */
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [university, setUniversity] = useState("");
   const [levelOfStudy, setLevelOfStudy] = useState("");
   const [program, setProgram] = useState("");
   const [interests, setInterests] = useState<string[]>([]);
+
+  /* Account state */
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const [error, setError] = useState("");
 
   const progress = ((step + 1) / TOTAL_STEPS) * 100;
@@ -171,20 +184,40 @@ export default function OnboardingWizard() {
   }, []);
 
   const handleSubmit = useCallback(() => {
+    if (!email.trim()) {
+      setError("Email is required");
+      return;
+    }
+    if (!password || password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
     startTransition(async () => {
-      const result = await saveOnboardingProfile({
+      const result = await createAccountAndProfile({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
         university,
         levelOfStudy,
         program: program.trim(),
         interests,
+        email: email.trim(),
+        password,
       });
       if (result?.error) {
         setError(result.error);
       }
     });
-  }, [firstName, lastName, university, levelOfStudy, program, interests]);
+  }, [
+    firstName,
+    lastName,
+    university,
+    levelOfStudy,
+    program,
+    interests,
+    email,
+    password,
+  ]);
 
   /* ── Render ── */
 
@@ -204,7 +237,10 @@ export default function OnboardingWizard() {
         animate="visible"
       >
         {/* ── Progress Header ── */}
-        <motion.div className="onboarding-header" variants={containerChildVariants}>
+        <motion.div
+          className="onboarding-header"
+          variants={containerChildVariants}
+        >
           <div className="onboarding-progress-track">
             <motion.div
               className="onboarding-progress-fill"
@@ -218,7 +254,10 @@ export default function OnboardingWizard() {
         </motion.div>
 
         {/* ── Wizard Panel ── */}
-        <motion.div className="onboarding-panel-wrap" variants={containerChildVariants}>
+        <motion.div
+          className="onboarding-panel-wrap"
+          variants={containerChildVariants}
+        >
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={step}
@@ -479,6 +518,79 @@ export default function OnboardingWizard() {
                 </motion.div>
               )}
 
+              {/* ════════ Step 4 — Account (Email & Password) ════════ */}
+              {step === 4 && (
+                <>
+                  <motion.div
+                    className="onboarding-field"
+                    variants={itemVariants}
+                  >
+                    <label htmlFor="ob-email" className="onboarding-label">
+                      <Mail size={14} />
+                      Email address{" "}
+                      <span className="onboarding-required">*</span>
+                    </label>
+                    <input
+                      id="ob-email"
+                      type="email"
+                      className="vspr-input"
+                      placeholder="name@school.edu"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (error) setError("");
+                      }}
+                      autoFocus
+                      autoComplete="email"
+                    />
+                    <p className="auth-form-helper text-secondary">
+                      Use your campus or personal email.
+                    </p>
+                  </motion.div>
+
+                  <motion.div
+                    className="onboarding-field"
+                    variants={itemVariants}
+                  >
+                    <label htmlFor="ob-password" className="onboarding-label">
+                      Password{" "}
+                      <span className="onboarding-required">*</span>
+                    </label>
+                    <div className="auth-password-wrap">
+                      <input
+                        id="ob-password"
+                        type={showPassword ? "text" : "password"}
+                        className="vspr-input auth-password-input"
+                        placeholder="Create a password"
+                        value={password}
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          if (error) setError("");
+                        }}
+                        autoComplete="new-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        className="auth-password-toggle"
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? (
+                          <EyeOff size={14} />
+                        ) : (
+                          <Eye size={14} />
+                        )}
+                      </button>
+                    </div>
+                    <p className="auth-form-helper text-muted">
+                      At least 6 characters.
+                    </p>
+                  </motion.div>
+                </>
+              )}
+
               {/* ── Inline Error ── */}
               <AnimatePresence>
                 {error && (
@@ -502,7 +614,10 @@ export default function OnboardingWizard() {
         </motion.div>
 
         {/* ── Actions Bar ── */}
-        <motion.div className="onboarding-actions" variants={containerChildVariants}>
+        <motion.div
+          className="onboarding-actions"
+          variants={containerChildVariants}
+        >
           <div className="onboarding-actions__left">
             <AnimatePresence>
               {step > 0 && (
@@ -531,7 +646,7 @@ export default function OnboardingWizard() {
               <motion.button
                 type="button"
                 className="onboarding-skip"
-                onClick={step === TOTAL_STEPS - 1 ? handleSubmit : goNext}
+                onClick={goNext}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
@@ -561,7 +676,7 @@ export default function OnboardingWizard() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                {isPending ? "Setting up\u2026" : "Get Started"}
+                {isPending ? "Creating account\u2026" : "Create Account"}
                 <Sparkles size={14} />
               </motion.button>
             )}
