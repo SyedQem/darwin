@@ -1,7 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
 import { useFormStatus } from "react-dom";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { signIn, signUp } from "./actions";
 
 function AuthActionButton({
@@ -28,7 +28,7 @@ function AuthActionButton({
   );
 }
 
-export default function LoginPage() {
+function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
 
@@ -114,5 +114,28 @@ export default function LoginPage() {
         New here? <span className="auth-alt-link">Create account with the button above.</span>
       </p>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="surface-panel browse-hero-panel w-full max-w-md p-5 md:p-6">
+          <div className="mb-8 space-y-3">
+            <p className="section-label">Darwin</p>
+            <h1 className="section-title-md max-w-none">Welcome back</h1>
+            <p className="text-sm text-secondary">
+              Sign in to buy, sell, and manage your listings.
+            </p>
+          </div>
+          <p className="auth-status auth-status-muted" aria-live="polite" role="status">
+            Loading...
+          </p>
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }
