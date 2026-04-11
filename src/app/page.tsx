@@ -164,7 +164,7 @@ export default function HomePage() {
       {/* ── DIVIDER ── */}
       <div className="container-vspr"><div className="divider" /></div>
 
-      {/* ── CATEGORIES ── */}
+      {/* ──- CATEGORIES ──- */}
       <section className="py-20 md:py-28">
         <div className="container-vspr">
           <AnimatedSection>
