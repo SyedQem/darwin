@@ -809,9 +809,21 @@ button, input, select, textarea { font: inherit; }
 }
 
 .home-review-card {
-  min-height: 100%;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.home-review-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 .home-category-card {
