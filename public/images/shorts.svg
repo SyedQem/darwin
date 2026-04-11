@@ -1,18 +1,13 @@
-<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1200" height="900" rx="48" fill="#090A0F"/>
-<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
-<circle cx="956" cy="202" r="140" fill="#7DD2FF" fill-opacity="0.18"/>
-<circle cx="238" cy="694" r="160" fill="#6C7DFF" fill-opacity="0.16"/>
-<rect x="214" y="118" width="772" height="604" rx="36" fill="#0E131D" stroke="rgba(255,255,255,0.12)"/>
-<path d="M410 222H788L748 590H622L600 456L578 590H450L410 222Z" fill="#252A37"/>
-<path d="M478 222H722L698 404H502L478 222Z" fill="#343C4C"/>
-<rect x="484" y="278" width="232" height="18" rx="9" fill="#7FD2FF"/>
-<text x="164" y="792" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">Nike Dri-FIT Shorts</text>
-<text x="164" y="838" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Brand new • Size M • Dorm workout staple</text>
-<defs>
-<linearGradient id="paint0_linear" x1="86" y1="84" x2="1088" y2="812" gradientUnits="userSpaceOnUse">
-<stop stop-color="#111722"/>
-<stop offset="1" stop-color="#070A10"/>
-</linearGradient>
-</defs>
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="800" fill="#0C0E14"/>
+<circle cx="600" cy="200" r="240" fill="#a78bfa" fill-opacity="0.07"/>
+<circle cx="200" cy="650" r="200" fill="#6366f1" fill-opacity="0.06"/>
+<!-- Shorts shape -->
+<path d="M260 240 H540 Q550 240 550 250 V320 L480 540 Q476 552 464 552 H420 L400 420 L380 552 H336 Q324 552 320 540 L250 320 V250 Q250 240 260 240 Z" fill="#1E2130" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+<!-- Waistband -->
+<rect x="252" y="240" width="296" height="30" rx="4" fill="#252836" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<!-- Nike swoosh -->
+<path d="M340 360 Q380 380 420 350 Q400 390 350 380 Z" fill="#a78bfa" fill-opacity="0.3"/>
+<!-- Tag -->
+<rect x="430" y="248" width="32" height="14" rx="3" fill="#a78bfa" fill-opacity="0.2"/>
 </svg>

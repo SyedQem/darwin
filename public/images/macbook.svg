@@ -1,26 +1,17 @@
-<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1200" height="900" rx="48" fill="#0A0C10"/>
-<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
-<circle cx="272" cy="188" r="144" fill="#8F66FF" fill-opacity="0.18"/>
-<circle cx="1002" cy="690" r="184" fill="#6BC2FF" fill-opacity="0.2"/>
-<rect x="166" y="188" width="868" height="442" rx="30" fill="#0A1018" stroke="rgba(255,255,255,0.12)"/>
-<rect x="198" y="220" width="804" height="378" rx="16" fill="url(#paint1_linear)"/>
-<circle cx="356" cy="360" r="92" fill="#B084FF" fill-opacity="0.5"/>
-<circle cx="832" cy="300" r="120" fill="#6EC9FF" fill-opacity="0.45"/>
-<path d="M474 462C530 350 658 358 728 412C798 466 816 548 816 548H410C410 548 418 574 474 462Z" fill="#F5F9FF" fill-opacity="0.88"/>
-<path d="M130 652H1070L1006 724H194L130 652Z" fill="#C7D2E2"/>
-<rect x="522" y="678" width="156" height="16" rx="8" fill="#7E8BA0"/>
-<text x="182" y="772" fill="#F3F7FF" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">MacBook Air M2</text>
-<text x="184" y="820" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Space Gray • 256GB • 8GB RAM</text>
-<defs>
-<linearGradient id="paint0_linear" x1="86" y1="94" x2="1096" y2="818" gradientUnits="userSpaceOnUse">
-<stop stop-color="#101421"/>
-<stop offset="1" stop-color="#080B12"/>
-</linearGradient>
-<linearGradient id="paint1_linear" x1="198" y1="220" x2="1002" y2="598" gradientUnits="userSpaceOnUse">
-<stop stop-color="#281B45"/>
-<stop offset="0.48" stop-color="#102341"/>
-<stop offset="1" stop-color="#0D4C72"/>
-</linearGradient>
-</defs>
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="800" fill="#0C0E14"/>
+<circle cx="620" cy="200" r="260" fill="#a78bfa" fill-opacity="0.08"/>
+<circle cx="180" cy="650" r="200" fill="#818cf8" fill-opacity="0.06"/>
+<!-- Lid -->
+<rect x="160" y="180" width="480" height="320" rx="16" fill="#1A1D28" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+<rect x="176" y="196" width="448" height="288" rx="8" fill="#0F1118"/>
+<!-- Screen glow -->
+<rect x="200" y="220" width="400" height="240" rx="6" fill="rgba(167,139,250,0.04)"/>
+<rect x="220" y="244" width="180" height="8" rx="4" fill="#a78bfa" fill-opacity="0.4"/>
+<rect x="220" y="268" width="120" height="5" rx="2.5" fill="rgba(255,255,255,0.12)"/>
+<rect x="220" y="300" width="360" height="120" rx="8" fill="rgba(167,139,250,0.06)" stroke="rgba(167,139,250,0.1)" stroke-width="1"/>
+<circle cx="400" cy="360" r="24" fill="rgba(167,139,250,0.12)" stroke="rgba(167,139,250,0.2)" stroke-width="1"/>
+<!-- Base -->
+<path d="M120 502 H680 L660 520 H140 Z" fill="#1A1D28" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<rect x="360" y="506" width="80" height="4" rx="2" fill="rgba(255,255,255,0.06)"/>
 </svg>
