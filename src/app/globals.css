@@ -1283,6 +1283,130 @@ button, input, select, textarea { font: inherit; }
   color: var(--text-primary);
 }
 
+/* ── Sell Page Background ── */
+.sell-page-wrap {
+  position: relative;
+  min-height: calc(100vh - var(--nav-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: clip;
+  padding: 3rem 1.5rem;
+}
+@media (min-width: 768px) {
+  .sell-page-wrap { padding: 4.5rem 3rem; }
+}
+
+/* Ambient glow orbs */
+.sell-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+.sell-bg-glow--purple {
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  right: -80px;
+  background: var(--accent);
+  opacity: 0.12;
+}
+.sell-bg-glow--blue {
+  width: 420px;
+  height: 420px;
+  bottom: -60px;
+  left: -80px;
+  background: #6366f1;
+  opacity: 0.10;
+}
+
+/* Grid texture */
+.sell-bg-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 10%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 10%, transparent 80%);
+}
+
+/* Decorative streaks on the sides */
+.sell-streak {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 999px;
+}
+.sell-streak--left {
+  width: 3px;
+  height: 55%;
+  top: 15%;
+  left: 8%;
+  background: linear-gradient(180deg, transparent 0%, var(--accent) 40%, #6366f1 70%, transparent 100%);
+  opacity: 0.35;
+  filter: blur(1px);
+  box-shadow: 0 0 20px 4px rgba(167, 139, 250, 0.15);
+}
+.sell-streak--right {
+  width: 3px;
+  height: 50%;
+  top: 25%;
+  right: 8%;
+  background: linear-gradient(180deg, transparent 0%, #6366f1 35%, var(--accent) 65%, transparent 100%);
+  opacity: 0.3;
+  filter: blur(1px);
+  box-shadow: 0 0 20px 4px rgba(99, 102, 241, 0.15);
+}
+.sell-streak--left-thin {
+  width: 1px;
+  height: 40%;
+  top: 30%;
+  left: calc(8% + 20px);
+  background: linear-gradient(180deg, transparent 0%, var(--accent) 50%, transparent 100%);
+  opacity: 0.2;
+}
+.sell-streak--right-thin {
+  width: 1px;
+  height: 35%;
+  top: 20%;
+  right: calc(8% + 20px);
+  background: linear-gradient(180deg, transparent 0%, #6366f1 50%, transparent 100%);
+  opacity: 0.18;
+}
+
+/* Hide streaks on small screens where they'd overlap the form */
+@media (max-width: 1024px) {
+  .sell-streak { display: none; }
+}
+
+/* ── Sell Form ── */
+.sell-form-card {
+  padding: 2.5rem;
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+@media (min-width: 640px) {
+  .sell-form-card { padding: 3rem; }
+}
+.sell-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.sell-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
 /* ── Navbar ── */
 .navbar-vspr {
   position: fixed;
@@ -1465,6 +1589,43 @@ button, input, select, textarea { font: inherit; }
   background: var(--bg-elevated);
   font-size: 1.05rem;
   font-weight: 700;
+}
+
+/* ── Listing detail ── */
+.listing-detail-image-wrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.listing-detail-condition {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.listing-detail-seller {
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  transition: border-color 200ms ease;
+}
+.listing-detail-seller:hover {
+  border-color: var(--border-hover);
 }
 
 /* ── Empty State ── */
