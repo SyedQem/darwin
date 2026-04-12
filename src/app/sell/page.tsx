@@ -1,8 +1,11 @@
+import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createListing } from "./actions";
 import { categories } from "@/lib/data";
-import { PackagePlus } from "lucide-react";
+import ImageUploader from "@/components/ImageUploader";
+import SellFormButton from "@/components/SellFormButton";
+import SellFormFeedback from "@/components/SellFormFeedback";
 
 export default async function SellPage() {
   const supabase = await createClient();
@@ -16,8 +19,9 @@ export default async function SellPage() {
     <main className="sell-page-wrap">
       {/* Background visuals */}
       <div className="sell-bg-glow sell-bg-glow--purple" />
+      <div className="sell-bg-glow sell-bg-glow--purple-center" />
       <div className="sell-bg-glow sell-bg-glow--blue" />
-      <div className="sell-bg-grid" />
+      <div className="sell-bg-dots" />
 
       {/* Decorative streaks */}
       <div className="sell-streak sell-streak--left" />
@@ -26,6 +30,10 @@ export default async function SellPage() {
       <div className="sell-streak sell-streak--right-thin" />
 
       <div className="relative z-10 w-full max-w-2xl px-6">
+        <Suspense>
+          <SellFormFeedback />
+        </Suspense>
+
         {/* Header */}
         <div className="mb-10">
           <span className="section-label">SELL</span>
@@ -66,6 +74,12 @@ export default async function SellPage() {
                 rows={4}
                 className="vspr-input resize-none"
               />
+            </div>
+
+            {/* Photos */}
+            <div className="sell-field">
+              <label className="sell-label">Photos</label>
+              <ImageUploader />
             </div>
 
             {/* Price + Condition row */}
@@ -152,13 +166,7 @@ export default async function SellPage() {
             <div className="divider" />
 
             {/* Submit */}
-            <button
-              type="submit"
-              className="pill-btn ui-icon-label w-full min-h-12 text-base"
-            >
-              <PackagePlus size={18} />
-              <span>Publish Listing</span>
-            </button>
+            <SellFormButton />
           </form>
         </div>
       </div>

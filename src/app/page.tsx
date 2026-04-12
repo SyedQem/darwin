@@ -27,6 +27,9 @@ export default function HomePage() {
     <div className="home-page">
       {/* ── HERO ── */}
       <section ref={heroRef} className="home-hero relative flex flex-col justify-center overflow-hidden">
+        <div className="bg-glow-orb bg-glow-orb--purple-tr" />
+        <div className="bg-glow-orb bg-glow-orb--blue-bl" />
+        <div className="bg-grid-subtle" />
         <div>
           <div className="container-vspr">
             <div className="home-hero-grid">

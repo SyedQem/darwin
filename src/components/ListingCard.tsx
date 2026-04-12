@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, MapPin, Star } from 'lucide-react';
 import { Listing, getConditionClass } from '@/lib/data';
@@ -16,6 +17,7 @@ interface Props {
 export default function ListingCard({ listing, index, variant = 'default' }: Props) {
   const conditionClass = getConditionClass(listing.condition);
   const isBrowse = variant === 'browse';
+  const [saved, setSaved] = useState(listing.saved);
 
   return (
     <motion.div
@@ -36,21 +38,30 @@ export default function ListingCard({ listing, index, variant = 'default' }: Pro
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover"
             />
+            {/* Hover overlay */}
+            <div className="listing-card-hover-overlay">
+              <span className="listing-card-hover-label">View Listing</span>
+            </div>
             {/* Bottom gradient overlay with category badge */}
             <div className="listing-image-meta">
               <span className="category-badge">{listing.category}</span>
             </div>
             {/* Save button */}
-            <button
-              className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm transition-transform duration-200 hover:scale-110"
-              onClick={(e) => { e.preventDefault(); }}
+            <motion.button
+              className={`listing-save-btn ${saved ? 'listing-save-btn--saved' : ''}`}
+              whileTap={{ scale: 0.75 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+              onClick={(e) => {
+                e.preventDefault();
+                setSaved(!saved);
+              }}
             >
               <Heart
                 size={14}
-                fill={listing.saved ? '#fff' : 'none'}
-                color="#fff"
+                fill={saved ? '#a78bfa' : 'none'}
+                color={saved ? '#a78bfa' : '#fff'}
               />
-            </button>
+            </motion.button>
           </div>
 
           <div className={`flex flex-1 flex-col gap-3 p-5 ${isBrowse ? 'browse-listing-info' : ''}`}>
