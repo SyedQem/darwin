@@ -1,7 +1,8 @@
 'use client';
 import { useState, useRef } from 'react';
+import Link from 'next/link';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, MapPin, Zap, ArrowRight, CheckCircle2, Users, Clock, Star } from 'lucide-react';
+import { ShieldCheck, MapPin, Zap, ArrowRight, CheckCircle2, Users, Clock, Star, Sparkles } from 'lucide-react';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -221,6 +222,64 @@ export default function WaitlistPage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── FOUNDING ACCESS (→ /whitelist) ── */}
+      <section className="waitlist-founding-section">
+        <div className="container-vspr">
+          <motion.div
+            className="waitlist-founding-panel"
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.7, ease }}
+          >
+            <div className="waitlist-founding-grid" aria-hidden="true" />
+            <div className="waitlist-founding-glow" aria-hidden="true" />
+            <div className="waitlist-founding-ornament" aria-hidden="true">
+              <div className="waitlist-founding-ornament-ring" />
+              <div className="waitlist-founding-ornament-ring waitlist-founding-ornament-ring--outer" />
+              <Sparkles size={40} className="waitlist-founding-ornament-icon" strokeWidth={1.5} />
+            </div>
+
+            <div className="waitlist-founding-content">
+              <span className="waitlist-kicker waitlist-founding-kicker">
+                <span className="waitlist-kicker-dot" aria-hidden="true" />
+                Founding Access
+              </span>
+              <h2 className="waitlist-founding-title">
+                Can&apos;t wait?
+                <br />
+                <span className="text-muted">Lock in forever.</span>
+              </h2>
+              <p className="waitlist-founding-copy">
+                One payment, monthly boosted listings for life — limited to 225 pre-launch spots across two tiers.
+              </p>
+
+              <div className="waitlist-founding-stats">
+                <div className="waitlist-founding-stat">
+                  <span className="waitlist-founding-stat-value">From $9</span>
+                  <span className="waitlist-founding-stat-label">One-time</span>
+                </div>
+                <span className="waitlist-founding-stat-sep" aria-hidden="true" />
+                <div className="waitlist-founding-stat">
+                  <span className="waitlist-founding-stat-value">225</span>
+                  <span className="waitlist-founding-stat-label">Total spots</span>
+                </div>
+                <span className="waitlist-founding-stat-sep" aria-hidden="true" />
+                <div className="waitlist-founding-stat">
+                  <span className="waitlist-founding-stat-value">Forever</span>
+                  <span className="waitlist-founding-stat-label">No renewals</span>
+                </div>
+              </div>
+            </div>
+
+            <Link href="/whitelist" className="pill-btn waitlist-founding-cta">
+              View Founding Tiers
+              <ArrowRight size={15} />
+            </Link>
+          </motion.div>
         </div>
       </section>
 

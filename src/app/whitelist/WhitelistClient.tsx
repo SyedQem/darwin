@@ -325,11 +325,14 @@ function TierCard({
     const tier = TIERS[tierKey];
     const remaining = Math.max(0, spot.total - spot.sold);
     const soldOut = remaining === 0;
-    const progressPct = Math.min(100, (spot.sold / spot.total) * 100);
+    const progressPct =
+        spot.total > 0
+            ? Math.max(0, Math.min(100, (spot.sold / spot.total) * 100))
+            : 0;
 
     return (
         <motion.div
-            className={`whitelist-card ${featured ? "whitelist-card--featured" : ""}`}
+            className={`whitelist-card flex flex-col h-full ${featured ? "whitelist-card--featured" : ""}`}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
@@ -345,12 +348,16 @@ function TierCard({
                 )}
             </div>
 
-            <div className="flex items-baseline gap-2 mb-6">
+            <div className="flex items-baseline gap-2 mb-10">
                 <span className="price-tag text-5xl">${tier.price}</span>
                 <span className="text-muted text-sm">one-time</span>
             </div>
 
-            <ul className="space-y-3 mb-8">
+            <div className="whitelist-card-divider" aria-hidden="true" />
+
+            <ul
+                className={`flex flex-col gap-5 mt-10 mb-8 flex-1 ${featured ? "" : "justify-center"}`}
+            >
                 {benefits.map((b) => (
                     <li
                         key={b}
@@ -365,7 +372,7 @@ function TierCard({
                 ))}
             </ul>
 
-            <div className="mb-6">
+            <div className="mb-8">
                 <div className="flex items-center justify-between text-xs text-muted mb-2">
                     <span>
                         {remaining} of {spot.total} spots left

@@ -1291,7 +1291,7 @@ button, input, select, textarea { font: inherit; }
   border: 1px solid var(--border-color);
   border-radius: 24px;
   background: var(--bg-card);
-  padding: clamp(1.75rem, 3vw, 2.75rem);
+  padding: clamp(1.75rem, 2.6vw, 2.25rem) clamp(1.75rem, 3vw, 2.75rem);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
   transition: border-color 200ms ease, transform 200ms ease;
 }
@@ -1324,11 +1324,24 @@ button, input, select, textarea { font: inherit; }
   color: var(--accent);
 }
 
+.whitelist-card-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent 100%
+  );
+}
+
 .whitelist-card-chip {
   display: inline-flex;
   align-items: center;
   padding: 0.35rem 0.7rem;
   font-size: 0.65rem;
+  line-height: 1;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-family: 'JetBrains Mono', monospace;
@@ -2916,6 +2929,263 @@ button, input, select, textarea { font: inherit; }
 .waitlist-step-desc {
   font-size: 0.9rem;
   line-height: 1.75;
+}
+
+/* Founding Access banner (between Features and How-It-Works) */
+.waitlist-founding-section {
+  padding-block: 2rem 2.5rem;
+}
+
+.waitlist-founding-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(167, 139, 250, 0.24);
+  background:
+    linear-gradient(135deg, rgba(167, 139, 250, 0.1) 0%, rgba(17, 17, 19, 0.98) 55%);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.38),
+    0 0 0 1px rgba(167, 139, 250, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  padding: clamp(2rem, 3.8vw, 3rem) clamp(1.75rem, 3.2vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+  transition: border-color 260ms ease, transform 260ms ease, box-shadow 260ms ease;
+}
+
+.waitlist-founding-panel:hover {
+  border-color: rgba(167, 139, 250, 0.4);
+  transform: translateY(-3px);
+  box-shadow:
+    0 32px 76px rgba(0, 0, 0, 0.42),
+    0 0 48px rgba(167, 139, 250, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 768px) {
+  .waitlist-founding-panel {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waitlist-founding-panel { transition: none; }
+  .waitlist-founding-panel:hover { transform: none; }
+}
+
+/* Grid texture overlay, like the hero */
+.waitlist-founding-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse at top right, rgba(0,0,0,0.9) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.waitlist-founding-glow {
+  position: absolute;
+  top: -80%;
+  right: -12%;
+  width: 55%;
+  height: 260%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 62%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Decorative icon ornament on the right (replaces the flat "01" numeral) */
+.waitlist-founding-ornament {
+  position: absolute;
+  top: 50%;
+  right: clamp(2rem, 5vw, 4rem);
+  transform: translateY(-50%);
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.waitlist-founding-ornament-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  background: radial-gradient(
+    circle at center,
+    rgba(167, 139, 250, 0.14) 0%,
+    rgba(167, 139, 250, 0.04) 55%,
+    transparent 80%
+  );
+  box-shadow:
+    inset 0 0 30px rgba(167, 139, 250, 0.1),
+    0 0 40px rgba(167, 139, 250, 0.12);
+  animation: waitlist-founding-ring-breathe 5s ease-in-out infinite;
+}
+
+.waitlist-founding-ornament-ring--outer {
+  inset: -1.5rem;
+  border-color: rgba(167, 139, 250, 0.09);
+  background: transparent;
+  box-shadow: none;
+  animation: waitlist-founding-ring-rotate 28s linear infinite;
+  background-image:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(167, 139, 250, 0.22) 0deg 2deg,
+      transparent 2deg 14deg
+    );
+  -webkit-mask: radial-gradient(circle, transparent 58%, black 59%, black 60%, transparent 61%);
+          mask: radial-gradient(circle, transparent 58%, black 59%, black 60%, transparent 61%);
+}
+
+.waitlist-founding-ornament-icon {
+  position: relative;
+  z-index: 1;
+  color: var(--accent);
+  filter: drop-shadow(0 0 18px rgba(167, 139, 250, 0.55));
+  animation: waitlist-founding-icon-pulse 3.8s ease-in-out infinite;
+}
+
+@keyframes waitlist-founding-ring-breathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes waitlist-founding-ring-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes waitlist-founding-icon-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 14px rgba(167, 139, 250, 0.45));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 22px rgba(167, 139, 250, 0.7));
+    transform: scale(1.06);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waitlist-founding-ornament-ring,
+  .waitlist-founding-ornament-ring--outer,
+  .waitlist-founding-ornament-icon { animation: none; }
+}
+
+@media (max-width: 767px) {
+  .waitlist-founding-ornament { display: none; }
+}
+
+.waitlist-founding-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 40rem;
+}
+
+/* Override the default waitlist-kicker bottom margin for this inline use */
+.waitlist-founding-kicker {
+  margin-bottom: 0.25rem;
+}
+
+.waitlist-founding-title {
+  font-size: clamp(2rem, 4vw, 2.85rem);
+  line-height: 1.05;
+  letter-spacing: -0.042em;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.waitlist-founding-copy {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 36rem;
+  margin-top: 0.25rem;
+}
+
+/* Stats row — three stat blocks separated by hairlines */
+.waitlist-founding-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.75rem 1.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1.35rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.waitlist-founding-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.22rem;
+  flex: 0 0 auto;
+}
+
+.waitlist-founding-stat-value {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.waitlist-founding-stat-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.waitlist-founding-stat-sep {
+  width: 1px;
+  height: 2rem;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 100%
+  );
+}
+
+.waitlist-founding-cta {
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border-radius: 14px;
+  min-height: 3.1rem;
+  padding-inline: 1.4rem;
+  flex-shrink: 0;
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.waitlist-founding-cta:hover {
+  box-shadow: 0 10px 32px rgba(167, 139, 250, 0.28);
+  transform: translateY(-1px);
 }
 
 /* Bottom CTA */
