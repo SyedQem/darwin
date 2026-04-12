@@ -44,6 +44,10 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   Browse
                 </Link>
 
+                <Link href="/whitelist" className="nav-link">
+                  Go Pro
+                </Link>
+
                 <Link
                   href="/saved"
                   className="text-secondary transition-colors hover:text-white"
@@ -118,6 +122,7 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                   {[
                     { href: '/', label: 'Home' },
                     { href: '/browse', label: 'Browse' },
+                    { href: '/whitelist', label: 'Go Pro' },
                     { href: '/sell', label: 'List Item' },
                     { href: '/saved', label: 'Saved' },
                   ].map((link) => (

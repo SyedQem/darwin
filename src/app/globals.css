@@ -1285,6 +1285,171 @@ button, input, select, textarea { font: inherit; }
   color: var(--text-primary);
 }
 
+/* ── Whitelist / Pricing Page ── */
+.whitelist-card {
+  position: relative;
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  background: var(--bg-card);
+  padding: clamp(1.75rem, 3vw, 2.75rem);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+.whitelist-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+}
+
+.whitelist-card--featured {
+  border-color: rgba(167, 139, 250, 0.35);
+  background: linear-gradient(
+    180deg,
+    rgba(167, 139, 250, 0.06) 0%,
+    var(--bg-card) 40%
+  );
+  box-shadow: 0 16px 48px rgba(167, 139, 250, 0.12);
+}
+.whitelist-card--featured:hover {
+  border-color: rgba(167, 139, 250, 0.55);
+}
+
+.whitelist-card-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.whitelist-card-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  border-radius: 9999px;
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  background: rgba(167, 139, 250, 0.1);
+  color: var(--accent);
+}
+
+.whitelist-progress {
+  width: 100%;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+.whitelist-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent) 0%, #6366f1 100%);
+  transition: width 300ms ease;
+}
+
+/* Hero trust row — pills-with-dots row under the /whitelist subhead */
+.whitelist-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.whitelist-trust-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+.whitelist-trust-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+.whitelist-trust-sep {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* Hero scroll hint — small cue at the bottom of the hero */
+.whitelist-scroll-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.whitelist-scroll-hint-chevron {
+  animation: whitelist-chevron-bob 2s ease-in-out infinite;
+}
+@keyframes whitelist-chevron-bob {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(3px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .whitelist-scroll-hint-chevron { animation: none; }
+}
+
+/* Bottom reassurance bullets */
+.whitelist-bottom-bullets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.5rem;
+  margin-top: 2.25rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.whitelist-bottom-bullet {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+.whitelist-bottom-bullet-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: rgba(167, 139, 250, 0.14);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── Founding Badge ── */
+.founding-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  border-radius: 9999px;
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  background: linear-gradient(
+    90deg,
+    rgba(167, 139, 250, 0.14) 0%,
+    rgba(99, 102, 241, 0.14) 100%
+  );
+  color: var(--accent);
+}
+
 /* ── Sell Page Background ── */
 .sell-page-wrap {
   position: relative;
