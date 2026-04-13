@@ -30,7 +30,7 @@ export async function createCheckoutSession(
     const session = await stripe().checkout.sessions.create({
         mode: "payment",
         line_items: [{ price: priceId, quantity: 1 }],
-        success_url: `${baseUrl}/whitelist?success=true`,
+        success_url: `${baseUrl}/whitelist/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/whitelist?error=cancelled`,
         metadata: { user_id: userId, tier },
         // Stripe ties the PaymentIntent to this session so we can refund
@@ -44,6 +44,19 @@ export async function createCheckoutSession(
         throw new Error("Stripe did not return a checkout URL");
     }
     return session.url;
+}
+
+/**
+ * Retrieve a Checkout Session with the PaymentIntent + latest Charge
+ * expanded so the success page can read the Stripe-hosted receipt URL
+ * without a second API round-trip.
+ */
+export async function retrieveSession(
+    sessionId: string,
+): Promise<Stripe.Checkout.Session> {
+    return stripe().checkout.sessions.retrieve(sessionId, {
+        expand: ["payment_intent.latest_charge"],
+    });
 }
 
 /**

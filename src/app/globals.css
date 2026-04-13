@@ -3188,6 +3188,70 @@ button, input, select, textarea { font: inherit; }
   transform: translateY(-1px);
 }
 
+/* Whitelist payment success screen — reuses .waitlist-founding-panel chrome
+   but stacks vertically and hosts its own bullet list + CTA row. */
+.whitelist-success-panel {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+  .whitelist-success-panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.whitelist-success-check {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.whitelist-success-email {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.whitelist-success-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.whitelist-success-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.whitelist-success-list li > span {
+  padding-top: 0.05rem;
+}
+
+.whitelist-success-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.whitelist-success-primary {
+  transition: box-shadow 220ms ease, transform 220ms ease;
+}
+
+.whitelist-success-primary:hover {
+  box-shadow: 0 10px 32px rgba(167, 139, 250, 0.28);
+  transform: translateY(-1px);
+}
+
 /* Bottom CTA */
 .waitlist-bottom-cta-section {
   padding-block: 3rem 4rem;
