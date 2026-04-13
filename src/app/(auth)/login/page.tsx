@@ -37,6 +37,7 @@ function LoginContent() {
   );
 
   const hasError = Boolean(searchParams.get("error"));
+  const next = searchParams.get("next") ?? "";
 
   return (
     <div className="surface-panel browse-hero-panel w-full max-w-md p-5 md:p-6">
@@ -49,6 +50,7 @@ function LoginContent() {
       </div>
 
       <form className="space-y-4" noValidate>
+        {next && <input type="hidden" name="next" value={next} />}
         <div className="auth-form-field">
           <label htmlFor="login-email" className="auth-form-label">
             Email address

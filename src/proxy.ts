@@ -7,6 +7,8 @@ export async function proxy(request: NextRequest) {
     const ALLOWED_PATHS = [
       '/waitlist',
       '/whitelist',
+      '/login',
+      '/onboarding',
       '/_next',
       '/favicon.ico',
       '/api',
