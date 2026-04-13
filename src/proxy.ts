@@ -6,6 +6,7 @@ export async function proxy(request: NextRequest) {
   if (process.env.ENABLE_WAITLIST === 'true') {
     const ALLOWED_PATHS = [
       '/waitlist',
+      '/whitelist',
       '/_next',
       '/favicon.ico',
       '/api',
