@@ -32,7 +32,7 @@ const socials = [
 
 export default function Footer() {
   const pathname = usePathname();
-  const isWaitlist = pathname === '/waitlist';
+  const isWaitlist = pathname === '/waitlist' || pathname.startsWith('/whitelist');
 
   return (
     <footer className="footer-vspr">
@@ -131,7 +131,7 @@ export default function Footer() {
               </button>
               <span className="vesper-badge">
                 <span className="vesper-dot" />
-                Built by Vesper Labs
+                Built by Vesper Works
               </span>
             </div>
           </div>
