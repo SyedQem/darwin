@@ -67,7 +67,7 @@ export default function WaitlistPage() {
         </div>
 
         <div className="container-vspr relative z-10">
-          <div className="waitlist-hero-inner">
+          <div className="waitlist-hero-inner -mt-10 sm:-mt-16">
             {/* Kicker */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -178,6 +178,16 @@ export default function WaitlistPage() {
                     <p className="waitlist-helper">
                       Use your preferred <span className="waitlist-helper-accent">email</span> for early access.
                     </p>
+                    <motion.div
+                      className="mt-20 text-left"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.7, duration: 0.5 }}
+                    >
+                      <button type="button" onClick={() => document.getElementById('founding-access')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] text-zinc-400 hover:text-zinc-200 transition-colors">
+                        Want benefits with early access? <span className="text-white underline decoration-white/20 underline-offset-4">See Founding Tiers &rarr;</span>
+                      </button>
+                    </motion.div>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -226,7 +236,7 @@ export default function WaitlistPage() {
       </section>
 
       {/* ── FOUNDING ACCESS (→ /whitelist) ── */}
-      <section className="waitlist-founding-section">
+      <section id="founding-access" className="waitlist-founding-section scroll-mt-24">
         <div className="container-vspr">
           <motion.div
             className="waitlist-founding-panel"

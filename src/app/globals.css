@@ -37,6 +37,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  position: relative;
 }
 
 a { -webkit-tap-highlight-color: transparent; }
@@ -2559,7 +2560,7 @@ button, input, select, textarea { font: inherit; }
   min-height: calc(100svh - var(--nav-offset));
   display: flex;
   align-items: center;
-  padding-block: clamp(5rem, 8vw, 8rem);
+  padding-block: clamp(2rem, 4vw, 4rem) clamp(5rem, 8vw, 8rem);
 }
 
 .waitlist-backdrop {
@@ -2660,6 +2661,10 @@ button, input, select, textarea { font: inherit; }
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.waitlist-form > *:last-child {
+  margin-top: 1.5rem;
 }
 
 .waitlist-input-wrap {
