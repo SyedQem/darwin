@@ -2412,6 +2412,14 @@ button, input, select, textarea { font: inherit; }
   color: #c4264a;
 }
 
+.university-card[data-accent="algonquin"] .university-card__icon {
+  background: rgba(34, 197, 94, 0.15);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+.university-card[data-accent="algonquin"] .university-card__initial {
+  color: #ffffff;
+}
+
 .university-card__info {
   display: flex;
   flex-direction: column;

@@ -418,6 +418,48 @@ export default function OnboardingWizard() {
                       )}
                     </AnimatePresence>
                   </motion.button>
+
+                  {/* Algonquin College */}
+                  <motion.button
+                    type="button"
+                    className={`university-card${university === "algonquin" ? " university-card--selected" : ""}`}
+                    onClick={() => {
+                      setUniversity("algonquin");
+                      if (error) setError("");
+                    }}
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.985 }}
+                    data-accent="algonquin"
+                  >
+                    <div className="university-card__icon">
+                      <span className="university-card__initial">AC</span>
+                    </div>
+                    <div className="university-card__info">
+                      <h3 className="university-card__name">
+                        Algonquin College
+                      </h3>
+                      <p className="university-card__location">
+                        Ottawa, Ontario
+                      </p>
+                    </div>
+                    <AnimatePresence>
+                      {university === "algonquin" && (
+                        <motion.div
+                          className="university-card__check"
+                          initial={{ scale: 0, rotate: -90 }}
+                          animate={{ scale: 1, rotate: 0 }}
+                          exit={{ scale: 0, rotate: 90 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 25,
+                          }}
+                        >
+                          <Check size={14} strokeWidth={3} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
                 </motion.div>
               )}
 
@@ -544,7 +586,7 @@ export default function OnboardingWizard() {
                       autoComplete="email"
                     />
                     <p className="auth-form-helper text-secondary">
-                      Use your campus or personal email.
+                      Use your campus email.
                     </p>
                   </motion.div>
 
