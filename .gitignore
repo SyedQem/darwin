@@ -32,7 +32,6 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-.env.local
 
 # vercel
 .vercel
@@ -43,3 +42,8 @@ next-env.d.ts
 
 # mcp config
 mcp.config.json
+
+.projects/cache
+.projects/vault
+.env
+.env.local

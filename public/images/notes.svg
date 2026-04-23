@@ -1,23 +1,27 @@
-<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1200" height="900" rx="48" fill="#090A0F"/>
-<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
-<circle cx="904" cy="214" r="152" fill="#76C9FF" fill-opacity="0.16"/>
-<circle cx="274" cy="710" r="168" fill="#8490FF" fill-opacity="0.18"/>
-<rect x="232" y="118" width="736" height="610" rx="34" fill="#F7FAFD"/>
-<rect x="306" y="206" width="350" height="18" rx="9" fill="#9ACFFF"/>
-<rect x="306" y="250" width="566" height="10" rx="5" fill="#C6D3E0"/>
-<rect x="306" y="292" width="530" height="10" rx="5" fill="#C6D3E0"/>
-<rect x="306" y="334" width="410" height="10" rx="5" fill="#C6D3E0"/>
-<path d="M306 426C382.5 354 442 390.5 482 430.5C522 470.5 546.5 531 546.5 531H306V426Z" fill="#A6D6FF"/>
-<path d="M572 426L646.5 531H838C838 531 804 443 724 426H572Z" fill="#6F8CFF"/>
-<rect x="306" y="590" width="224" height="12" rx="6" fill="#C6D3E0"/>
-<rect x="306" y="620" width="330" height="12" rx="6" fill="#C6D3E0"/>
-<text x="144" y="792" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">CS201 Study Notes</text>
-<text x="144" y="836" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Lecture summaries, diagrams, and code examples</text>
-<defs>
-<linearGradient id="paint0_linear" x1="90" y1="84" x2="1092" y2="814" gradientUnits="userSpaceOnUse">
-<stop stop-color="#111924"/>
-<stop offset="1" stop-color="#070A10"/>
-</linearGradient>
-</defs>
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="800" fill="#0C0E14"/>
+<circle cx="600" cy="180" r="250" fill="#a78bfa" fill-opacity="0.07"/>
+<circle cx="200" cy="660" r="200" fill="#818cf8" fill-opacity="0.06"/>
+<!-- Paper -->
+<rect x="220" y="140" width="360" height="500" rx="12" fill="#1A1D28" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+<!-- Corner fold -->
+<path d="M520 140 L580 200 L520 200 Z" fill="#252836"/>
+<path d="M520 140 L580 200" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<!-- Lines of text -->
+<rect x="260" y="200" width="200" height="7" rx="3.5" fill="#a78bfa" fill-opacity="0.35"/>
+<rect x="260" y="228" width="260" height="5" rx="2.5" fill="rgba(255,255,255,0.12)"/>
+<rect x="260" y="248" width="220" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+<rect x="260" y="268" width="240" height="5" rx="2.5" fill="rgba(255,255,255,0.08)"/>
+<!-- Diagram block -->
+<rect x="260" y="300" width="280" height="140" rx="8" fill="rgba(167,139,250,0.05)" stroke="rgba(167,139,250,0.1)" stroke-width="1"/>
+<circle cx="340" cy="370" r="28" fill="rgba(167,139,250,0.1)" stroke="rgba(167,139,250,0.15)" stroke-width="1"/>
+<circle cx="460" cy="370" r="28" fill="rgba(99,102,241,0.1)" stroke="rgba(99,102,241,0.15)" stroke-width="1"/>
+<line x1="368" y1="370" x2="432" y2="370" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+<!-- More lines -->
+<rect x="260" y="470" width="240" height="5" rx="2.5" fill="rgba(255,255,255,0.1)"/>
+<rect x="260" y="490" width="200" height="5" rx="2.5" fill="rgba(255,255,255,0.08)"/>
+<rect x="260" y="510" width="260" height="5" rx="2.5" fill="rgba(255,255,255,0.08)"/>
+<!-- Highlight -->
+<rect x="256" y="546" width="140" height="18" rx="4" fill="#a78bfa" fill-opacity="0.1"/>
+<rect x="260" y="550" width="130" height="10" rx="3" fill="#a78bfa" fill-opacity="0.25"/>
 </svg>

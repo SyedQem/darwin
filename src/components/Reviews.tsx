@@ -40,7 +40,7 @@ export default function Reviews() {
         </div>
       </AnimatedSection>
 
-      <div className="mt-12 grid gap-4 md:grid-cols-3">
+      <div className="mt-12 grid gap-8 md:grid-cols-3">
         {reviews.map((review, i) => (
           <motion.div
             key={i}
@@ -48,16 +48,16 @@ export default function Reviews() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ delay: i * 0.08, duration: 0.5, ease }}
-            className="vspr-card home-review-card p-7 md:p-8 transition-all duration-200 hover:border-[rgba(255,255,255,0.14)]"
+            className="home-review-card px-10 py-10 md:px-14 md:py-14 transition-all duration-200 hover:border-[rgba(255,255,255,0.14)]"
           >
-            <div className="accent-text text-sm tracking-widest">★★★★★</div>
-            <p className="mt-5 text-base leading-8 text-white/90">
+            <div className="accent-text text-lg tracking-wider">★★★★★</div>
+            <p className="mt-5 text-lg leading-relaxed text-white/90 font-light">
               &ldquo;{review.text}&rdquo;
             </p>
-            <div className="mt-6 flex items-center gap-2 border-t border-white/6 pt-5 text-sm">
-              <span className="font-medium">{review.name}</span>
+            <div className="mt-auto flex items-center gap-3 pt-8 text-base">
+              <span className="font-medium text-white">{review.name}</span>
               <span className="text-muted">·</span>
-              <span className="text-muted">{review.school}</span>
+              <span className="text-white/50">{review.school}</span>
             </div>
           </motion.div>
         ))}

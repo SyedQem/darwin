@@ -1,23 +1,21 @@
-<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1200" height="900" rx="48" fill="#090A0F"/>
-<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
-<circle cx="952" cy="222" r="160" fill="#7EBCFF" fill-opacity="0.18"/>
-<circle cx="232" cy="706" r="134" fill="#F58A78" fill-opacity="0.16"/>
-<rect x="180" y="130" width="840" height="598" rx="36" fill="#0E131B" stroke="rgba(255,255,255,0.12)"/>
-<path d="M464 262C464 228.863 490.863 202 524 202H678C711.137 202 738 228.863 738 262V416H464V262Z" fill="#C7D1DD"/>
-<rect x="420" y="398" width="362" height="150" rx="32" fill="#DEE7F2"/>
-<rect x="432" y="548" width="62" height="110" rx="28" fill="#9DAABA"/>
-<rect x="708" y="548" width="62" height="110" rx="28" fill="#9DAABA"/>
-<rect x="478" y="652" width="24" height="110" rx="12" fill="#7C8899"/>
-<rect x="700" y="652" width="24" height="110" rx="12" fill="#7C8899"/>
-<rect x="446" y="754" width="88" height="18" rx="9" fill="#B1BDC9"/>
-<rect x="668" y="754" width="88" height="18" rx="9" fill="#B1BDC9"/>
-<text x="184" y="794" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">IKEA MARKUS Chair</text>
-<text x="184" y="838" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Ergonomic office chair for long study sessions</text>
-<defs>
-<linearGradient id="paint0_linear" x1="80" y1="86" x2="1116" y2="824" gradientUnits="userSpaceOnUse">
-<stop stop-color="#11161F"/>
-<stop offset="1" stop-color="#070A10"/>
-</linearGradient>
-</defs>
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="800" fill="#0C0E14"/>
+<circle cx="580" cy="220" r="240" fill="#a78bfa" fill-opacity="0.07"/>
+<circle cx="220" cy="620" r="200" fill="#6366f1" fill-opacity="0.06"/>
+<!-- Chair back -->
+<path d="M300 200 Q300 160 340 160 H460 Q500 160 500 200 V420 H300 Z" fill="#1A1D28" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+<rect x="316" y="180" width="168" height="6" rx="3" fill="rgba(255,255,255,0.1)"/>
+<!-- Seat -->
+<rect x="270" y="420" width="260" height="60" rx="12" fill="#1E2130" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+<!-- Armrests -->
+<rect x="250" y="340" width="20" height="100" rx="8" fill="#1E2130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<rect x="530" y="340" width="20" height="100" rx="8" fill="#1E2130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<!-- Stem -->
+<rect x="390" y="480" width="20" height="120" rx="4" fill="#1A1D28"/>
+<!-- Base -->
+<ellipse cx="400" cy="620" rx="120" ry="16" fill="#1A1D28" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+<!-- Wheels -->
+<circle cx="300" cy="630" r="10" fill="#252836"/>
+<circle cx="500" cy="630" r="10" fill="#252836"/>
+<circle cx="400" cy="640" r="10" fill="#252836"/>
 </svg>

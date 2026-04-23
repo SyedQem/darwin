@@ -4,9 +4,10 @@ import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, Compass, Search, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Compass, Search, Sparkles, X } from 'lucide-react';
 import { categories, Category, sampleListings } from '@/lib/data';
 import ListingCard from '@/components/ListingCard';
+import SkeletonCard from '@/components/SkeletonCard';
 import PageTransition from '@/components/PageTransition';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -68,10 +69,15 @@ function BrowseContent() {
     },
   ];
 
+  const hasActiveFilters = selectedCat !== 'All' || query.trim().length > 0;
+
   return (
     <PageTransition>
-      <div className="container-vspr page-shell">
-        <div className="browse-shell">
+      <div className="container-vspr page-shell relative overflow-clip">
+        <div className="bg-glow-orb bg-glow-orb--purple-tr" />
+        <div className="bg-glow-orb bg-glow-orb--blue-bl" />
+        <div className="bg-grid-subtle" />
+        <div className="browse-shell relative z-10">
           <motion.section
             className="browse-hero-panel surface-panel"
             initial={{ opacity: 0, scale: 0.99 }}
@@ -171,9 +177,6 @@ function BrowseContent() {
               </div>
 
               <div className="browse-controls-meta">
-                <p className="browse-results-count">
-                  {filtered.length} listing{filtered.length !== 1 ? 's' : ''}
-                </p>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
@@ -200,19 +203,56 @@ function BrowseContent() {
           </motion.section>
 
           {filtered.length > 0 ? (
-            <section
-              aria-label="Results"
-              className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-6 sm:grid-cols-2 xl:grid-cols-3"
-            >
-              {filtered.map((listing, index) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  index={index}
-                  variant="browse"
-                />
-              ))}
-            </section>
+            <>
+              <motion.div
+                className="browse-results-header"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.18, duration: 0.35, ease }}
+              >
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <p className="browse-results-count">
+                    {filtered.length} listing{filtered.length !== 1 ? 's' : ''}
+                  </p>
+                  {selectedCat !== 'All' && (
+                    <button
+                      className="browse-active-filter"
+                      onClick={() => setSelectedCat('All')}
+                    >
+                      {selectedCat}
+                      <span className="browse-active-filter-clear">
+                        <X size={8} />
+                      </span>
+                    </button>
+                  )}
+                  {query.trim() && (
+                    <button
+                      className="browse-active-filter"
+                      onClick={() => setQuery('')}
+                    >
+                      &ldquo;{query}&rdquo;
+                      <span className="browse-active-filter-clear">
+                        <X size={8} />
+                      </span>
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+
+              <section
+                aria-label="Results"
+                className="browse-results-grid grid grid-cols-1 auto-rows-fr gap-6 sm:grid-cols-2 xl:grid-cols-3"
+              >
+                {filtered.map((listing, index) => (
+                  <ListingCard
+                    key={listing.id}
+                    listing={listing}
+                    index={index}
+                    variant="browse"
+                  />
+                ))}
+              </section>
+            </>
           ) : (
             <motion.section
               aria-label="No results"
@@ -221,12 +261,23 @@ function BrowseContent() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.35, ease }}
             >
-              <p className="text-secondary text-xl font-medium">
+              <div className="empty-state-icon">
+                <Search size={26} />
+              </div>
+              <p className="text-secondary text-xl font-medium mt-5">
                 No listings match your search.
               </p>
               <p className="text-muted mt-2 text-sm">
                 Try a broader keyword or clear a category filter.
               </p>
+              {hasActiveFilters && (
+                <button
+                  className="pill-btn pill-btn-outline pill-btn-sm mt-6"
+                  onClick={() => { setSelectedCat('All'); setQuery(''); }}
+                >
+                  Clear All Filters
+                </button>
+              )}
             </motion.section>
           )}
         </div>
@@ -240,9 +291,23 @@ export default function BrowsePage() {
     <Suspense
       fallback={
         <div className="container-vspr page-shell">
-          <span className="section-label">BROWSE</span>
-          <h1 className="section-title-md mt-4">Find what you need.</h1>
-          <p className="text-muted mt-4 text-sm">Loading...</p>
+          <div className="browse-shell">
+            <div className="surface-panel browse-hero-panel">
+              <div className="flex flex-col gap-4">
+                <div className="h-4 w-20 rounded bg-white/[0.06]" />
+                <div className="h-10 w-3/4 rounded bg-white/[0.06]" />
+                <div className="h-4 w-1/2 rounded bg-white/[0.06]" />
+              </div>
+            </div>
+            <div className="surface-panel browse-controls-panel">
+              <div className="h-14 rounded-2xl bg-white/[0.06] skeleton-shimmer" />
+            </div>
+            <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))}
+            </section>
+          </div>
         </div>
       }
     >

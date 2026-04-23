@@ -1,21 +1,22 @@
-<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="1200" height="900" rx="48" fill="#090A0F"/>
-<rect x="56" y="56" width="1088" height="788" rx="36" fill="url(#paint0_linear)"/>
-<circle cx="916" cy="182" r="154" fill="#FF8D76" fill-opacity="0.18"/>
-<circle cx="298" cy="702" r="174" fill="#7BC7FF" fill-opacity="0.16"/>
-<g transform="rotate(-8 382 212)">
-<rect x="382" y="212" width="468" height="256" rx="28" fill="#141B26" stroke="rgba(255,255,255,0.12)"/>
-<path d="M520 212V468" stroke="#2E3A4B" stroke-width="4" stroke-dasharray="14 12"/>
-<text x="438" y="324" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="700">CAMPUS FEST</text>
-<text x="438" y="374" fill="#A8D5FF" font-family="JetBrains Mono, monospace" font-size="24">GENERAL ADMISSION</text>
-<text x="566" y="360" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="800">x2</text>
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="800" height="800" fill="#0C0E14"/>
+<circle cx="620" cy="200" r="260" fill="#a78bfa" fill-opacity="0.1"/>
+<circle cx="180" cy="640" r="220" fill="#6366f1" fill-opacity="0.07"/>
+<!-- Ticket 1 (back) -->
+<g transform="rotate(-6 400 400)" opacity="0.5">
+  <rect x="180" y="280" width="440" height="200" rx="16" fill="#1E2130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
 </g>
-<text x="146" y="790" fill="#F4F7FB" font-family="Inter, Arial, sans-serif" font-size="56" font-weight="700">Campus Fest Tickets</text>
-<text x="146" y="836" fill="#A8B4C5" font-family="Inter, Arial, sans-serif" font-size="24">Two GA passes for the spring music festival</text>
-<defs>
-<linearGradient id="paint0_linear" x1="88" y1="86" x2="1088" y2="814" gradientUnits="userSpaceOnUse">
-<stop stop-color="#121823"/>
-<stop offset="1" stop-color="#070A10"/>
-</linearGradient>
-</defs>
+<!-- Ticket 2 (front) -->
+<g transform="rotate(3 400 400)">
+  <rect x="180" y="280" width="440" height="200" rx="16" fill="#1A1D28" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+  <!-- Tear line -->
+  <line x1="480" y1="288" x2="480" y2="472" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" stroke-dasharray="8 6"/>
+  <!-- Content -->
+  <text x="220" y="350" fill="#a78bfa" fill-opacity="0.7" font-family="monospace" font-size="14" letter-spacing="3">ADMIT ONE</text>
+  <text x="220" y="390" fill="rgba(255,255,255,0.7)" font-family="sans-serif" font-size="24" font-weight="700">CAMPUS FEST</text>
+  <text x="220" y="420" fill="rgba(255,255,255,0.3)" font-family="sans-serif" font-size="14">Spring 2025</text>
+  <!-- Stub -->
+  <text x="510" y="380" fill="rgba(255,255,255,0.5)" font-family="monospace" font-size="40" font-weight="800">x2</text>
+  <text x="516" y="410" fill="rgba(255,255,255,0.2)" font-family="monospace" font-size="11">GA</text>
+</g>
 </svg>

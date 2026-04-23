@@ -27,6 +27,9 @@ export default function HomePage() {
     <div className="home-page">
       {/* ── HERO ── */}
       <section ref={heroRef} className="home-hero relative flex flex-col justify-center overflow-hidden">
+        <div className="bg-glow-orb bg-glow-orb--purple-tr" />
+        <div className="bg-glow-orb bg-glow-orb--blue-bl" />
+        <div className="bg-grid-subtle" />
         <div>
           <div className="container-vspr">
             <div className="home-hero-grid">
@@ -164,7 +167,7 @@ export default function HomePage() {
       {/* ── DIVIDER ── */}
       <div className="container-vspr"><div className="divider" /></div>
 
-      {/* ── CATEGORIES ── */}
+      {/* ──- CATEGORIES ──- */}
       <section className="py-20 md:py-28">
         <div className="container-vspr">
           <AnimatedSection>
