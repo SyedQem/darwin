@@ -12,6 +12,7 @@
     "@supabase/ssr": "^0.10.0",
     "@supabase/supabase-js": "^2.101.1",
     "@vercel/analytics": "^2.0.1",
+    "claude": "^0.1.1",
     "framer-motion": "^12.38.0",
     "lenis": "^1.3.21",
     "lucide-react": "^1.7.0",
