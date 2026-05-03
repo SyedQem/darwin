@@ -18,11 +18,21 @@ export const dynamic = "force-dynamic";
 
 type SearchParams = Promise<{ session_id?: string }>;
 
-function formatUSD(amountCents: number | null | undefined): string {
-    if (amountCents == null) return "$0";
+function formatMoney(
+    amountCents: number | null | undefined,
+    currency: string | null | undefined,
+): string {
+    const code = (currency ?? "usd").toUpperCase();
+    if (amountCents == null) {
+        return new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: code,
+            minimumFractionDigits: 0,
+        }).format(0);
+    }
     return new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: code,
         minimumFractionDigits: 0,
     }).format(amountCents / 100);
 }
@@ -70,7 +80,7 @@ export default async function WhitelistSuccessPage({
     }
 
     const tier = TIERS[tierKey];
-    const amount = formatUSD(session.amount_total);
+    const amount = formatMoney(session.amount_total, session.currency);
     const email = session.customer_details?.email ?? user.email ?? null;
     const receiptUrl = receiptUrlFrom(session);
 

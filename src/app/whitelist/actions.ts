@@ -40,9 +40,10 @@ export async function startCheckout(formData: FormData): Promise<void> {
     let checkoutUrl: string;
     try {
         checkoutUrl = await createCheckoutSession(tier, user.id);
-    } catch {
+    } catch (err) {
+        console.error("[startCheckout]", err);
         redirect("/whitelist?error=checkout_failed");
-    }
+}
 
     redirect(checkoutUrl);
 }
