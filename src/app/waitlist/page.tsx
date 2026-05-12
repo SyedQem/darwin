@@ -28,7 +28,7 @@ const features = [
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'already' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const heroRef = useRef<HTMLElement>(null);
 
@@ -50,10 +50,36 @@ export default function WaitlistPage() {
       return;
     }
     setStatus('loading');
-    // Placeholder — wire to Loops / Supabase later
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus('success');
-    setEmail('');
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = (await res.json().catch(() => ({}))) as { error?: string };
+
+      if (res.ok) {
+        setStatus('success');
+        return;
+      }
+
+      if (res.status === 409) {
+        setStatus('already');
+        return;
+      }
+
+      setErrorMsg(
+        typeof data.error === 'string' && data.error
+          ? data.error
+          : 'Something went wrong. Please try again.',
+      );
+      setStatus('error');
+    } catch {
+      setErrorMsg('Network error. Check your connection and try again.');
+      setStatus('error');
+    }
   };
 
   return (
@@ -122,6 +148,21 @@ export default function WaitlistPage() {
                     <div>
                       <p className="waitlist-success-title">You&apos;re on the list!</p>
                       <p className="waitlist-success-sub">We&apos;ll reach out when darwin opens at your campus.</p>
+                    </div>
+                  </motion.div>
+                ) : status === 'already' ? (
+                  <motion.div
+                    key="already"
+                    className="waitlist-success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4, ease }}
+                  >
+                    <CheckCircle2 size={20} className="waitlist-success-icon" />
+                    <div>
+                      <p className="waitlist-success-title">You&apos;re already on the list!</p>
+                      <p className="waitlist-success-sub">We already have your email — we&apos;ll be in touch when darwin launches.</p>
                     </div>
                   </motion.div>
                 ) : (
@@ -370,6 +411,20 @@ export default function WaitlistPage() {
                     <div>
                       <p className="waitlist-success-title">You&apos;re on the list!</p>
                       <p className="waitlist-success-sub">We&apos;ll reach out when darwin opens at your campus.</p>
+                    </div>
+                  </motion.div>
+                ) : status === 'already' ? (
+                  <motion.div
+                    key="already-bottom"
+                    className="waitlist-success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, ease }}
+                  >
+                    <CheckCircle2 size={20} className="waitlist-success-icon" />
+                    <div>
+                      <p className="waitlist-success-title">You&apos;re already on the list!</p>
+                      <p className="waitlist-success-sub">We already have your email — we&apos;ll be in touch when darwin launches.</p>
                     </div>
                   </motion.div>
                 ) : (

@@ -3,6 +3,31 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
+const EMAIL_ALREADY_REGISTERED = "Email already registered";
+
+function isDuplicateSignupError(err: {
+  message?: string;
+  code?: string;
+  status?: number;
+}): boolean {
+  const code = err.code ?? "";
+  if (
+    code === "email_exists" ||
+    code === "user_already_exists" ||
+    code === "identity_already_exists"
+  ) {
+    return true;
+  }
+  const msg = (err.message ?? "").toLowerCase();
+  return (
+    msg.includes("user already registered") ||
+    msg.includes("already registered") ||
+    msg.includes("email address is already") ||
+    msg.includes("email already") ||
+    msg.includes("user already exists")
+  );
+}
+
 interface OnboardingData {
   firstName: string;
   lastName: string;
@@ -24,7 +49,21 @@ export async function createAccountAndProfile(data: OnboardingData) {
   });
 
   if (authError) {
+    if (isDuplicateSignupError(authError)) {
+      return { error: EMAIL_ALREADY_REGISTERED };
+    }
     return { error: authError.message };
+  }
+
+  // Duplicate signup while "Confirm email" is on: GoTrue returns a stub user
+  // with no identities and no session (see signUp() remarks in @supabase/auth-js).
+  const stubDuplicateUser =
+    !authData.session &&
+    authData.user &&
+    Array.isArray(authData.user.identities) &&
+    authData.user.identities.length === 0;
+  if (stubDuplicateUser) {
+    return { error: EMAIL_ALREADY_REGISTERED };
   }
 
   // 2. If email verification is required, there's no session yet

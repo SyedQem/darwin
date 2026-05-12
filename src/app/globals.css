@@ -2755,8 +2755,9 @@ button, input, select, textarea { font: inherit; }
   display: inline-block;
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(9, 9, 11, 0.3);
-  border-top-color: var(--bg-primary);
+  /* High contrast on light .pill-btn; disabled opacity still reads */
+  border: 2px solid rgba(9, 9, 11, 0.18);
+  border-top-color: var(--accent);
   border-radius: 9999px;
   animation: spin 0.7s linear infinite;
 }
