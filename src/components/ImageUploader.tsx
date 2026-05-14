@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { ImagePlus, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import Image from 'next/image';
@@ -14,11 +14,21 @@ interface UploadedImage {
   uploading: boolean;
 }
 
-export default function ImageUploader() {
+interface ImageUploaderProps {
+  onUrlsChange?: (urls: string[]) => void;
+}
+
+export default function ImageUploader({ onUrlsChange }: ImageUploaderProps) {
   const [images, setImages] = useState<UploadedImage[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
+
+  useEffect(() => {
+    onUrlsChange?.(
+      images.filter((img) => img.url).map((img) => img.url as string)
+    );
+  }, [images, onUrlsChange]);
 
   const uploadFile = useCallback(
     async (file: File): Promise<string | null> => {
@@ -147,17 +157,6 @@ export default function ImageUploader() {
         </div>
       )}
 
-      {/* Hidden inputs for form submission */}
-      {images
-        .filter((img) => img.url)
-        .map((img, i) => (
-          <input
-            key={img.url}
-            type="hidden"
-            name={i === 0 ? 'image_url' : `image_url_${i}`}
-            value={img.url!}
-          />
-        ))}
     </div>
   );
 }

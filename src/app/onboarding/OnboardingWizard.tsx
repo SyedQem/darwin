@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useCallback } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -50,6 +51,27 @@ const LEVELS_OF_STUDY = [
   "PhD",
   "Alumni",
   "Other",
+];
+
+const SCHOOLS = [
+  {
+    id: "carleton",
+    name: "Carleton University",
+    location: "Ottawa, Ontario",
+    logo: "/images/schools/carleton.svg",
+  },
+  {
+    id: "uottawa",
+    name: "University of Ottawa",
+    location: "Ottawa, Ontario",
+    logo: "/images/schools/uottawa.svg",
+  },
+  {
+    id: "algonquin",
+    name: "Algonquin College",
+    location: "Ottawa, Ontario",
+    logo: "/images/schools/algonquin.svg",
+  },
 ];
 
 const STEP_META = [
@@ -337,131 +359,55 @@ export default function OnboardingWizard({ next }: { next?: string }) {
                   className="university-grid"
                   variants={itemVariants}
                 >
-                  {/* Carleton */}
-                  <motion.button
-                    type="button"
-                    className={`university-card${university === "carleton" ? " university-card--selected" : ""}`}
-                    onClick={() => {
-                      setUniversity("carleton");
-                      if (error) setError("");
-                    }}
-                    whileHover={{ y: -3 }}
-                    whileTap={{ scale: 0.985 }}
-                    data-accent="carleton"
-                  >
-                    <div className="university-card__icon">
-                      <span className="university-card__initial">C</span>
-                    </div>
-                    <div className="university-card__info">
-                      <h3 className="university-card__name">
-                        Carleton University
-                      </h3>
-                      <p className="university-card__location">
-                        Ottawa, Ontario
-                      </p>
-                    </div>
-                    <AnimatePresence>
-                      {university === "carleton" && (
-                        <motion.div
-                          className="university-card__check"
-                          initial={{ scale: 0, rotate: -90 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          exit={{ scale: 0, rotate: 90 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 25,
-                          }}
-                        >
-                          <Check size={14} strokeWidth={3} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
-
-                  {/* uOttawa */}
-                  <motion.button
-                    type="button"
-                    className={`university-card${university === "uottawa" ? " university-card--selected" : ""}`}
-                    onClick={() => {
-                      setUniversity("uottawa");
-                      if (error) setError("");
-                    }}
-                    whileHover={{ y: -3 }}
-                    whileTap={{ scale: 0.985 }}
-                    data-accent="uottawa"
-                  >
-                    <div className="university-card__icon">
-                      <span className="university-card__initial">uO</span>
-                    </div>
-                    <div className="university-card__info">
-                      <h3 className="university-card__name">
-                        University of Ottawa
-                      </h3>
-                      <p className="university-card__location">
-                        Ottawa, Ontario
-                      </p>
-                    </div>
-                    <AnimatePresence>
-                      {university === "uottawa" && (
-                        <motion.div
-                          className="university-card__check"
-                          initial={{ scale: 0, rotate: -90 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          exit={{ scale: 0, rotate: 90 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 25,
-                          }}
-                        >
-                          <Check size={14} strokeWidth={3} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
-
-                  {/* Algonquin College */}
-                  <motion.button
-                    type="button"
-                    className={`university-card${university === "algonquin" ? " university-card--selected" : ""}`}
-                    onClick={() => {
-                      setUniversity("algonquin");
-                      if (error) setError("");
-                    }}
-                    whileHover={{ y: -3 }}
-                    whileTap={{ scale: 0.985 }}
-                    data-accent="algonquin"
-                  >
-                    <div className="university-card__icon">
-                      <span className="university-card__initial">AC</span>
-                    </div>
-                    <div className="university-card__info">
-                      <h3 className="university-card__name">
-                        Algonquin College
-                      </h3>
-                      <p className="university-card__location">
-                        Ottawa, Ontario
-                      </p>
-                    </div>
-                    <AnimatePresence>
-                      {university === "algonquin" && (
-                        <motion.div
-                          className="university-card__check"
-                          initial={{ scale: 0, rotate: -90 }}
-                          animate={{ scale: 1, rotate: 0 }}
-                          exit={{ scale: 0, rotate: 90 }}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 25,
-                          }}
-                        >
-                          <Check size={14} strokeWidth={3} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
+                  {SCHOOLS.map((school) => (
+                    <motion.button
+                      key={school.id}
+                      type="button"
+                      className={`university-card${university === school.id ? " university-card--selected" : ""}`}
+                      onClick={() => {
+                        setUniversity(school.id);
+                        if (error) setError("");
+                      }}
+                      whileHover={{ y: -3 }}
+                      whileTap={{ scale: 0.985 }}
+                      data-accent={school.id}
+                    >
+                      <div className="university-card__icon">
+                        <Image
+                          src={school.logo}
+                          alt={`${school.name} logo`}
+                          width={32}
+                          height={32}
+                          className="university-card__logo"
+                        />
+                      </div>
+                      <div className="university-card__info">
+                        <h3 className="university-card__name">
+                          {school.name}
+                        </h3>
+                        <p className="university-card__location">
+                          {school.location}
+                        </p>
+                      </div>
+                      <AnimatePresence>
+                        {university === school.id && (
+                          <motion.div
+                            className="university-card__check"
+                            initial={{ scale: 0, rotate: -90 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            exit={{ scale: 0, rotate: 90 }}
+                            transition={{
+                              type: "spring",
+                              stiffness: 500,
+                              damping: 25,
+                            }}
+                          >
+                            <Check size={14} strokeWidth={3} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.button>
+                  ))}
                 </motion.div>
               )}
 
