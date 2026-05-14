@@ -2,8 +2,6 @@ import WaitlistEmail from '@/components/WaitlistEmail';
 import { render } from '@react-email/render';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: Request) {
     try {
         const { email } = await request.json();
@@ -11,6 +9,10 @@ export async function POST(request: Request) {
         if (!email) {
             return Response.json({ error: 'Email is required' }, { status: 400 });
         }
+
+        // Instantiated per request — module-scope construction runs during
+        // `next build` page-data collection, where RESEND_API_KEY is absent.
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         const { data, error } = await resend.emails.send({
             from: 'Darwin <noreply@vesperworks.ca>',

@@ -5,6 +5,14 @@ import { createClient } from "@/lib/supabase/server";
 
 const EMAIL_ALREADY_REGISTERED = "Email already registered";
 
+// Only allow single-slash internal paths — no protocol-relative or absolute
+// URLs — to prevent open-redirect via `?next=`.
+function safeNext(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  if (!raw.startsWith("/") || raw.startsWith("//")) return null;
+  return raw;
+}
+
 function isDuplicateSignupError(err: {
   message?: string;
   code?: string;
@@ -37,6 +45,7 @@ interface OnboardingData {
   interests: string[];
   email: string;
   password: string;
+  next?: string;
 }
 
 export async function createAccountAndProfile(data: OnboardingData) {
@@ -99,5 +108,5 @@ export async function createAccountAndProfile(data: OnboardingData) {
     }
   }
 
-  redirect("/browse");
+  redirect(safeNext(data.next) ?? "/browse");
 }

@@ -3,13 +3,6 @@ import { render } from '@react-email/render';
 import { Resend } from 'resend';
 import WaitlistEmail from '@/components/WaitlistEmail';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function POST(request: Request) {
     try {
         const { email } = await request.json();
@@ -17,6 +10,14 @@ export async function POST(request: Request) {
         if (!email) {
             return Response.json({ error: 'Email is required' }, { status: 400 });
         }
+
+        // Instantiated per request — module-scope construction runs during
+        // `next build` page-data collection, where these env vars are absent.
+        const supabase = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!
+        );
+        const resend = new Resend(process.env.RESEND_API_KEY);
 
         //Store email in Supabase
         const { error: dbError } = await supabase

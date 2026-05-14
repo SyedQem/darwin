@@ -109,7 +109,11 @@ function LoginContent() {
       <div className="auth-alt-action" aria-hidden="true" />
       <p className="auth-alt-copy text-secondary">
         New here?{" "}
-        <Link href="/onboarding" className="auth-alt-link" style={{ textDecoration: "underline", cursor: "pointer" }}>
+        <Link
+          href={next ? `/onboarding?next=${encodeURIComponent(next)}` : "/onboarding"}
+          className="auth-alt-link"
+          style={{ textDecoration: "underline", cursor: "pointer" }}
+        >
           Create an account
         </Link>
       </p>
