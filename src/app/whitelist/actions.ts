@@ -6,18 +6,20 @@ import { createCheckoutSession } from "@/lib/stripe";
 import { isTierKey } from "@/lib/whitelist";
 
 export async function startCheckout(formData: FormData): Promise<void> {
+    const tier = formData.get("tier");
+    if (!isTierKey(tier)) {
+        redirect("/whitelist?error=invalid_tier");
+    }
+
     const supabase = await createClient();
     const {
         data: { user },
     } = await supabase.auth.getUser();
 
+    // Not signed in — send to login carrying the chosen tier, so the flow
+    // resumes straight into Stripe checkout once the user authenticates.
     if (!user) {
-        redirect("/login?next=/whitelist");
-    }
-
-    const tier = formData.get("tier");
-    if (!isTierKey(tier)) {
-        redirect("/whitelist?error=invalid_tier");
+        redirect(`/login?next=${encodeURIComponent(`/whitelist?tier=${tier}`)}`);
     }
 
     // Defense-in-depth: block obviously sold-out tiers before hitting Lemon.

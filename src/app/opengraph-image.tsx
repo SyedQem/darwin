@@ -68,7 +68,7 @@ export default function OGImage() {
             style={{
               fontSize: '42px',
               fontWeight: 800,
-              color: '#a78bfa',
+              color: '#f97316',
             }}
           >
             .
@@ -116,7 +116,7 @@ export default function OGImage() {
             left: 0,
             right: 0,
             height: '4px',
-            background: 'linear-gradient(90deg, #6366f1, #a78bfa, #6366f1)',
+            background: 'linear-gradient(90deg, #fbbf24, #f97316, #fbbf24)',
           }}
         />
       </div>

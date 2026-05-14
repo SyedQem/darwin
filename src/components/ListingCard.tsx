@@ -58,8 +58,8 @@ export default function ListingCard({ listing, index, variant = 'default' }: Pro
             >
               <Heart
                 size={14}
-                fill={saved ? '#a78bfa' : 'none'}
-                color={saved ? '#a78bfa' : '#fff'}
+                fill={saved ? '#f97316' : 'none'}
+                color={saved ? '#f97316' : '#fff'}
               />
             </motion.button>
           </div>

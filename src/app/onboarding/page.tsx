@@ -7,6 +7,11 @@ export const metadata: Metadata = {
     "Set up your campus marketplace profile to start buying and selling.",
 };
 
-export default function OnboardingPage() {
-  return <OnboardingWizard />;
+export default async function OnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
+  return <OnboardingWizard next={next} />;
 }

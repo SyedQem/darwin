@@ -133,7 +133,7 @@ const containerChildVariants = {
 
 /* ── Component ── */
 
-export default function OnboardingWizard() {
+export default function OnboardingWizard({ next }: { next?: string }) {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPending, startTransition] = useTransition();
@@ -203,6 +203,7 @@ export default function OnboardingWizard() {
         interests,
         email: email.trim(),
         password,
+        next,
       });
       if (result?.error) {
         setError(result.error);
@@ -217,6 +218,7 @@ export default function OnboardingWizard() {
     interests,
     email,
     password,
+    next,
   ]);
 
   /* ── Render ── */
