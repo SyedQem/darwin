@@ -3,7 +3,17 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export async function createListing(formData: FormData): Promise<void> {
+export interface NewListingInput {
+    title: string;
+    price: number;
+    imageUrls: string[];
+    condition: string;
+    category: string;
+    description: string;
+    campus: string;
+}
+
+export async function createListing(input: NewListingInput) {
     const supabase = await createClient();
 
     const {
@@ -14,27 +24,32 @@ export async function createListing(formData: FormData): Promise<void> {
         redirect("/login");
     }
 
-    const title = String(formData.get("title") || "");
-    const description = String(formData.get("description") || "");
-    const price = Number(formData.get("price") || 0);
-    const category = String(formData.get("category") || "");
-    const campus = String(formData.get("campus") || "");
-    const image_url = formData.get("image_url")
-        ? String(formData.get("image_url"))
-        : null;
+    const title = input.title.trim();
+    const price = Number(input.price);
+
+    if (!title) {
+        return { error: "Title is required" };
+    }
+    if (!Number.isFinite(price) || price <= 0) {
+        return { error: "Enter a price greater than $0" };
+    }
+
+    const imageUrls = input.imageUrls.filter(Boolean);
 
     const { error } = await supabase.from("listings").insert({
         user_id: user.id,
         title,
-        description,
+        description: input.description.trim() || null,
         price,
-        category,
-        campus,
-        image_url,
+        category: input.category || null,
+        condition: input.condition || null,
+        campus: input.campus.trim() || null,
+        image_url: imageUrls[0] ?? null,
+        image_urls: imageUrls.length > 0 ? imageUrls : null,
     });
 
     if (error) {
-        redirect("/sell?error=" + encodeURIComponent(error.message));
+        return { error: error.message };
     }
 
     redirect("/sell?success=true");
