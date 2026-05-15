@@ -6,11 +6,13 @@ import {
     ArrowUpRight,
     Check,
     CheckCircle2,
-    Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { retrieveSession } from "@/lib/stripe";
 import { TIERS, isTierKey } from "@/lib/whitelist";
+import AnimatedCheck from "@/components/effects/AnimatedCheck";
+import Confetti from "@/components/effects/Confetti";
+import ShineBorder from "@/components/effects/ShineBorder";
 
 // Always re-render: the page reflects a live Stripe session and must never
 // be served from a static cache.
@@ -94,6 +96,8 @@ export default async function WhitelistSuccessPage({
 
                 <div className="container-vspr relative z-10">
                     <div className="whitelist-success-panel waitlist-founding-panel">
+                        <Confetti trigger={session_id} />
+                        <ShineBorder duration={10} />
                         <div
                             className="waitlist-founding-grid"
                             aria-hidden="true"
@@ -102,16 +106,12 @@ export default async function WhitelistSuccessPage({
                             className="waitlist-founding-glow"
                             aria-hidden="true"
                         />
-                        <div
-                            className="waitlist-founding-ornament"
-                            aria-hidden="true"
-                        >
-                            <div className="waitlist-founding-ornament-ring" />
-                            <div className="waitlist-founding-ornament-ring waitlist-founding-ornament-ring--outer" />
-                            <Sparkles
-                                size={40}
+                        <div className="waitlist-founding-ornament">
+                            <div className="waitlist-founding-ornament-ring" aria-hidden="true" />
+                            <div className="waitlist-founding-ornament-ring waitlist-founding-ornament-ring--outer" aria-hidden="true" />
+                            <AnimatedCheck
+                                size={44}
                                 className="waitlist-founding-ornament-icon"
-                                strokeWidth={1.5}
                             />
                         </div>
 

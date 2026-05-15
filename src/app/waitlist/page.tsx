@@ -1,29 +1,23 @@
 'use client';
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, MapPin, Zap, ArrowRight, CheckCircle2, Users, Clock, Star, Sparkles } from 'lucide-react';
+import { ShieldCheck, MapPin, Zap, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import AnimatedGradientText from '@/components/effects/AnimatedGradientText';
+import DotPatternSpotlight from '@/components/effects/DotPatternSpotlight';
+import { BentoGrid, BentoCard } from '@/components/effects/BentoGrid';
+import Marquee from '@/components/effects/Marquee';
+import Confetti from '@/components/effects/Confetti';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const features = [
-  {
-    icon: <ShieldCheck size={22} />,
-    label: 'Verified Students Only',
-    desc: 'Sign up with your university email. Every buyer and seller is a real, verified student from your campus.',
-  },
-  {
-    icon: <MapPin size={22} />,
-    label: 'Campus-Only Listings',
-    desc: 'Browse items from students at your school. No strangers, no shipping — just local, safe exchanges.',
-  },
-  {
-    icon: <Zap size={22} />,
-    label: 'Fast & Frictionless',
-    desc: 'List in seconds, connect instantly. Darwin is built for students — not for navigating bloated interfaces.',
-  },
+const SCHOOLS = [
+  { id: 'carleton', name: 'Carleton University', logo: '/images/schools/carleton.svg' },
+  { id: 'uottawa', name: 'University of Ottawa', logo: '/images/schools/uottawa.svg' },
+  { id: 'algonquin', name: 'Algonquin College', logo: '/images/schools/algonquin.svg' },
 ];
 
 export default function WaitlistPage() {
@@ -84,12 +78,14 @@ export default function WaitlistPage() {
 
   return (
     <div className="waitlist-page">
+      <Confetti trigger={status === 'success' ? 'fired' : 'idle'} />
       {/* ── HERO ── */}
       <section ref={heroRef} className="waitlist-hero">
-        {/* Background orb + grid */}
+        {/* Background orb + dot-pattern spotlight */}
         <div className="waitlist-backdrop" aria-hidden="true">
           <motion.div className="waitlist-orb" style={{ y: orbY }} />
           <div className="waitlist-grid" />
+          <DotPatternSpotlight />
         </div>
 
         <div className="container-vspr relative z-10">
@@ -114,7 +110,7 @@ export default function WaitlistPage() {
             >
               Your campus.
               <br />
-              <span className="text-muted">Your marketplace.</span>
+              <AnimatedGradientText>Your marketplace.</AnimatedGradientText>
             </motion.h1>
 
             {/* Subhead */}
@@ -193,7 +189,7 @@ export default function WaitlistPage() {
                       <button
                         id="waitlist-submit"
                         type="submit"
-                        className="pill-btn waitlist-submit-btn"
+                        className="pill-btn shimmer-btn waitlist-submit-btn"
                         disabled={status === 'loading'}
                         aria-label="Join waitlist"
                       >
@@ -220,7 +216,7 @@ export default function WaitlistPage() {
                       Use your preferred <span className="waitlist-helper-accent">email</span> for early access.
                     </p>
                     <motion.div
-                      className="mt-20 text-left"
+                      className="text-left"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.7, duration: 0.5 }}
@@ -239,7 +235,7 @@ export default function WaitlistPage() {
         </div>
       </section>
 
-      {/* ── FEATURES ── */}
+      {/* ── FEATURES (bento) ── */}
       <section className="waitlist-features-section">
         <div className="container-vspr">
           <motion.div
@@ -255,24 +251,67 @@ export default function WaitlistPage() {
             </h2>
           </motion.div>
 
-          <div className="waitlist-features-grid">
-            {features.map((f, i) => (
-              <motion.div
-                key={f.label}
-                className="waitlist-feature-card vspr-card"
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: i * 0.1, duration: 0.55, ease }}
-              >
-                <div className="waitlist-feature-icon-wrap">
-                  {f.icon}
+          <BentoGrid>
+            <BentoCard
+              span="lg"
+              delay={0}
+              icon={<ShieldCheck size={20} />}
+              title="Verified Students Only"
+              description="Sign up with your university email. Every buyer and seller is a real, verified student from your campus — no impostors, no scammers."
+              background={
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,transparent_65%)] blur-2xl"
+                />
+              }
+            />
+            <BentoCard
+              span="sm"
+              delay={0.08}
+              icon={<MapPin size={20} />}
+              title="Campus-Only"
+              description="Browse items from students at your school. No strangers, no shipping — just local, safe exchanges."
+            />
+            <BentoCard
+              span="sm"
+              delay={0.16}
+              icon={<Zap size={20} />}
+              title="Fast & Frictionless"
+              description="List in seconds, connect instantly. Built for students — not for navigating bloated interfaces."
+            />
+          </BentoGrid>
+
+          {/* School logo marquee */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.6, ease }}
+            className="mt-16"
+          >
+            <p className="section-label text-center text-[var(--text-muted)]">
+              Joining students from
+            </p>
+            <Marquee className="mt-6" durationSec={28}>
+              {SCHOOLS.map((s) => (
+                <div
+                  key={s.id}
+                  className="flex items-center gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)]/60 px-5 py-3"
+                >
+                  <Image
+                    src={s.logo}
+                    alt={s.name}
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 shrink-0 object-contain opacity-80"
+                  />
+                  <span className="text-sm tracking-wide text-[var(--text-secondary)]">
+                    {s.name}
+                  </span>
                 </div>
-                <h3 className="waitlist-feature-title">{f.label}</h3>
-                <p className="waitlist-feature-desc text-secondary">{f.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+              ))}
+            </Marquee>
+          </motion.div>
         </div>
       </section>
 
@@ -454,7 +493,7 @@ export default function WaitlistPage() {
                       <button
                         id="waitlist-submit-bottom"
                         type="submit"
-                        className="pill-btn waitlist-submit-btn"
+                        className="pill-btn shimmer-btn waitlist-submit-btn"
                         disabled={status === 'loading'}
                       >
                         {status === 'loading' ? (
