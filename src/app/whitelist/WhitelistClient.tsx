@@ -10,6 +10,14 @@ import {
 } from "lucide-react";
 import { TIERS, type TierKey } from "@/lib/whitelist";
 import { startCheckout } from "./actions";
+import AnimatedGradientText from "@/components/effects/AnimatedGradientText";
+import BorderBeam from "@/components/effects/BorderBeam";
+import CardSpotlight from "@/components/effects/CardSpotlight";
+import DotPatternSpotlight from "@/components/effects/DotPatternSpotlight";
+import NumberTicker from "@/components/effects/NumberTicker";
+import BenefitTooltip from "@/components/effects/BenefitTooltip";
+import FoundingBadge from "@/components/FoundingBadge";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -19,18 +27,52 @@ type Props = {
     spots: Record<TierKey, SpotRow>;
 };
 
-const MEMBER_BENEFITS = [
-    "1 boosted listing every month, forever",
-    "Early access to marketplace features",
-    "Founding-member status preserved in your profile",
+type Benefit = { text: string; tooltipPhrase?: string; preview?: React.ReactNode };
+
+const MEMBER_BENEFITS: Benefit[] = [
+    { text: "1 boosted listing every month, forever" },
+    { text: "Early access to marketplace features" },
+    {
+        text: "Founding-member status preserved in your profile",
+        tooltipPhrase: "Founding-member status",
+        preview: (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--accent)]/35 bg-[var(--accent)]/10 px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.16em] text-[var(--accent)]">
+                <Sparkles size={11} />
+                Founding Member
+            </span>
+        ),
+    },
 ];
 
-const PRO_BENEFITS = [
-    "3 boosted listings every month, forever",
-    "Founding Pro badge on your profile",
-    "Priority support during the pre-launch period",
-    "Early access to every upcoming feature",
+const PRO_BENEFITS: Benefit[] = [
+    { text: "3 boosted listings every month, forever" },
+    {
+        text: "Founding Pro badge on your profile",
+        tooltipPhrase: "Founding Pro badge",
+        preview: <FoundingBadge tier="founding_pro" />,
+    },
+    { text: "Priority support during the pre-launch period" },
+    { text: "Early access to every upcoming feature" },
 ];
+
+function BenefitLine({ benefit }: { benefit: Benefit }) {
+    if (!benefit.tooltipPhrase || !benefit.preview) {
+        return <span>{benefit.text}</span>;
+    }
+    const idx = benefit.text.indexOf(benefit.tooltipPhrase);
+    if (idx < 0) return <span>{benefit.text}</span>;
+    const before = benefit.text.slice(0, idx);
+    const after = benefit.text.slice(idx + benefit.tooltipPhrase.length);
+    return (
+        <span>
+            {before}
+            <BenefitTooltip preview={benefit.preview}>
+                {benefit.tooltipPhrase}
+            </BenefitTooltip>
+            {after}
+        </span>
+    );
+}
 
 const STEPS = [
     {
@@ -74,6 +116,7 @@ export default function WhitelistClient({ spots }: Props) {
                 <div className="waitlist-backdrop" aria-hidden="true">
                     <motion.div className="waitlist-orb" style={{ y: orbY }} />
                     <div className="waitlist-grid" />
+                    <DotPatternSpotlight />
                 </div>
 
                 <div className="container-vspr relative z-10">
@@ -99,7 +142,7 @@ export default function WhitelistClient({ spots }: Props) {
                         >
                             Pay once.
                             <br />
-                            <span className="text-muted">Boost forever.</span>
+                            <AnimatedGradientText>Boost forever.</AnimatedGradientText>
                         </motion.h1>
 
                         <motion.p
@@ -182,23 +225,25 @@ export default function WhitelistClient({ spots }: Props) {
                         </h2>
                     </motion.div>
 
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <TierCard
-                            tierKey="founding_member"
-                            spot={spots.founding_member}
-                            icon={<Sparkles size={18} />}
-                            benefits={MEMBER_BENEFITS}
-                            delay={0}
-                        />
-                        <TierCard
-                            tierKey="founding_pro"
-                            spot={spots.founding_pro}
-                            icon={<Star size={18} />}
-                            benefits={PRO_BENEFITS}
-                            featured
-                            delay={0.1}
-                        />
-                    </div>
+                    <TooltipProvider>
+                        <div className="grid gap-6 md:grid-cols-2">
+                            <TierCard
+                                tierKey="founding_member"
+                                spot={spots.founding_member}
+                                icon={<Sparkles size={18} />}
+                                benefits={MEMBER_BENEFITS}
+                                delay={0}
+                            />
+                            <TierCard
+                                tierKey="founding_pro"
+                                spot={spots.founding_pro}
+                                icon={<Star size={18} />}
+                                benefits={PRO_BENEFITS}
+                                featured
+                                delay={0.1}
+                            />
+                        </div>
+                    </TooltipProvider>
                 </div>
             </section>
 
@@ -318,7 +363,7 @@ function TierCard({
     tierKey: TierKey;
     spot: SpotRow;
     icon: React.ReactNode;
-    benefits: string[];
+    benefits: Benefit[];
     featured?: boolean;
     delay?: number;
 }) {
@@ -332,13 +377,16 @@ function TierCard({
 
     return (
         <motion.div
-            className={`whitelist-card flex flex-col h-full ${featured ? "whitelist-card--featured" : ""}`}
+            className={`whitelist-card isolate flex flex-col h-full ${featured ? "whitelist-card--featured" : ""}`}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ delay, duration: 0.55, ease }}
         >
-            <div className="flex items-center justify-between mb-5">
+            <CardSpotlight radius={featured ? 320 : 240} />
+            {featured && <BorderBeam duration={6} />}
+
+            <div className="relative z-10 flex items-center justify-between mb-5">
                 <span className="whitelist-card-kicker">
                     {icon}
                     {tier.label}
@@ -348,36 +396,40 @@ function TierCard({
                 )}
             </div>
 
-            <div className="flex items-baseline gap-2 mb-10">
-                <span className="price-tag text-5xl">${tier.price}</span>
+            <div className="relative z-10 flex items-baseline gap-2 mb-7">
+                <span className="price-tag text-5xl">
+                    <NumberTicker value={tier.price} prefix="$" />
+                </span>
                 <span className="text-muted text-sm">one-time</span>
             </div>
 
-            <div className="whitelist-card-divider" aria-hidden="true" />
+            <div className="relative z-10 whitelist-card-divider" aria-hidden="true" />
 
             <ul
-                className={`flex flex-col gap-5 mt-10 mb-8 flex-1 ${featured ? "" : "justify-center"}`}
+                className={`relative z-10 flex flex-col gap-4 mt-7 mb-8 flex-1 ${featured ? "" : "justify-center"}`}
             >
                 {benefits.map((b) => (
                     <li
-                        key={b}
+                        key={b.text}
                         className="flex items-start gap-3 text-[15px] text-secondary leading-relaxed"
                     >
                         <Check
                             size={16}
                             className="mt-1 shrink-0 text-[color:var(--accent)]"
                         />
-                        <span>{b}</span>
+                        <BenefitLine benefit={b} />
                     </li>
                 ))}
             </ul>
 
-            <div className="mb-8">
-                <div className="flex items-center justify-between text-xs text-muted mb-2">
+            <div className="relative z-10 mb-6">
+                <div className="flex items-center justify-between text-xs text-muted mb-2.5">
                     <span>
-                        {remaining} of {spot.total} spots left
+                        <NumberTicker value={remaining} /> of {spot.total} spots left
                     </span>
-                    <span>{Math.round(progressPct)}% claimed</span>
+                    <span>
+                        <NumberTicker value={Math.round(progressPct)} suffix="%" /> claimed
+                    </span>
                 </div>
                 <div
                     className="whitelist-progress"
@@ -397,17 +449,17 @@ function TierCard({
                 <button
                     type="button"
                     disabled
-                    className="pill-btn w-full min-h-12"
+                    className="relative z-10 pill-btn w-full min-h-12"
                     aria-disabled="true"
                 >
                     Sold Out
                 </button>
             ) : (
-                <form action={startCheckout}>
+                <form action={startCheckout} className="relative z-10">
                     <input type="hidden" name="tier" value={tierKey} />
                     <button
                         type="submit"
-                        className={`w-full min-h-12 ${featured ? "pill-btn" : "pill-btn pill-btn-outline"}`}
+                        className={`w-full min-h-12 ${featured ? "pill-btn shimmer-btn" : "pill-btn pill-btn-outline"}`}
                     >
                         Claim {tier.label}
                     </button>
