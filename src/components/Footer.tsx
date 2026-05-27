@@ -112,6 +112,9 @@ export default function Footer() {
                   {link}
                 </Link>
               ))}
+              <Link href="/privacy" className="nav-link">
+                Privacy
+              </Link>
             </div>
 
             <div className="flex items-center gap-3">

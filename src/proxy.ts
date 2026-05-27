@@ -9,6 +9,7 @@ export async function proxy(request: NextRequest) {
       '/whitelist',
       '/login',
       '/onboarding',
+      '/privacy',
       '/_next',
       '/favicon.ico',
       '/api',
