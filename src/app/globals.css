@@ -973,6 +973,93 @@ h1, h2, h3, h4,
     var(--bg-card);
 }
 
+/* ── Messaging ── */
+.messages-thread-layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: calc(100vh - var(--nav-offset) - 4rem);
+  min-height: 0;
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+.conversation-item:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-elevated);
+}
+.conversation-item--active {
+  border-color: rgba(249, 115, 22, 0.3);
+  background: var(--accent-glow);
+}
+
+.conversation-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(249, 115, 22, 0.5);
+  flex-shrink: 0;
+}
+
+.msg-bubble-mine {
+  background: rgba(249, 115, 22, 0.1);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 18px 18px 4px 18px;
+  padding: 0.65rem 1rem;
+  max-width: 72%;
+  word-break: break-word;
+}
+.msg-bubble-theirs {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: 18px 18px 18px 4px;
+  padding: 0.65rem 1rem;
+  max-width: 72%;
+  word-break: break-word;
+}
+
+.msg-input-row {
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 1rem 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.nav-unread-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--accent);
+  font-size: 0.55rem;
+  font-family: var(--font-mono), monospace;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  color: white;
+  pointer-events: none;
+  line-height: 1;
+}
+
 .home-how-it-works {
   padding-bottom: 6rem;
 }

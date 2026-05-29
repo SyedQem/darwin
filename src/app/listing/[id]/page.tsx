@@ -6,11 +6,11 @@ import {
   Heart,
   MapPin,
   Star,
-  MessageCircle,
   Share2,
   Shield,
   Clock,
 } from 'lucide-react';
+import MessageSellerButton from '@/components/MessageSellerButton';
 import Link from 'next/link';
 import { sampleListings, getConditionClass } from '@/lib/data';
 import Image from 'next/image';
@@ -200,10 +200,11 @@ export default function ListingDetailPage({
               transition={stagger(8)}
               className="flex flex-col sm:flex-row gap-3 mt-8"
             >
-              <button className="pill-btn ui-icon-label flex-1 min-h-12">
-                <MessageCircle size={17} />
-                <span>Message Seller</span>
-              </button>
+              <MessageSellerButton
+                listingId={listing.id}
+                sellerId={(listing.seller as { id?: string }).id ?? ''}
+                listingTitle={listing.title}
+              />
               <button className="pill-btn pill-btn-outline ui-icon-label min-h-12 transition-colors hover:bg-white/5 hover:border-white/30">
                 <Heart size={17} />
                 <span>Save</span>
