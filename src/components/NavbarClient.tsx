@@ -4,13 +4,16 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Menu, X, ArrowRight } from 'lucide-react';
+import { Heart, MessageCircle, Menu, X, ArrowRight } from 'lucide-react';
+import UnreadBadge from './UnreadBadge';
 
 type NavbarClientProps = {
   isLoggedIn: boolean;
+  userId: string | null;
+  initialUnreadCount: number;
 };
 
-export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
+export default function NavbarClient({ isLoggedIn, userId, initialUnreadCount }: NavbarClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const isWaitlist = pathname === '/waitlist' || pathname === '/whitelist';
@@ -55,6 +58,17 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                 >
                   <Heart size={18} />
                 </Link>
+
+                {isLoggedIn && userId && (
+                  <Link
+                    href="/messages"
+                    className="relative text-secondary transition-colors hover:text-white"
+                    aria-label="Messages"
+                  >
+                    <MessageCircle size={18} />
+                    <UnreadBadge initialCount={initialUnreadCount} userId={userId} />
+                  </Link>
+                )}
 
                 <div className="ml-3 flex items-center gap-3">
                   <Link href="/sell" className="nav-sell-btn group">
@@ -125,6 +139,7 @@ export default function NavbarClient({ isLoggedIn }: NavbarClientProps) {
                     { href: '/whitelist', label: 'Go Pro' },
                     { href: '/sell', label: 'List Item' },
                     { href: '/saved', label: 'Saved' },
+                    ...(isLoggedIn ? [{ href: '/messages', label: 'Messages' }] : []),
                   ].map((link) => (
                     <Link
                       key={link.href}
