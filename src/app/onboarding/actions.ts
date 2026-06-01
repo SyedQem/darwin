@@ -51,10 +51,25 @@ interface OnboardingData {
 export async function createAccountAndProfile(data: OnboardingData) {
   const supabase = await createClient();
 
+  const fullName = [data.firstName, data.lastName]
+    .filter(Boolean)
+    .join(" ");
+
   // 1. Create the Supabase auth account
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email: data.email,
     password: data.password,
+    options: {
+      data: {
+        first_name: data.firstName,
+        last_name: data.lastName || null,
+        full_name: fullName,
+        school: data.university || null,
+        level_of_study: data.levelOfStudy || null,
+        program: data.program || null,
+        interests: data.interests.length > 0 ? data.interests : null,
+      },
+    },
   });
 
   if (authError) {

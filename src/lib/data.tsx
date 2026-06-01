@@ -24,6 +24,7 @@ export interface Listing {
   description: string;
   image: string;
   seller: {
+    id?: string;
     name: string;
     avatar: string;
     rating: number;
