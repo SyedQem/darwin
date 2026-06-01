@@ -1,5 +1,5 @@
 'use client';
-import { use } from 'react';
+import { use, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -12,9 +12,10 @@ import {
 } from 'lucide-react';
 import MessageSellerButton from '@/components/MessageSellerButton';
 import Link from 'next/link';
-import { sampleListings, getConditionClass } from '@/lib/data';
+import { sampleListings, getConditionClass, Listing } from '@/lib/data';
 import Image from 'next/image';
 import PageTransition from '@/components/PageTransition';
+import { createClient } from '@/lib/supabase/client';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -28,7 +29,90 @@ export default function ListingDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const listing = sampleListings.find((l) => l.id === id);
+  const [listing, setListing] = useState<Listing | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 1. Check sample listings first
+    const sample = sampleListings.find((l) => l.id === id);
+    if (sample) {
+      setListing(sample);
+      setLoading(false);
+      return;
+    }
+
+    // 2. Fetch from DB
+    async function fetchDbListing() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('listings')
+          .select(`
+            id,
+            title,
+            description,
+            price,
+            category,
+            condition,
+            campus,
+            image_url,
+            created_at,
+            seller:profiles (
+              id,
+              first_name,
+              full_name,
+              avatar_url
+            )
+          `)
+          .eq('id', id)
+          .maybeSingle();
+
+        if (error) {
+          console.error('Error fetching listing:', error);
+          return;
+        }
+
+        if (data) {
+          const sellerMeta = (data as any).seller || {};
+          const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
+          setListing({
+            id: data.id,
+            title: data.title,
+            price: data.price,
+            category: (data.category as any) || 'Other',
+            condition: (data.condition as any) || 'New',
+            description: data.description || '',
+            image: data.image_url || '/images/textbook.svg',
+            seller: {
+              id: sellerMeta.id || '',
+              name: sellerName,
+              avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
+              rating: 5.0,
+              campus: data.campus || 'Main Campus',
+            },
+            createdAt: data.created_at,
+            saved: false,
+          });
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchDbListing();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <PageTransition>
+        <div className="container-vspr page-shell text-center">
+          <p className="text-secondary mt-10">Loading listing details...</p>
+        </div>
+      </PageTransition>
+    );
+  }
 
   if (!listing) {
     return (

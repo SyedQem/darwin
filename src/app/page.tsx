@@ -1,10 +1,11 @@
 'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowDown, ArrowRight, Search, MapPin } from 'lucide-react';
-import { categories, categoryIcons, sampleListings } from '@/lib/data';
+import { categories, categoryIcons, sampleListings, Listing } from '@/lib/data';
+import { createClient } from '@/lib/supabase/client';
 import ListingCard from '@/components/ListingCard';
 import Reviews from '@/components/Reviews';
 import AnimatedSection from '@/components/AnimatedSection';
@@ -19,6 +20,74 @@ export default function HomePage() {
     offset: ['start start', 'end start'],
   });
   const phoneY = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
+
+  const [dbListings, setDbListings] = useState<Listing[]>([]);
+
+  useEffect(() => {
+    async function fetchListings() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('listings')
+          .select(`
+            id,
+            title,
+            description,
+            price,
+            category,
+            condition,
+            campus,
+            image_url,
+            created_at,
+            seller:profiles (
+              id,
+              first_name,
+              full_name,
+              avatar_url
+            )
+          `)
+          .order('created_at', { ascending: false })
+          .limit(4);
+
+        if (error) {
+          console.error('Error fetching listings:', error);
+          return;
+        }
+
+        if (data) {
+          const mapped: Listing[] = data.map((item: any) => {
+            const sellerMeta = item.seller || {};
+            const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
+            return {
+              id: item.id,
+              title: item.title,
+              price: item.price,
+              category: (item.category as any) || 'Other',
+              condition: (item.condition as any) || 'New',
+              description: item.description || '',
+              image: item.image_url || '/images/textbook.svg',
+              seller: {
+                id: sellerMeta.id || '',
+                name: sellerName,
+                avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
+                rating: 5.0,
+                campus: item.campus || 'Main Campus',
+              },
+              createdAt: item.created_at,
+              saved: false,
+            };
+          });
+          setDbListings(mapped);
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    }
+
+    fetchListings();
+  }, []);
+
+  const featuredListings = [...dbListings, ...sampleListings].slice(0, 4);
 
   /* Phone listings data */
   const phoneListings = sampleListings.slice(0, 5);
@@ -223,7 +292,7 @@ export default function HomePage() {
           </AnimatedSection>
 
           <div className="grid grid-cols-1 auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {sampleListings.slice(0, 4).map((listing, i) => (
+            {featuredListings.map((listing, i) => (
               <ListingCard key={listing.id} listing={listing} index={i} />
             ))}
           </div>

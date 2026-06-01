@@ -1,11 +1,12 @@
 'use client';
-import { useMemo, useState, Suspense } from 'react';
+import { useMemo, useState, Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Compass, Search, Sparkles, X } from 'lucide-react';
-import { categories, Category, sampleListings } from '@/lib/data';
+import { categories, Category, sampleListings, Listing } from '@/lib/data';
+import { createClient } from '@/lib/supabase/client';
 import ListingCard from '@/components/ListingCard';
 import SkeletonCard from '@/components/SkeletonCard';
 import PageTransition from '@/components/PageTransition';
@@ -19,9 +20,75 @@ function BrowseContent() {
   const [query, setQuery] = useState('');
   const [selectedCat, setSelectedCat] = useState<Category | 'All'>(initialCat || 'All');
   const [sortBy, setSortBy] = useState<'newest' | 'price-low' | 'price-high'>('newest');
+  const [dbListings, setDbListings] = useState<Listing[]>([]);
+
+  useEffect(() => {
+    async function fetchListings() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from('listings')
+          .select(`
+            id,
+            title,
+            description,
+            price,
+            category,
+            condition,
+            campus,
+            image_url,
+            created_at,
+            seller:profiles (
+              id,
+              first_name,
+              full_name,
+              avatar_url
+            )
+          `)
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error fetching listings:', error);
+          return;
+        }
+
+        if (data) {
+          const mapped: Listing[] = data.map((item: any) => {
+            const sellerMeta = item.seller || {};
+            const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
+            return {
+              id: item.id,
+              title: item.title,
+              price: item.price,
+              category: (item.category as any) || 'Other',
+              condition: (item.condition as any) || 'New',
+              description: item.description || '',
+              image: item.image_url || '/images/textbook.svg',
+              seller: {
+                id: sellerMeta.id || '',
+                name: sellerName,
+                avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
+                rating: 5.0,
+                campus: item.campus || 'Main Campus',
+              },
+              createdAt: item.created_at,
+              saved: false,
+            };
+          });
+          setDbListings(mapped);
+        }
+      } catch (err) {
+        console.error('Fetch error:', err);
+      }
+    }
+
+    fetchListings();
+  }, []);
 
   const filtered = useMemo(() => {
-    let results = [...sampleListings];
+    const dbIds = new Set(dbListings.map((l) => l.id));
+    const uniqueSample = sampleListings.filter((l) => !dbIds.has(l.id));
+    let results = [...dbListings, ...uniqueSample];
 
     if (query.trim()) {
       const q = query.toLowerCase();
@@ -47,7 +114,7 @@ function BrowseContent() {
     }
 
     return results;
-  }, [query, selectedCat, sortBy]);
+  }, [query, selectedCat, sortBy, dbListings]);
 
   const heroListing = filtered[0] ?? sampleListings[1];
 
