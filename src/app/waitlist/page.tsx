@@ -9,6 +9,7 @@ import DotPatternSpotlight from '@/components/effects/DotPatternSpotlight';
 import { BentoGrid, BentoCard } from '@/components/effects/BentoGrid';
 import Marquee from '@/components/effects/Marquee';
 import Confetti from '@/components/effects/Confetti';
+import VerifiedIdArt from '@/components/effects/VerifiedIdArt';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -221,8 +222,16 @@ export default function WaitlistPage() {
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.7, duration: 0.5 }}
                     >
-                      <button type="button" onClick={() => document.getElementById('founding-access')?.scrollIntoView({ behavior: 'smooth' })} className="text-[13px] text-zinc-400 hover:text-zinc-200 transition-colors">
-                        Want benefits with early access? <span className="text-white underline decoration-white/20 underline-offset-4">See Founding Tiers &rarr;</span>
+                      <button
+                        type="button"
+                        onClick={() => document.getElementById('founding-access')?.scrollIntoView({ behavior: 'smooth' })}
+                        className="group inline-flex items-center gap-1.5 text-[13px] text-zinc-400 transition-colors hover:text-zinc-300"
+                      >
+                        Want benefits with early access?
+                        <span className="inline-flex items-center gap-1 font-medium text-[color:var(--accent)]">
+                          See Founding Tiers
+                          <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5" />
+                        </span>
                       </button>
                     </motion.div>
                   </motion.form>
@@ -258,12 +267,7 @@ export default function WaitlistPage() {
               icon={<ShieldCheck size={20} />}
               title="Verified Students Only"
               description="Sign up with your university email. Every buyer and seller is a real, verified student from your campus — no impostors, no scammers."
-              background={
-                <div
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,transparent_65%)] blur-2xl"
-                />
-              }
+              background={<VerifiedIdArt />}
             />
             <BentoCard
               span="sm"

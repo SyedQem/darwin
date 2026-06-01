@@ -83,7 +83,7 @@ export default function WaitlistEmail() {
                             payment, no renewals. Only 225 spots across two tiers.
                         </Text>
 
-                        <Button style={cta} href="https://darwinmarket.vercel.app/whitelist">
+                        <Button style={cta} href="https://darwinmarketplace.ca/whitelist">
                             View founding tiers
                         </Button>
 
@@ -103,8 +103,8 @@ export default function WaitlistEmail() {
                         <Text style={footerText}>
                             You're receiving this because you joined the Darwin waitlist.
                             {"\n"}© 2026 Vesper Works ·{" "}
-                            <Link href="https://darwinmarket.vercel.app" style={footerLink}>
-                                darwinmarket.ca
+                            <Link href="https://darwinmarketplace.ca" style={footerLink}>
+                                darwinmarketplace.ca
                             </Link>
                         </Text>
                     </Section>
