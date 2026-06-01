@@ -80,6 +80,8 @@ export default function WaitlistPage() {
   return (
     <div className="waitlist-page">
       <Confetti trigger={status === 'success' ? 'fired' : 'idle'} />
+      {/* Page-wide ambient backdrop — keeps warmth + grid behind every section */}
+      <div className="waitlist-page-backdrop" aria-hidden="true" />
       {/* ── HERO ── */}
       <section ref={heroRef} className="waitlist-hero">
         {/* Background orb + dot-pattern spotlight */}
