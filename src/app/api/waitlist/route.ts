@@ -17,9 +17,10 @@ export async function POST(request: Request) {
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.SUPABASE_SERVICE_ROLE_KEY!
         );
-        const resend = new Resend(process.env.RESEND_API_KEY);
 
-        //Store email in Supabase
+        // Store email in Supabase. This insert is the source of truth for
+        // "registered" — it runs before any email machinery so a Resend
+        // misconfiguration can never cost us the signup.
         const { error: dbError } = await supabase
             .from('waitlist')
             .insert({ email });
@@ -32,23 +33,24 @@ export async function POST(request: Request) {
             return Response.json({ error: dbError.message }, { status: 500 });
         }
 
-        // Send welcome email via Resend (insert already succeeded — verify domain & RESEND_API_KEY in prod)
-        let emailError: { message: string } | null = null;
+        // Send welcome email via Resend. Constructing the client and sending
+        // both live inside this try/catch: a missing RESEND_API_KEY (the
+        // constructor throws) or a delivery failure must not turn an
+        // already-saved user's request into an error.
         try {
+            const resend = new Resend(process.env.RESEND_API_KEY);
             const result = await resend.emails.send({
                 from: 'Darwin <noreply@vesperworks.ca>',
                 to: email,
                 subject: "You're on the Darwin waitlist.",
                 html: await render(WaitlistEmail()),
             });
-            emailError = result.error ?? null;
+            if (result.error) {
+                console.error('Waitlist welcome email failed to send:', result.error.message);
+            }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Email delivery failed.';
-            emailError = { message };
-        }
-
-        if (emailError) {
-            return Response.json({ error: emailError.message }, { status: 500 });
+            console.error('Waitlist welcome email failed to send:', message);
         }
 
         return Response.json({ success: true }, { status: 200 });
