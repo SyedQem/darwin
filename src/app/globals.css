@@ -2677,6 +2677,53 @@ h1, h2, h3, h4,
 
 .waitlist-page {
   position: relative;
+  isolation: isolate;
+}
+
+/* Page-wide ambient backdrop — spans the full scrolled height so warmth + grid
+   carry past the hero instead of fading to flat black lower down. */
+.waitlist-page-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background-image:
+    radial-gradient(60rem 50rem at 78% 38%, rgba(249, 115, 22, 0.06) 0%, transparent 60%),
+    radial-gradient(56rem 50rem at 18% 66%, rgba(249, 115, 22, 0.055) 0%, transparent 60%),
+    radial-gradient(64rem 52rem at 70% 92%, rgba(249, 115, 22, 0.06) 0%, transparent 62%),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    42px 42px,
+    42px 42px;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 1) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 1) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/* Keep section content above the positioned page backdrop. The hero manages its
+   own stacking via isolation + its own backdrop layer. */
+.waitlist-features-section,
+.waitlist-founding-section,
+.waitlist-how-section,
+.waitlist-bottom-cta-section {
+  position: relative;
+  z-index: 1;
 }
 
 /* Hero */

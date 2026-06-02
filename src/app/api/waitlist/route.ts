@@ -41,32 +41,13 @@ export async function POST(request: Request) {
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.SUPABASE_SERVICE_ROLE_KEY!
         );
-        const resend = new Resend(process.env.RESEND_API_KEY);
 
-        // Atomic insert + referral credit + reward unlock (see join_waitlist RPC).
-        const { data, error: dbError } = await supabase
-            .rpc('join_waitlist', { p_email: email, p_ref: ref })
-            .single<JoinResult>();
-
-        if (dbError || !data) {
-            return Response.json(
-                { error: dbError?.message ?? 'Something went wrong.' },
-                { status: 500 },
-            );
-        }
-
-        // Already on the list — surface their existing code/progress so the UI
-        // can still show the share panel instead of a dead end.
-        if (data.existed) {
-            return Response.json(
-                {
-                    error: 'You are already on the waitlist.',
-                    referralCode: data.code,
-                    referralCount: data.ref_count,
-                },
-                { status: 409 },
-            );
-        }
+        // Store email in Supabase. This insert is the source of truth for
+        // "registered" — it runs before any email machinery so a Resend
+        // misconfiguration can never cost us the signup.
+        const { error: dbError } = await supabase
+            .from('waitlist')
+            .insert({ email });
 
         // Fire the referrer's reward email first (best-effort) — a failure here
         // must not fail the new signup.
@@ -83,28 +64,24 @@ export async function POST(request: Request) {
             }
         }
 
-        // Send welcome email (now carrying the new member's referral link).
-        let emailError: { message: string } | null = null;
+        // Send welcome email via Resend. Constructing the client and sending
+        // both live inside this try/catch: a missing RESEND_API_KEY (the
+        // constructor throws) or a delivery failure must not turn an
+        // already-saved user's request into an error.
         try {
+            const resend = new Resend(process.env.RESEND_API_KEY);
             const result = await resend.emails.send({
                 from: 'Darwin <noreply@vesperworks.ca>',
                 to: email,
                 subject: "You're on the Darwin waitlist.",
                 html: await render(WaitlistEmail({ referralUrl: referralUrl(data.code) })),
             });
-            emailError = result.error ?? null;
+            if (result.error) {
+                console.error('Waitlist welcome email failed to send:', result.error.message);
+            }
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Email delivery failed.';
-            emailError = { message };
-        }
-
-        if (emailError) {
-            // Signup succeeded; only the welcome email failed. Still return the
-            // referral code so the share UI works.
-            return Response.json(
-                { success: true, referralCode: data.code, referralCount: 0, emailError: emailError.message },
-                { status: 200 },
-            );
+            console.error('Waitlist welcome email failed to send:', message);
         }
 
         return Response.json(
