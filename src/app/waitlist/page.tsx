@@ -1,15 +1,16 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { ShieldCheck, MapPin, Zap, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { ShieldCheck, MapPin, Zap, ArrowRight, Sparkles } from 'lucide-react';
 import AnimatedGradientText from '@/components/effects/AnimatedGradientText';
 import DotPatternSpotlight from '@/components/effects/DotPatternSpotlight';
 import { BentoGrid, BentoCard } from '@/components/effects/BentoGrid';
 import Marquee from '@/components/effects/Marquee';
 import Confetti from '@/components/effects/Confetti';
 import VerifiedIdArt from '@/components/effects/VerifiedIdArt';
+import ReferralShare from '@/components/effects/ReferralShare';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -21,11 +22,44 @@ const SCHOOLS = [
   { id: 'algonquin', name: 'Algonquin College', logo: '/images/schools/algonquin.svg' },
 ];
 
+const REF_STORAGE_KEY = 'darwin_referral_code';
+
 export default function WaitlistPage() {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'already' | 'error'>('idle');
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'already' | 'returning' | 'error'
+  >('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  // Referral state: the inbound ?ref= code we credit on signup, plus the
+  // signed-up member's own code/progress for the share panel.
+  const [refParam, setRefParam] = useState<string | null>(null);
+  const [referralCode, setReferralCode] = useState('');
+  const [referralCount, setReferralCount] = useState(0);
+  const [rewardUnlocked, setRewardUnlocked] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
+
+  // Read the inbound referral code from the URL, and restore the share panel
+  // for returning members (code persisted in localStorage).
+  useEffect(() => {
+    // Browser-only reads (URL + localStorage) resolved once on mount.
+    /* eslint-disable react-hooks/set-state-in-effect */
+    const inbound = new URLSearchParams(window.location.search).get('ref');
+    if (inbound) setRefParam(inbound.trim().toUpperCase());
+
+    const saved = window.localStorage.getItem(REF_STORAGE_KEY);
+    if (!saved) return;
+    setReferralCode(saved);
+    setStatus('returning');
+    /* eslint-enable react-hooks/set-state-in-effect */
+    fetch(`/api/waitlist/status?code=${encodeURIComponent(saved)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return;
+        setReferralCount(d.referralCount ?? 0);
+        setRewardUnlocked(Boolean(d.rewardUnlocked));
+      })
+      .catch(() => {});
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -51,16 +85,30 @@ export default function WaitlistPage() {
       const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ email: email.trim(), ref: refParam }),
       });
-      const data = (await res.json().catch(() => ({}))) as { error?: string };
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        referralCode?: string;
+        referralCount?: number;
+      };
 
       if (res.ok) {
+        if (data.referralCode) {
+          setReferralCode(data.referralCode);
+          window.localStorage.setItem(REF_STORAGE_KEY, data.referralCode);
+        }
+        setReferralCount(data.referralCount ?? 0);
         setStatus('success');
         return;
       }
 
       if (res.status === 409) {
+        if (data.referralCode) {
+          setReferralCode(data.referralCode);
+          window.localStorage.setItem(REF_STORAGE_KEY, data.referralCode);
+        }
+        setReferralCount(data.referralCount ?? 0);
         setStatus('already');
         return;
       }
@@ -76,6 +124,39 @@ export default function WaitlistPage() {
       setStatus('error');
     }
   };
+
+  const showShare =
+    status === 'success' || status === 'already' || status === 'returning';
+  const shareTitle =
+    status === 'already'
+      ? "You're already on the list!"
+      : status === 'returning'
+        ? 'Welcome back!'
+        : "You're on the list!";
+  const shareSubtitle =
+    status === 'already'
+      ? 'We already have your email — now invite friends to climb the list.'
+      : status === 'returning'
+        ? 'Keep inviting friends to unlock priority access at your campus.'
+        : "We'll reach out when Darwin opens at your campus.";
+
+  const sharePanel = (key: string) => (
+    <motion.div
+      key={key}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.4, ease }}
+    >
+      <ReferralShare
+        referralCode={referralCode}
+        referralCount={referralCount}
+        rewardUnlocked={rewardUnlocked}
+        title={shareTitle}
+        subtitle={shareSubtitle}
+      />
+    </motion.div>
+  );
 
   return (
     <div className="waitlist-page">
@@ -132,36 +213,8 @@ export default function WaitlistPage() {
               className="waitlist-form-wrap"
             >
               <AnimatePresence mode="wait">
-                {status === 'success' ? (
-                  <motion.div
-                    key="success"
-                    className="waitlist-success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4, ease }}
-                  >
-                    <CheckCircle2 size={20} className="waitlist-success-icon" />
-                    <div>
-                      <p className="waitlist-success-title">You&apos;re on the list!</p>
-                      <p className="waitlist-success-sub">We&apos;ll reach out when darwin opens at your campus.</p>
-                    </div>
-                  </motion.div>
-                ) : status === 'already' ? (
-                  <motion.div
-                    key="already"
-                    className="waitlist-success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.4, ease }}
-                  >
-                    <CheckCircle2 size={20} className="waitlist-success-icon" />
-                    <div>
-                      <p className="waitlist-success-title">You&apos;re already on the list!</p>
-                      <p className="waitlist-success-sub">We already have your email — we&apos;ll be in touch when darwin launches.</p>
-                    </div>
-                  </motion.div>
+                {showShare && referralCode ? (
+                  sharePanel('share')
                 ) : (
                   <motion.form
                     key="form"
@@ -442,34 +495,8 @@ export default function WaitlistPage() {
 
             <div className="waitlist-bottom-form-wrap mt-10">
               <AnimatePresence mode="wait">
-                {status === 'success' ? (
-                  <motion.div
-                    key="success-bottom"
-                    className="waitlist-success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, ease }}
-                  >
-                    <CheckCircle2 size={20} className="waitlist-success-icon" />
-                    <div>
-                      <p className="waitlist-success-title">You&apos;re on the list!</p>
-                      <p className="waitlist-success-sub">We&apos;ll reach out when darwin opens at your campus.</p>
-                    </div>
-                  </motion.div>
-                ) : status === 'already' ? (
-                  <motion.div
-                    key="already-bottom"
-                    className="waitlist-success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4, ease }}
-                  >
-                    <CheckCircle2 size={20} className="waitlist-success-icon" />
-                    <div>
-                      <p className="waitlist-success-title">You&apos;re already on the list!</p>
-                      <p className="waitlist-success-sub">We already have your email — we&apos;ll be in touch when darwin launches.</p>
-                    </div>
-                  </motion.div>
+                {showShare && referralCode ? (
+                  sharePanel('share-bottom')
                 ) : (
                   <motion.form
                     key="form-bottom"

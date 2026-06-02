@@ -14,11 +14,16 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export default function WaitlistEmail({ referralUrl }: { referralUrl?: string } = {}) {
+/**
+ * Sent to a waitlist member the moment their 5th referral lands and
+ * `priority_access` flips true. The reward is non-monetary: guaranteed
+ * day-one access at their campus + a Founding Supporter badge.
+ */
+export default function ReferralRewardEmail() {
     return (
         <Html>
             <Head />
-            <Preview>You're on the Darwin waitlist — your campus marketplace is coming.</Preview>
+            <Preview>You did it — priority access to Darwin is yours.</Preview>
             <Body style={main}>
                 <Container style={container}>
 
@@ -30,54 +35,47 @@ export default function WaitlistEmail({ referralUrl }: { referralUrl?: string } 
                     {/* Body */}
                     <Section style={body}>
 
-                        {/* Badge */}
-                        <Text style={badge}>✅ You're on the list</Text>
+                        <Text style={badge}>🎉 Priority access unlocked</Text>
 
-                        <Text style={h1}>Your campus marketplace is coming.</Text>
-
-                        <Text style={p}>
-                            You're officially on the Darwin waitlist. We're building the
-                            campus-only marketplace where verified students buy, sell, and
-                            exchange safely and locally. No strangers. No shipping. Just
-                            your campus.
-                        </Text>
+                        <Text style={h1}>Five invites in. You&apos;re at the front of the line.</Text>
 
                         <Text style={p}>
-                            We're launching at select campuses first. You'll be among the
-                            first to know when Darwin goes live at yours.
+                            Five students joined the Darwin waitlist through your link — thank
+                            you for helping bring the marketplace to your campus. Here&apos;s
+                            what you just earned:
                         </Text>
 
-                        {/* Perks */}
+                        {/* Rewards */}
                         <Section style={perksBox}>
                             <Row style={perkRow}>
-                                <Column style={perkIcon}>🧑‍💻</Column>
+                                <Column style={perkIcon}>🚀</Column>
                                 <Column>
                                     <Text style={perkText}>
-                                        <strong>Verified students only</strong> — every buyer and seller is confirmed with a university email
+                                        <strong>Priority early access</strong> — guaranteed entry the
+                                        day Darwin goes live at your campus, ahead of the rest of the
+                                        waitlist
                                     </Text>
                                 </Column>
                             </Row>
                             <Row style={perkRow}>
-                                <Column style={perkIcon}>🏫</Column>
+                                <Column style={perkIcon}>🏅</Column>
                                 <Column>
                                     <Text style={perkText}>
-                                        <strong>Campus-only listings</strong> — browse items from students at your school, no shipping needed
-                                    </Text>
-                                </Column>
-                            </Row>
-                            <Row style={perkRow}>
-                                <Column style={perkIcon}>⚡</Column>
-                                <Column>
-                                    <Text style={perkText}>
-                                        <strong>List in seconds</strong> — snap a photo and you're live
+                                        <strong>Founding Supporter badge</strong> — a permanent mark on
+                                        your profile for being one of the first to back Darwin
                                     </Text>
                                 </Column>
                             </Row>
                         </Section>
 
+                        <Text style={p}>
+                            Nothing else to do — we&apos;ve locked this to your email. We&apos;ll
+                            be in touch the moment we open at your school.
+                        </Text>
+
                         <Hr style={divider} />
 
-                        <Text style={boldP}>Want to lock in early access forever?</Text>
+                        <Text style={boldP}>Want even more out of launch day?</Text>
                         <Text style={p}>
                             Founding members get monthly boosted listings for life — one
                             payment, no renewals. Only 225 spots across two tiers.
@@ -87,37 +85,14 @@ export default function WaitlistEmail({ referralUrl }: { referralUrl?: string } 
                             View founding tiers
                         </Button>
 
-                        <Hr style={divider} />
-
-                        {referralUrl ? (
-                            <Section style={referralBox}>
-                                <Text style={boldP}>Invite 5 friends, unlock priority access.</Text>
-                                <Text style={p}>
-                                    Get 5 students to join with your link and you&apos;ll jump to the
-                                    front of the line — guaranteed day-one access the moment Darwin
-                                    launches at your campus, plus a Founding Supporter badge on your
-                                    profile. No payment, ever.
-                                </Text>
-                                <Text style={referralLabel}>Your invite link</Text>
-                                <Link href={referralUrl} style={referralLink}>
-                                    {referralUrl.replace(/^https?:\/\//, '')}
-                                </Link>
-                            </Section>
-                        ) : (
-                            <Text style={p}>
-                                Know someone who&apos;d love Darwin? Forward this email — the more
-                                students on your campus who join early, the faster we launch
-                                there.
-                            </Text>
-                        )}
-
                         <Text style={{ ...p, marginBottom: 0 }}>— The Darwin team</Text>
                     </Section>
 
                     {/* Footer */}
                     <Section style={footer}>
                         <Text style={footerText}>
-                            You're receiving this because you joined the Darwin waitlist.
+                            You&apos;re receiving this because you referred friends to the Darwin
+                            waitlist.
                             {"\n"}© 2026 Vesper Works ·{" "}
                             <Link href="https://darwinmarketplace.ca" style={footerLink}>
                                 darwinmarketplace.ca
@@ -166,8 +141,8 @@ const body: React.CSSProperties = {
 
 const badge: React.CSSProperties = {
     display: "inline-block",
-    backgroundColor: "#f0fdf4",
-    color: "#16a34a",
+    backgroundColor: "#fff7ed",
+    color: "#c2410c",
     fontSize: "11px",
     fontWeight: "600",
     letterSpacing: "0.06em",
@@ -257,28 +232,4 @@ const footerText: React.CSSProperties = {
 
 const footerLink: React.CSSProperties = {
     color: "#aaaaaa",
-};
-
-const referralBox: React.CSSProperties = {
-    backgroundColor: "#fff7ed",
-    border: "1px solid #fed7aa",
-    borderRadius: "8px",
-    padding: "18px 20px",
-    margin: "8px 0 20px",
-};
-
-const referralLabel: React.CSSProperties = {
-    fontSize: "11px",
-    fontWeight: "600",
-    letterSpacing: "0.06em",
-    textTransform: "uppercase",
-    color: "#9a3412",
-    margin: "8px 0 4px",
-};
-
-const referralLink: React.CSSProperties = {
-    fontSize: "14px",
-    fontWeight: "600",
-    color: "#c2410c",
-    wordBreak: "break-all",
 };
