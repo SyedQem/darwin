@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
+import { notifyMessagesRead } from '@/lib/messages-events';
 import { markConversationRead, type MessageRow, type ConversationRow } from '@/app/messages/actions';
 import MessageBubble from './MessageBubble';
 import MessageInput from './MessageInput';
@@ -39,9 +41,19 @@ export default function MessageThread({
   initialMessages,
   conversation,
 }: MessageThreadProps) {
+  const router = useRouter();
   const [messages, setMessages] = useState<MessageRow[]>(initialMessages);
   const messagesRef = useRef<HTMLDivElement>(null);
   const [sendError, setSendError] = useState<string | null>(null);
+
+  const clearUnread = useCallback(async () => {
+    const cleared = conversation.unread;
+    const { ok } = await markConversationRead(conversationId);
+    if (ok) {
+      notifyMessagesRead(cleared);
+      router.refresh();
+    }
+  }, [conversationId, conversation.unread, router]);
 
   // Scroll the message panel (not the page) when messages change
   useEffect(() => {
@@ -50,10 +62,10 @@ export default function MessageThread({
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
-  // Mark as read on mount
+  // Mark as read when opening the thread and when new messages arrive while viewing
   useEffect(() => {
-    markConversationRead(conversationId);
-  }, [conversationId]);
+    void clearUnread();
+  }, [clearUnread, messages]);
 
   // Realtime subscription
   useEffect(() => {

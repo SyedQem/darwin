@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -92,12 +93,14 @@ export async function sendMessage(
   return { message: data as MessageRow };
 }
 
-export async function markConversationRead(conversationId: string): Promise<void> {
+export async function markConversationRead(
+  conversationId: string
+): Promise<{ ok: boolean }> {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) return { ok: false };
 
   const { data: conv } = await supabase
     .from("conversations")
@@ -105,13 +108,19 @@ export async function markConversationRead(conversationId: string): Promise<void
     .eq("id", conversationId)
     .single();
 
-  if (!conv) return;
+  if (!conv) return { ok: false };
 
   const field = conv.buyer_id === user.id ? "buyer_unread" : "seller_unread";
-  await supabase
+  const { error } = await supabase
     .from("conversations")
     .update({ [field]: 0 })
     .eq("id", conversationId);
+
+  if (error) return { ok: false };
+
+  revalidatePath("/messages");
+  revalidatePath(`/messages/${conversationId}`);
+  return { ok: true };
 }
 
 export async function getConversations(): Promise<ConversationRow[]> {
