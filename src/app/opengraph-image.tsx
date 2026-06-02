@@ -5,7 +5,32 @@ export const alt = 'Darwin — Campus Marketplace';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-export default function OGImage() {
+// Fetch a single Google font weight, scoped to the glyphs we render, as a TTF
+// (Google serves truetype when the request lacks a woff2-capable UA). Returns
+// null on any failure so the card still renders with the default font.
+async function loadGoogleFont(family: string, weight: number, text: string) {
+  try {
+    const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
+      family,
+    )}:wght@${weight}&text=${encodeURIComponent(text)}`;
+    const css = await (await fetch(url)).text();
+    const src = css.match(/src: url\((.+?)\) format\('(?:opentype|truetype)'\)/);
+    if (!src) return null;
+    const res = await fetch(src[1]);
+    if (!res.ok) return null;
+    return await res.arrayBuffer();
+  } catch {
+    return null;
+  }
+}
+
+export default async function OGImage() {
+  const display = await loadGoogleFont(
+    'Space Grotesk',
+    700,
+    'darwin.Your campus marketplace',
+  );
+
   return new ImageResponse(
     (
       <div
@@ -17,80 +42,61 @@ export default function OGImage() {
           justifyContent: 'center',
           padding: '80px 100px',
           background: '#09090b',
+          fontFamily: display ? 'Space Grotesk' : 'sans-serif',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {/* Background glow - purple */}
+        {/* Warm brand glow — top-right */}
         <div
           style={{
             position: 'absolute',
-            top: '-120px',
-            right: '-80px',
-            width: '500px',
-            height: '500px',
+            top: '-160px',
+            right: '-120px',
+            width: '620px',
+            height: '620px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(167,139,250,0.2) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(249,115,22,0.22) 0%, transparent 70%)',
           }}
         />
-        {/* Background glow - indigo */}
+        {/* Fainter amber glow — bottom-left */}
         <div
           style={{
             position: 'absolute',
-            bottom: '-100px',
-            left: '-60px',
-            width: '400px',
-            height: '400px',
+            bottom: '-140px',
+            left: '-100px',
+            width: '440px',
+            height: '440px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)',
+            background: 'radial-gradient(circle, rgba(251,191,36,0.14) 0%, transparent 70%)',
           }}
         />
 
-        {/* Logo */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginBottom: '40px',
-          }}
-        >
+        {/* Wordmark */}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
           <span
             style={{
               fontSize: '42px',
-              fontWeight: 800,
+              fontWeight: 700,
               color: '#f4f4f5',
               letterSpacing: '-0.03em',
             }}
           >
             darwin
           </span>
-          <span
-            style={{
-              fontSize: '42px',
-              fontWeight: 800,
-              color: '#f97316',
-            }}
-          >
-            .
-          </span>
+          <span style={{ fontSize: '42px', fontWeight: 700, color: '#f97316' }}>.</span>
         </div>
 
         {/* Headline */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <span
             style={{
-              fontSize: '72px',
-              fontWeight: 800,
+              fontSize: '76px',
+              fontWeight: 700,
               color: '#f4f4f5',
-              lineHeight: 1.05,
+              lineHeight: 1.04,
               letterSpacing: '-0.04em',
-              maxWidth: '700px',
+              maxWidth: '760px',
             }}
           >
             Your campus marketplace.
@@ -101,14 +107,30 @@ export default function OGImage() {
               fontWeight: 400,
               color: '#a1a1aa',
               lineHeight: 1.5,
-              maxWidth: '600px',
+              letterSpacing: '-0.01em',
+              maxWidth: '640px',
+              fontFamily: 'sans-serif',
             }}
           >
-            Buy and sell textbooks, electronics, furniture, and more — built for students.
+            Verified students buy, sell &amp; exchange — safely, on campus.
           </span>
         </div>
 
-        {/* Bottom border accent */}
+        {/* Domain */}
+        <span
+          style={{
+            marginTop: '44px',
+            fontSize: '22px',
+            fontWeight: 500,
+            color: '#71717a',
+            letterSpacing: '0.02em',
+            fontFamily: 'sans-serif',
+          }}
+        >
+          darwinmarketplace.ca
+        </span>
+
+        {/* Bottom accent bar */}
         <div
           style={{
             position: 'absolute',
@@ -121,6 +143,11 @@ export default function OGImage() {
         />
       </div>
     ),
-    { ...size }
+    {
+      ...size,
+      fonts: display
+        ? [{ name: 'Space Grotesk', data: display, weight: 700, style: 'normal' }]
+        : undefined,
+    },
   );
 }

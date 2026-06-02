@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SmoothScroll from '@/components/SmoothScroll';
+import MotionProvider from '@/components/MotionProvider';
 import { Analytics } from '@vercel/analytics/next';
 
 const spaceGrotesk = Space_Grotesk({
@@ -51,9 +52,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body>
         <SmoothScroll />
-        <Navbar />
-        <main className="main-content relative z-10">{children}</main>
-        <Footer />
+        <MotionProvider>
+          <Navbar />
+          <main className="main-content relative z-10">{children}</main>
+          <Footer />
+        </MotionProvider>
         <Analytics />
       </body>
     </html>
