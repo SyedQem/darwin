@@ -9,7 +9,7 @@
   --bg-panel: rgba(19, 19, 22, 0.92);
   --text-primary: #f4f4f5;
   --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
+  --text-muted: #8b8b95;
   --border-color: rgba(255, 255, 255, 0.08);
   --border-hover: rgba(255, 255, 255, 0.16);
   --accent: #f97316;
@@ -965,12 +965,11 @@ h1, h2, h3, h4,
 }
 
 .home-category-card:hover {
-  border-color: rgba(255, 255, 255, 0.22);
-  transform: translateY(-6px) scale(1.015);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-3px);
   box-shadow:
-    0 22px 54px rgba(0, 0, 0, 0.34),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 0 28px rgba(249, 115, 22, 0.14);
+    0 16px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
   background:
     linear-gradient(180deg, rgba(249, 115, 22, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%),
     var(--bg-card);
@@ -2037,21 +2036,22 @@ h1, h2, h3, h4,
   filter: blur(120px);
   pointer-events: none;
 }
+/* Single restrained warm glow (top-right); the second is barely-there. */
 .bg-glow-orb--purple-tr {
-  width: 500px;
-  height: 500px;
+  width: 460px;
+  height: 460px;
   top: -120px;
   right: -100px;
   background: var(--accent);
-  opacity: 0.08;
+  opacity: 0.05;
 }
 .bg-glow-orb--blue-bl {
-  width: 400px;
-  height: 400px;
+  width: 360px;
+  height: 360px;
   bottom: -80px;
   left: -80px;
   background: var(--accent-2);
-  opacity: 0.06;
+  opacity: 0.035;
 }
 
 /* ── Navbar Buttons ── */
@@ -2755,7 +2755,7 @@ h1, h2, h3, h4,
   height: min(72rem, 110vw);
   transform: translateX(-50%);
   border-radius: 9999px;
-  background: radial-gradient(circle, rgba(249, 115, 22, 0.13) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.10) 0%, transparent 65%);
   filter: blur(16px);
 }
 
@@ -2807,6 +2807,10 @@ h1, h2, h3, h4,
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waitlist-kicker-dot { animation: none; }
 }
 
 /* Headline */

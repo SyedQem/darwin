@@ -155,9 +155,9 @@ export default function HomePage() {
                   transition={{ duration: 0.7, delay: 0.85, ease }}
                 >
                   {[
-                    { label: 'Verified Students', value: '12 campuses' },
-                    { label: 'Avg. Sale Time', value: '< 10 minutes' },
-                    { label: 'Student Rating', value: '4.9 / 5.0' },
+                    { label: 'Sign-up', value: '.edu verified' },
+                    { label: 'Marketplace', value: 'Campus-only' },
+                    { label: 'Founding spots', value: '225' },
                   ].map((item) => (
                     <div key={item.label} className="home-proof">
                       <div className="home-proof-label">{item.label}</div>
@@ -308,7 +308,7 @@ export default function HomePage() {
           <AnimatedSection>
             <span className="section-label">HOW IT WORKS</span>
             <h2 className="section-title-md mt-4 max-w-3xl">
-              Three steps. Zero friction.
+              List it, meet up, done.
             </h2>
           </AnimatedSection>
 

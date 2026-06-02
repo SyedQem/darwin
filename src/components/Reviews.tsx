@@ -32,10 +32,11 @@ export default function Reviews() {
         <div className="max-w-3xl">
           <span className="section-label">TRUSTED BY STUDENTS</span>
           <h2 className="section-title-md mt-4">
-            4.9 / 5 from 1,200+ exchanges
+            Trusted by students, not strangers.
           </h2>
           <p className="section-copy mt-5">
-            Trust is what makes students use the marketplace every week.
+            Every buyer and seller is a verified student — so trades feel less like
+            meeting a stranger and more like meeting a classmate.
           </p>
         </div>
       </AnimatedSection>
