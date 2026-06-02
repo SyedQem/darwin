@@ -26,34 +26,41 @@ function BrowseContent() {
     async function fetchListings() {
       try {
         const supabase = createClient();
-        const { data, error } = await supabase
-          .from('listings')
-          .select(`
-            id,
-            title,
-            description,
-            price,
-            category,
-            condition,
-            campus,
-            image_url,
-            created_at,
-            seller:profiles (
-              id,
-              first_name,
-              full_name,
-              avatar_url
-            )
-          `)
-          .order('created_at', { ascending: false });
 
-        if (error) {
-          console.error('Error fetching listings:', error);
+        // Fetch listings and saved IDs in parallel
+        const [listingsResult, savedResult] = await Promise.all([
+          supabase
+            .from('listings')
+            .select(`
+              id,
+              title,
+              description,
+              price,
+              category,
+              condition,
+              campus,
+              image_url,
+              created_at,
+              seller:profiles (
+                id,
+                first_name,
+                full_name,
+                avatar_url
+              )
+            `)
+            .order('created_at', { ascending: false }),
+          fetch('/api/saved').then((r) => r.json()).catch(() => ({ savedIds: [] })),
+        ]);
+
+        if (listingsResult.error) {
+          console.error('Error fetching listings:', listingsResult.error);
           return;
         }
 
-        if (data) {
-          const mapped: Listing[] = data.map((item: any) => {
+        const savedIds = new Set<string>(savedResult.savedIds ?? []);
+
+        if (listingsResult.data) {
+          const mapped: Listing[] = listingsResult.data.map((item: any) => {
             const sellerMeta = item.seller || {};
             const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
             return {
@@ -68,11 +75,11 @@ function BrowseContent() {
                 id: sellerMeta.id || '',
                 name: sellerName,
                 avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
-                rating: 5.0,
+                rating: 0,
                 campus: item.campus || 'Main Campus',
               },
               createdAt: item.created_at,
-              saved: false,
+              saved: savedIds.has(item.id),
             };
           });
           setDbListings(mapped);
