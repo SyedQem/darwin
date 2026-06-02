@@ -6,7 +6,9 @@
       "Bash(Format-Table -AutoSize)",
       "mcp__claude_ai_Supabase__list_projects",
       "mcp__claude_ai_Supabase__list_tables",
-      "mcp__claude_ai_Supabase__execute_sql"
+      "mcp__claude_ai_Supabase__execute_sql",
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js\\)$\")",
+      "Bash(xargs grep -l \"whitelist\\\\|waitlist\")"
     ]
   }
 }
