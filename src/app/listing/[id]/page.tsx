@@ -1,5 +1,5 @@
 'use client';
-import { use, useState, useEffect } from 'react';
+import { use, useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -31,6 +31,11 @@ export default function ListingDetailPage({
   const { id } = use(params);
   const [listing, setListing] = useState<Listing | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
+  const [savePending, setSavePending] = useState(false);
+
+  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const isDbListing = UUID_RE.test(id);
 
   useEffect(() => {
     // 1. Check sample listings first
@@ -87,7 +92,7 @@ export default function ListingDetailPage({
               id: sellerMeta.id || '',
               name: sellerName,
               avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
-              rating: 5.0,
+              rating: 0,
               campus: data.campus || 'Main Campus',
             },
             createdAt: data.created_at,
@@ -103,6 +108,38 @@ export default function ListingDetailPage({
 
     fetchDbListing();
   }, [id]);
+
+  // Fetch saved state for DB listings
+  useEffect(() => {
+    if (!isDbListing) return;
+    fetch('/api/saved')
+      .then((r) => r.json())
+      .then((json) => {
+        if (Array.isArray(json.savedIds)) {
+          setIsSaved(json.savedIds.includes(id));
+        }
+      })
+      .catch(() => {});
+  }, [id, isDbListing]);
+
+  const handleSaveToggle = useCallback(async () => {
+    if (savePending || !isDbListing) return;
+    const next = !isSaved;
+    setIsSaved(next);
+    setSavePending(true);
+    try {
+      const res = await fetch('/api/saved', {
+        method: next ? 'POST' : 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ listingId: id }),
+      });
+      if (!res.ok) setIsSaved(isSaved); // revert
+    } catch {
+      setIsSaved(isSaved); // revert
+    } finally {
+      setSavePending(false);
+    }
+  }, [savePending, isDbListing, isSaved, id]);
 
   if (loading) {
     return (
@@ -261,13 +298,15 @@ export default function ListingDetailPage({
                     {listing.seller.name}
                   </p>
                   <div className="flex items-center gap-3 mt-1">
-                    <span className="flex items-center gap-1 text-sm">
-                      <Star size={13} fill="#facc15" color="#facc15" />
-                      <span className="text-white/80">
-                        {listing.seller.rating}
-                      </span>
-                    </span>
-                    <span className="text-white/20">|</span>
+                    {listing.seller.rating && listing.seller.rating > 0 ? (
+                      <>
+                        <span className="flex items-center gap-1 text-sm">
+                          <Star size={13} fill="#facc15" color="#facc15" />
+                          <span className="text-white/80">{listing.seller.rating}</span>
+                        </span>
+                        <span className="text-white/20">|</span>
+                      </>
+                    ) : null}
                     <span className="flex items-center gap-1 text-muted text-sm">
                       <MapPin size={13} />
                       {listing.seller.campus}
@@ -289,9 +328,18 @@ export default function ListingDetailPage({
                 sellerId={(listing.seller as { id?: string }).id ?? ''}
                 listingTitle={listing.title}
               />
-              <button className="pill-btn pill-btn-outline ui-icon-label min-h-12 transition-colors hover:bg-white/5 hover:border-white/30">
-                <Heart size={17} />
-                <span>Save</span>
+              <button
+                className="pill-btn pill-btn-outline ui-icon-label min-h-12 transition-colors hover:bg-white/5 hover:border-white/30"
+                onClick={handleSaveToggle}
+                disabled={savePending || !isDbListing}
+                aria-label={isSaved ? 'Unsave listing' : 'Save listing'}
+              >
+                <Heart
+                  size={17}
+                  fill={isSaved ? '#f97316' : 'none'}
+                  color={isSaved ? '#f97316' : 'currentColor'}
+                />
+                <span>{isSaved ? 'Saved' : 'Save'}</span>
               </button>
               <button className="pill-btn pill-btn-outline ui-icon-label min-h-12 transition-colors hover:bg-white/5 hover:border-white/30">
                 <Share2 size={17} />

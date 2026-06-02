@@ -27,7 +27,7 @@ export interface Listing {
     id?: string;
     name: string;
     avatar: string;
-    rating: number;
+    rating?: number;
     campus: string;
   };
   createdAt: string;
