@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, MapPin, Zap, ArrowRight, Sparkles } from 'lucide-react';
-import AnimatedGradientText from '@/components/effects/AnimatedGradientText';
 import DotPatternSpotlight from '@/components/effects/DotPatternSpotlight';
 import { BentoGrid, BentoCard } from '@/components/effects/BentoGrid';
 import Marquee from '@/components/effects/Marquee';
@@ -182,7 +181,7 @@ export default function WaitlistPage() {
               className="waitlist-kicker"
             >
               <span className="waitlist-kicker-dot" />
-              Good things take time
+              Launching campus by campus
             </motion.div>
 
             {/* Headline */}
@@ -194,7 +193,7 @@ export default function WaitlistPage() {
             >
               Your campus.
               <br />
-              <AnimatedGradientText>Your marketplace.</AnimatedGradientText>
+              <span className="text-[color:var(--accent)]">Your marketplace.</span>
             </motion.h1>
 
             {/* Subhead */}
@@ -335,8 +334,8 @@ export default function WaitlistPage() {
               span="sm"
               delay={0.16}
               icon={<Zap size={20} />}
-              title="Fast & Frictionless"
-              description="List in seconds, connect instantly. Built for students — not for navigating bloated interfaces."
+              title="List in under a minute"
+              description="Snap a photo, set a price, and your listing is live — then meet up between classes. Built to be fast, not bloated."
             />
           </BentoGrid>
 
@@ -446,7 +445,7 @@ export default function WaitlistPage() {
           >
             <span className="section-label">HOW IT WORKS</span>
             <h2 className="section-title-md mt-4">
-              Three steps.<br /><span className="text-muted">Zero friction.</span>
+              Sign up, list,<br /><span className="text-muted">meet on campus.</span>
             </h2>
           </motion.div>
 
