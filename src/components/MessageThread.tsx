@@ -40,12 +40,14 @@ export default function MessageThread({
   conversation,
 }: MessageThreadProps) {
   const [messages, setMessages] = useState<MessageRow[]>(initialMessages);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
   const [sendError, setSendError] = useState<string | null>(null);
 
-  // Scroll to bottom when messages change
+  // Scroll the message panel (not the page) when messages change
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = messagesRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   }, [messages]);
 
   // Mark as read on mount
@@ -189,7 +191,8 @@ export default function MessageThread({
 
       {/* Messages */}
       <div
-        className="flex flex-col gap-2 overflow-y-auto px-1 py-4"
+        ref={messagesRef}
+        className="flex min-h-0 flex-col gap-2 overflow-y-auto px-1 py-4"
         style={{ overflowAnchor: 'none' }}
       >
         {messages.length === 0 && (
@@ -222,7 +225,6 @@ export default function MessageThread({
           </p>
         )}
 
-        <div ref={bottomRef} />
       </div>
 
       {/* Input */}
