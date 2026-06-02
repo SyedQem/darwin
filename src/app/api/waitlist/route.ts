@@ -42,17 +42,40 @@ export async function POST(request: Request) {
             process.env.SUPABASE_SERVICE_ROLE_KEY!
         );
 
-        // Store email in Supabase. This insert is the source of truth for
-        // "registered" — it runs before any email machinery so a Resend
-        // misconfiguration can never cost us the signup.
-        const { error: dbError } = await supabase
-            .from('waitlist')
-            .insert({ email });
+        // Atomic insert + referral credit + reward unlock (join_waitlist RPC).
+        // This is the source of truth for "registered" — it runs before any
+        // email machinery so a Resend misconfiguration can never cost us the
+        // signup.
+        const { data, error: dbError } = await supabase
+            .rpc('join_waitlist', { p_email: email, p_ref: ref })
+            .single<JoinResult>();
 
-        // Fire the referrer's reward email first (best-effort) — a failure here
-        // must not fail the new signup.
+        if (dbError || !data) {
+            return Response.json(
+                { error: dbError?.message ?? 'Something went wrong.' },
+                { status: 500 },
+            );
+        }
+
+        // Already on the list — surface their existing code/progress so the UI
+        // can still show the share panel instead of a dead end.
+        if (data.existed) {
+            return Response.json(
+                {
+                    error: 'You are already on the waitlist.',
+                    referralCode: data.code,
+                    referralCount: data.ref_count,
+                },
+                { status: 409 },
+            );
+        }
+
+        // Fire the referrer's reward email (best-effort). Constructing the
+        // client and sending both live inside this try/catch so a missing
+        // RESEND_API_KEY can never fail the new signup.
         if (data.just_unlocked && data.referrer_email) {
             try {
+                const resend = new Resend(process.env.RESEND_API_KEY);
                 await resend.emails.send({
                     from: 'Darwin <noreply@vesperworks.ca>',
                     to: data.referrer_email,
@@ -60,14 +83,13 @@ export async function POST(request: Request) {
                     html: await render(ReferralRewardEmail()),
                 });
             } catch (err) {
-                console.error('[waitlist] reward email failed', err);
+                console.error('[waitlist] reward email failed to send:', err);
             }
         }
 
-        // Send welcome email via Resend. Constructing the client and sending
-        // both live inside this try/catch: a missing RESEND_API_KEY (the
-        // constructor throws) or a delivery failure must not turn an
-        // already-saved user's request into an error.
+        // Send welcome email (carries the new member's referral link). Same
+        // hardening: construction + delivery inside the try/catch, log on
+        // failure rather than turning an already-saved signup into an error.
         try {
             const resend = new Resend(process.env.RESEND_API_KEY);
             const result = await resend.emails.send({
