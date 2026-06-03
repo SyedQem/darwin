@@ -7,15 +7,15 @@ import {
     Check,
     CheckCircle2,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
 import { retrieveSession } from "@/lib/stripe";
+import { getPurchaseBySessionId } from "@/lib/founding-purchase";
 import { TIERS, isTierKey } from "@/lib/whitelist";
 import AnimatedCheck from "@/components/effects/AnimatedCheck";
 import Confetti from "@/components/effects/Confetti";
 import ShineBorder from "@/components/effects/ShineBorder";
+import FoundingSecretCode from "@/components/FoundingSecretCode";
+import FoundingSuccessPending from "@/components/FoundingSuccessPending";
 
-// Always re-render: the page reflects a live Stripe session and must never
-// be served from a static cache.
 export const dynamic = "force-dynamic";
 
 type SearchParams = Promise<{ session_id?: string }>;
@@ -55,12 +55,6 @@ export default async function WhitelistSuccessPage({
     const { session_id } = await searchParams;
     if (!session_id) redirect("/whitelist");
 
-    const supabase = await createClient();
-    const {
-        data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) redirect("/login?next=/whitelist");
-
     let session: Stripe.Checkout.Session;
     try {
         session = await retrieveSession(session_id);
@@ -69,22 +63,17 @@ export default async function WhitelistSuccessPage({
     }
 
     const tierKey = session.metadata?.tier;
-    const metadataUserId = session.metadata?.user_id;
 
-    // Don't leak another user's session — and don't render a confirmation
-    // for anything that hasn't actually been paid.
-    if (
-        session.payment_status !== "paid" ||
-        metadataUserId !== user.id ||
-        !isTierKey(tierKey)
-    ) {
+    if (session.payment_status !== "paid" || !isTierKey(tierKey)) {
         redirect("/whitelist");
     }
 
     const tier = TIERS[tierKey];
     const amount = formatMoney(session.amount_total, session.currency);
-    const email = session.customer_details?.email ?? user.email ?? null;
+    const email =
+        session.customer_details?.email ?? session.customer_email ?? null;
     const receiptUrl = receiptUrlFrom(session);
+    const purchase = await getPurchaseBySessionId(session_id);
 
     return (
         <div className="waitlist-page">
@@ -107,8 +96,14 @@ export default async function WhitelistSuccessPage({
                             aria-hidden="true"
                         />
                         <div className="waitlist-founding-ornament">
-                            <div className="waitlist-founding-ornament-ring" aria-hidden="true" />
-                            <div className="waitlist-founding-ornament-ring waitlist-founding-ornament-ring--outer" aria-hidden="true" />
+                            <div
+                                className="waitlist-founding-ornament-ring"
+                                aria-hidden="true"
+                            />
+                            <div
+                                className="waitlist-founding-ornament-ring waitlist-founding-ornament-ring--outer"
+                                aria-hidden="true"
+                            />
                             <AnimatedCheck
                                 size={44}
                                 className="waitlist-founding-ornament-icon"
@@ -132,7 +127,13 @@ export default async function WhitelistSuccessPage({
                                 </span>
                             </h1>
 
-                            <p className="waitlist-founding-copy">
+                            {purchase ? (
+                                <FoundingSecretCode code={purchase.secret_code} />
+                            ) : (
+                                <FoundingSuccessPending sessionId={session_id} />
+                            )}
+
+                            <p className="waitlist-founding-copy mt-6">
                                 We charged {amount} and locked in your{" "}
                                 {tier.label} spot
                                 {email ? (
@@ -190,8 +191,9 @@ export default async function WhitelistSuccessPage({
                                         className="whitelist-success-check"
                                     />
                                     <span>
-                                        Boosted listings activate the moment
-                                        Darwin goes live at your campus.
+                                        Create your Darwin account and enter
+                                        your activation code to link this
+                                        purchase.
                                     </span>
                                 </li>
                                 <li>
@@ -200,8 +202,8 @@ export default async function WhitelistSuccessPage({
                                         className="whitelist-success-check"
                                     />
                                     <span>
-                                        We&apos;ll email you the instant your
-                                        campus opens.
+                                        Boosted listings activate the moment
+                                        Darwin goes live at your campus.
                                     </span>
                                 </li>
                                 <li>
@@ -218,10 +220,10 @@ export default async function WhitelistSuccessPage({
 
                             <div className="whitelist-success-ctas">
                                 <Link
-                                    href="/waitlist"
+                                    href="/onboarding"
                                     className="pill-btn whitelist-success-primary"
                                 >
-                                    Back to waitlist
+                                    Create your account
                                     <ArrowRight size={15} />
                                 </Link>
                                 {receiptUrl && (

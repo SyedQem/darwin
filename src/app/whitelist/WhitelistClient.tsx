@@ -185,7 +185,7 @@ export default function WhitelistClient({ spots }: Props) {
                                 ·
                             </span>
                             <span className="whitelist-trust-item">
-                                Secure Stripe checkout
+                                No account required
                             </span>
                         </motion.div>
 

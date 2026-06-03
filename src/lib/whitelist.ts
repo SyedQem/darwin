@@ -4,7 +4,7 @@
  * Single source of truth for tier metadata, consumed by:
  *   - /whitelist pricing page
  *   - startCheckout server action
- *   - Lemon Squeezy webhook validator
+ *   - Stripe webhook validator
  */
 
 type TierSpec = {

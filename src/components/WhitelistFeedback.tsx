@@ -8,6 +8,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   sold_out: 'That tier is sold out. Try the other tier.',
   invalid_tier: 'Something went wrong with that selection. Try again.',
   checkout_failed: 'Checkout could not be started. Please try again.',
+  cancelled: 'Checkout was cancelled. You can try again anytime.',
 };
 
 export default function WhitelistFeedback() {
