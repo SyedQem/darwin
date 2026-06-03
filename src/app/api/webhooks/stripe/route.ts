@@ -7,10 +7,31 @@ import { isTierKey } from "@/lib/whitelist";
 // Stripe SDK uses node:crypto — Edge runtime is not an option.
 export const runtime = "nodejs";
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function emailFromSession(session: Stripe.Checkout.Session): string | null {
+    const raw =
+        session.customer_details?.email ??
+        session.customer_email ??
+        null;
+    if (typeof raw !== "string") return null;
+    const trimmed = raw.trim().toLowerCase();
+    return trimmed.length > 0 ? trimmed : null;
+}
+
+function stripeCustomerId(session: Stripe.Checkout.Session): string | null {
+    const c = session.customer;
+    if (typeof c === "string") return c;
+    if (c && typeof c === "object" && "id" in c) return c.id;
+    return null;
+}
+
+function paymentIntentId(session: Stripe.Checkout.Session): string | null {
+    const pi = session.payment_intent;
+    if (typeof pi === "string") return pi;
+    if (pi && typeof pi === "object" && "id" in pi) return pi.id;
+    return null;
+}
 
 export async function POST(request: Request) {
-    // Stripe signs the raw body — must read text() before JSON parsing.
     const rawBody = await request.text();
     const signature = request.headers.get("stripe-signature");
 
@@ -21,15 +42,12 @@ export async function POST(request: Request) {
         return new Response("Invalid signature", { status: 401 });
     }
 
-    // Only care about completed one-time Checkout payments for now.
     if (event.type !== "checkout.session.completed") {
         return new Response("Ignored", { status: 200 });
     }
 
     const session = event.data.object as Stripe.Checkout.Session;
 
-    // Stripe marks the session paid via `payment_status`; guard against
-    // async captures that aren't settled yet.
     if (session.payment_status !== "paid") {
         return new Response("Not yet paid", { status: 200 });
     }
@@ -37,9 +55,6 @@ export async function POST(request: Request) {
     const sessionId = session.id;
     const supabase = serviceClient();
 
-    // Idempotency — Stripe retries on non-2xx and can duplicate events.
-    // INSERT ON CONFLICT DO NOTHING: if we already handled this event,
-    // the insert returns nothing and we exit early.
     const { data: eventRow, error: eventErr } = await supabase
         .from("webhook_events")
         .insert({ event_id: event.id, provider: "stripe" })
@@ -53,40 +68,44 @@ export async function POST(request: Request) {
         return new Response("Already processed", { status: 200 });
     }
 
-    // Validate signed metadata. Stripe signs the whole event, so
-    // `session.metadata` is authoritative.
-    const userId = session.metadata?.user_id;
     const tier = session.metadata?.tier;
-
-    if (
-        typeof userId !== "string" ||
-        !UUID_RE.test(userId) ||
-        !isTierKey(tier)
-    ) {
+    if (!isTierKey(tier)) {
         return new Response("Invalid metadata", { status: 400 });
     }
 
-    // Atomic spot claim.
-    const { data: claimed, error: rpcErr } = await supabase.rpc(
-        "claim_whitelist_spot",
-        { p_user_id: userId, p_tier: tier, p_order_id: sessionId },
+    const email = emailFromSession(session);
+    if (!email) {
+        return new Response("Missing email", { status: 400 });
+    }
+
+    const { data: rows, error: rpcErr } = await supabase.rpc(
+        "claim_founding_spot_guest",
+        {
+            p_email: email,
+            p_tier: tier,
+            p_order_id: sessionId,
+            p_stripe_customer_id: stripeCustomerId(session),
+            p_stripe_payment_intent_id: paymentIntentId(session),
+        },
     );
 
     if (rpcErr) {
+        console.error("[stripe webhook] claim_founding_spot_guest", rpcErr);
         return new Response("Claim failed", { status: 500 });
     }
 
-    if (claimed === false) {
-        // Oversell race — tier sold out between checkout and payment.
-        // Refund via the PaymentIntent attached to the session, then
-        // 200 so Stripe stops retrying. TODO: wire alerting/logging.
-        const paymentIntentId =
-            typeof session.payment_intent === "string"
-                ? session.payment_intent
-                : session.payment_intent?.id;
-        if (paymentIntentId) {
+    const result = Array.isArray(rows) ? rows[0] : rows;
+    const claimed =
+        result &&
+        typeof result === "object" &&
+        "claimed" in result &&
+        result.claimed === true;
+
+    if (!claimed) {
+        const piId = paymentIntentId(session);
+        if (piId) {
             try {
-                await refundSession(paymentIntentId);
+                await refundSession(piId);
             } catch (err) {
                 console.error(
                     "Oversell refund failed for session",

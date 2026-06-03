@@ -13,14 +13,11 @@ function stripe(): Stripe {
 }
 
 /**
- * Create a Stripe Checkout Session for a given tier + user.
- * Encodes user_id and tier in session metadata — Stripe echoes this
- * back in the webhook on `session.metadata`, which is what we trust.
+ * Create a Stripe Checkout Session for a given tier (guest checkout).
+ * Encodes tier in session metadata — Stripe echoes this back in the
+ * webhook on `session.metadata`, which is what we trust.
  */
-export async function createCheckoutSession(
-    tier: TierKey,
-    userId: string,
-): Promise<string> {
+export async function createCheckoutSession(tier: TierKey): Promise<string> {
     const priceId = process.env[TIERS[tier].priceEnv];
     if (!priceId) throw new Error(`${TIERS[tier].priceEnv} is not set`);
 
@@ -32,11 +29,10 @@ export async function createCheckoutSession(
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${baseUrl}/whitelist/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/whitelist?error=cancelled`,
-        metadata: { user_id: userId, tier },
-        // Stripe ties the PaymentIntent to this session so we can refund
-        // later via session.payment_intent without extra lookups.
+        customer_creation: "always",
+        metadata: { tier },
         payment_intent_data: {
-            metadata: { user_id: userId, tier },
+            metadata: { tier },
         },
     });
 
