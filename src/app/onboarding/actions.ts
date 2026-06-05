@@ -45,11 +45,24 @@ interface OnboardingData {
   interests: string[];
   email: string;
   password: string;
+  purchaseEmail?: string;
+  magicCode?: string;
   next?: string;
 }
 
 export async function createAccountAndProfile(data: OnboardingData) {
   const supabase = await createClient();
+
+  if (data.magicCode && data.purchaseEmail) {
+    const { data: isValid, error: rpcError } = await supabase.rpc("redeem_magic_code", {
+      p_email: data.purchaseEmail,
+      p_code: data.magicCode,
+    });
+
+    if (rpcError || !isValid) {
+      return { error: "Invalid or already used magic code" };
+    }
+  }
 
   const fullName = [data.firstName, data.lastName]
     .filter(Boolean)
