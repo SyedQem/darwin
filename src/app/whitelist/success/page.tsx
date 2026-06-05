@@ -191,17 +191,6 @@ export default async function WhitelistSuccessPage({
                                         className="whitelist-success-check"
                                     />
                                     <span>
-                                        Create your Darwin account and enter
-                                        your activation code to link this
-                                        purchase.
-                                    </span>
-                                </li>
-                                <li>
-                                    <Check
-                                        size={16}
-                                        className="whitelist-success-check"
-                                    />
-                                    <span>
                                         Boosted listings activate the moment
                                         Darwin goes live at your campus.
                                     </span>
@@ -219,13 +208,6 @@ export default async function WhitelistSuccessPage({
                             </ul>
 
                             <div className="whitelist-success-ctas">
-                                <Link
-                                    href="/onboarding"
-                                    className="pill-btn whitelist-success-primary"
-                                >
-                                    Create your account
-                                    <ArrowRight size={15} />
-                                </Link>
                                 {receiptUrl && (
                                     <a
                                         href={receiptUrl}

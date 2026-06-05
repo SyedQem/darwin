@@ -16,7 +16,7 @@ type NavbarClientProps = {
 export default function NavbarClient({ isLoggedIn, userId, initialUnreadCount }: NavbarClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const isWaitlist = pathname === '/waitlist' || pathname === '/whitelist';
+  const isWaitlist = pathname === '/waitlist' || pathname === '/whitelist' || pathname === '/whitelist/success';
 
   return (
     <>
