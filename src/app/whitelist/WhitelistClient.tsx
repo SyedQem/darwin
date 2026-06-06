@@ -2,12 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import {
-    Check,
-    ChevronDown,
-    Sparkles,
-    Star,
-} from "lucide-react";
+import { ArrowRight, Check, Sparkles, Star } from "lucide-react";
 import { TIERS, type TierKey } from "@/lib/whitelist";
 import { startCheckout } from "./actions";
 import AnimatedGradientText from "@/components/effects/AnimatedGradientText";
@@ -120,7 +115,7 @@ export default function WhitelistClient({ spots }: Props) {
                 </div>
 
                 <div className="container-vspr relative z-10">
-                    <div className="waitlist-hero-inner">
+                    <div className="waitlist-hero-inner -mt-10 sm:-mt-16">
                         <motion.div
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -157,52 +152,31 @@ export default function WhitelistClient({ spots }: Props) {
                         </motion.p>
 
                         <motion.div
-                            className="whitelist-trust-row"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.7, delay: 0.58, ease }}
+                            className="waitlist-form-wrap"
                         >
-                            <span className="whitelist-trust-item">
-                                <span
-                                    className="whitelist-trust-dot"
-                                    aria-hidden="true"
-                                />
-                                {totalSpots} total spots
-                            </span>
-                            <span
-                                className="whitelist-trust-sep"
-                                aria-hidden="true"
-                            >
-                                ·
-                            </span>
-                            <span className="whitelist-trust-item">
-                                One-time payment
-                            </span>
-                            <span
-                                className="whitelist-trust-sep"
-                                aria-hidden="true"
-                            >
-                                ·
-                            </span>
-                            <span className="whitelist-trust-item">
-                                No account required
-                            </span>
+                            <div className="waitlist-form">
+                                <div className="waitlist-input-wrap">
+                                    <a
+                                        href="#tiers"
+                                        className="pill-btn waitlist-submit-btn whitelist-hero-cta"
+                                        aria-label="Jump to tier selection"
+                                    >
+                                        Claim Founding Tier
+                                        <ArrowRight size={15} />
+                                    </a>
+                                </div>
+                                <p className="waitlist-helper">
+                                    {totalSpots} total spots ·{" "}
+                                    <span className="waitlist-helper-accent">
+                                        one-time payment
+                                    </span>{" "}
+                                    · no account required
+                                </p>
+                            </div>
                         </motion.div>
-
-                        <motion.a
-                            href="#tiers"
-                            className="whitelist-scroll-hint"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.8, delay: 0.9, ease }}
-                            aria-label="Jump to tier selection"
-                        >
-                            Choose your tier
-                            <ChevronDown
-                                size={14}
-                                className="whitelist-scroll-hint-chevron"
-                            />
-                        </motion.a>
                     </div>
                 </div>
             </section>
@@ -329,6 +303,16 @@ export default function WhitelistClient({ spots }: Props) {
                             one-time, limited, and permanent — no renewals, no
                             catches.
                         </p>
+
+                        <div className="whitelist-bottom-cta-row">
+                            <a
+                                href="#tiers"
+                                className="pill-btn waitlist-submit-btn whitelist-bottom-cta-btn"
+                            >
+                                Claim Founding Tier
+                                <ArrowRight size={15} />
+                            </a>
+                        </div>
 
                         <ul className="whitelist-bottom-bullets">
                             {BOTTOM_BULLETS.map((b) => (
