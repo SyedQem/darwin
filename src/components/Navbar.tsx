@@ -5,6 +5,8 @@ export default async function Navbar() {
     let isLoggedIn = false;
     let userId: string | null = null;
     let initialUnreadCount = 0;
+    let avatarUrl: string | null = null;
+    let firstName: string | null = null;
 
     try {
         const supabase = await createClient();
@@ -18,6 +20,17 @@ export default async function Navbar() {
         if (user) {
             const { data } = await supabase.rpc('get_unread_count');
             initialUnreadCount = (data as number) ?? 0;
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('avatar_url, first_name')
+                .eq('id', user.id)
+                .maybeSingle();
+
+            if (profile) {
+                avatarUrl = profile.avatar_url ?? null;
+                firstName = profile.first_name ?? null;
+            }
         }
     } catch {
         isLoggedIn = false;
@@ -28,6 +41,8 @@ export default async function Navbar() {
             isLoggedIn={isLoggedIn}
             userId={userId}
             initialUnreadCount={initialUnreadCount}
+            avatarUrl={avatarUrl}
+            firstName={firstName}
         />
     );
 }
