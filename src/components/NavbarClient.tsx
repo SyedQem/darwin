@@ -4,16 +4,25 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, MessageCircle, Menu, X, ArrowRight } from 'lucide-react';
+import { Heart, MessageCircle, Menu, X, ArrowRight, User } from 'lucide-react';
+import Image from 'next/image';
 import UnreadBadge from './UnreadBadge';
 
 type NavbarClientProps = {
   isLoggedIn: boolean;
   userId: string | null;
   initialUnreadCount: number;
+  avatarUrl: string | null;
+  firstName: string | null;
 };
 
-export default function NavbarClient({ isLoggedIn, userId, initialUnreadCount }: NavbarClientProps) {
+export default function NavbarClient({
+  isLoggedIn,
+  userId,
+  initialUnreadCount,
+  avatarUrl,
+  firstName,
+}: NavbarClientProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const isWaitlist = pathname === '/waitlist' || pathname === '/whitelist' || pathname === '/whitelist/success';
@@ -82,11 +91,23 @@ export default function NavbarClient({ isLoggedIn, userId, initialUnreadCount }:
                   </Link>
 
                   {isLoggedIn ? (
-                    <form action="/signout" method="post">
-                      <button type="submit" className="nav-auth-btn">
-                        Log out
-                      </button>
-                    </form>
+                    <Link
+                      href="/profile"
+                      className="nav-profile-avatar"
+                      aria-label="Profile"
+                    >
+                      {avatarUrl ? (
+                        <Image
+                          src={avatarUrl}
+                          alt="Profile"
+                          fill
+                          sizes="34px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <User size={16} />
+                      )}
+                    </Link>
                   ) : (
                     <Link href="/login" className="nav-auth-btn">
                       Log in
@@ -140,6 +161,7 @@ export default function NavbarClient({ isLoggedIn, userId, initialUnreadCount }:
                     { href: '/sell', label: 'List Item' },
                     { href: '/saved', label: 'Saved' },
                     ...(isLoggedIn ? [{ href: '/messages', label: 'Messages' }] : []),
+                    ...(isLoggedIn ? [{ href: '/profile', label: 'Profile' }] : []),
                   ].map((link) => (
                     <Link
                       key={link.href}
