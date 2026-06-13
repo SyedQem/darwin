@@ -108,7 +108,10 @@ export async function markConversationRead(
     .eq("id", conversationId)
     .single();
 
-  if (!conv) return { ok: false };
+  if (!conv) {
+    console.error("markConversationRead: Conversation not found or read blocked by RLS:", conversationId);
+    return { ok: false };
+  }
 
   const field = conv.buyer_id === user.id ? "buyer_unread" : "seller_unread";
   const { error } = await supabase
@@ -116,7 +119,10 @@ export async function markConversationRead(
     .update({ [field]: 0 })
     .eq("id", conversationId);
 
-  if (error) return { ok: false };
+  if (error) {
+    console.error("markConversationRead: Update error:", error);
+    return { ok: false };
+  }
 
   revalidatePath("/messages");
   revalidatePath(`/messages/${conversationId}`);

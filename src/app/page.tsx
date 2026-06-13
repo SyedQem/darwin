@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowDown, ArrowRight, Search, MapPin } from 'lucide-react';
-import { categories, categoryIcons, sampleListings, Listing } from '@/lib/data';
+import { categories, categoryIcons, Listing } from '@/lib/data';
 import { createClient } from '@/lib/supabase/client';
 import ListingCard from '@/components/ListingCard';
 import Reviews from '@/components/Reviews';
@@ -55,8 +55,16 @@ export default function HomePage() {
         }
 
         if (data) {
-          const mapped: Listing[] = data.map((item: any) => {
-            const sellerMeta = item.seller || {};
+          const mapped: Listing[] = data
+            .map((item: any) => {
+              const sellerRaw = item.seller;
+              const sellerMeta = Array.isArray(sellerRaw)
+                ? sellerRaw[0] ?? {}
+                : sellerRaw ?? {};
+              return { item, sellerMeta };
+            })
+            .filter(({ sellerMeta }) => !!sellerMeta.id)
+            .map(({ item, sellerMeta }) => {
             const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
             return {
               id: item.id,
@@ -67,7 +75,7 @@ export default function HomePage() {
               description: item.description || '',
               image: item.image_url || '/images/textbook.svg',
               seller: {
-                id: sellerMeta.id || '',
+                id: sellerMeta.id,
                 name: sellerName,
                 avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
                 rating: 5.0,
@@ -87,10 +95,10 @@ export default function HomePage() {
     fetchListings();
   }, []);
 
-  const featuredListings = [...dbListings, ...sampleListings].slice(0, 4);
+  const featuredListings = dbListings.slice(0, 4);
 
   /* Phone listings data */
-  const phoneListings = sampleListings.slice(0, 5);
+  const phoneListings = dbListings.slice(0, 5);
 
   return (
     <div className="home-page">
@@ -182,28 +190,35 @@ export default function HomePage() {
                       <p>darwin.</p>
                       <h3>Trending Near You</h3>
                     </div>
-                    {phoneListings.map((listing) => (
-                      <div key={listing.id} className="phone-product-card">
-                        <div className="phone-product-thumb">
-                          <Image
-                            src={listing.image}
-                            alt={listing.title}
-                            fill
-                            sizes="56px"
-                            className="object-cover"
-                          />
+                    {phoneListings.length > 0 ? (
+                      phoneListings.map((listing) => (
+                        <div key={listing.id} className="phone-product-card">
+                          <div className="phone-product-thumb">
+                            <Image
+                              src={listing.image}
+                              alt={listing.title}
+                              fill
+                              sizes="56px"
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="phone-product-info">
+                            <p className="phone-product-title">{listing.title}</p>
+                            <p className="phone-product-meta">
+                              <span className="inline-flex items-center gap-1">
+                                <MapPin size={10} /> {listing.seller.campus}
+                              </span>
+                            </p>
+                            <p className="phone-product-price">${listing.price}</p>
+                          </div>
                         </div>
-                        <div className="phone-product-info">
-                          <p className="phone-product-title">{listing.title}</p>
-                          <p className="phone-product-meta">
-                            <span className="inline-flex items-center gap-1">
-                              <MapPin size={10} /> {listing.seller.campus}
-                            </span>
-                          </p>
-                          <p className="phone-product-price">${listing.price}</p>
-                        </div>
+                      ))
+                    ) : (
+                      <div className="phone-product-card phone-product-card--empty">
+                        <p className="phone-product-title">No listings yet</p>
+                        <p className="phone-product-meta">Be the first to post</p>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -291,11 +306,23 @@ export default function HomePage() {
             </div>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredListings.map((listing, i) => (
-              <ListingCard key={listing.id} listing={listing} index={i} />
-            ))}
-          </div>
+          {featuredListings.length > 0 ? (
+            <div className="grid grid-cols-1 auto-rows-fr gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {featuredListings.map((listing, i) => (
+                <ListingCard key={listing.id} listing={listing} index={i} />
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state">
+              <p className="text-secondary text-lg font-medium">No listings yet.</p>
+              <p className="text-muted mt-2 text-sm">
+                Be the first student to post an item for sale.
+              </p>
+              <Link href="/sell" className="pill-btn pill-btn-sm mt-6 inline-flex">
+                Create a listing
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

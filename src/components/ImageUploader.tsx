@@ -8,7 +8,7 @@ import Image from 'next/image';
 const MAX_IMAGES = 4;
 
 interface UploadedImage {
-  file: File;
+  file?: File;
   preview: string;
   url: string | null;
   uploading: boolean;
@@ -16,10 +16,20 @@ interface UploadedImage {
 
 interface ImageUploaderProps {
   onUrlsChange?: (urls: string[]) => void;
+  initialUrls?: string[];
 }
 
-export default function ImageUploader({ onUrlsChange }: ImageUploaderProps) {
-  const [images, setImages] = useState<UploadedImage[]>([]);
+export default function ImageUploader({
+  onUrlsChange,
+  initialUrls = [],
+}: ImageUploaderProps) {
+  const [images, setImages] = useState<UploadedImage[]>(() =>
+    initialUrls.map((url) => ({
+      preview: url,
+      url,
+      uploading: false,
+    })),
+  );
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const supabase = createClient();
@@ -65,7 +75,9 @@ export default function ImageUploader({ onUrlsChange }: ImageUploaderProps) {
       setImages((prev) => [...prev, ...newImages]);
 
       for (let i = 0; i < newImages.length; i++) {
-        const url = await uploadFile(newImages[i].file);
+        const file = newImages[i].file;
+        if (!file) continue;
+        const url = await uploadFile(file);
         setImages((prev) =>
           prev.map((img) =>
             img.preview === newImages[i].preview
@@ -81,7 +93,7 @@ export default function ImageUploader({ onUrlsChange }: ImageUploaderProps) {
   const removeImage = (preview: string) => {
     setImages((prev) => {
       const removed = prev.find((img) => img.preview === preview);
-      if (removed) URL.revokeObjectURL(removed.preview);
+      if (removed?.file) URL.revokeObjectURL(removed.preview);
       return prev.filter((img) => img.preview !== preview);
     });
   };

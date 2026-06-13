@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Compass, Search, Sparkles, X } from 'lucide-react';
-import { categories, Category, sampleListings, Listing } from '@/lib/data';
+import { categories, Category, Listing } from '@/lib/data';
 import { createClient } from '@/lib/supabase/client';
 import ListingCard from '@/components/ListingCard';
 import SkeletonCard from '@/components/SkeletonCard';
@@ -60,8 +60,16 @@ function BrowseContent() {
         const savedIds = new Set<string>(savedResult.savedIds ?? []);
 
         if (listingsResult.data) {
-          const mapped: Listing[] = listingsResult.data.map((item: any) => {
-            const sellerMeta = item.seller || {};
+          const mapped: Listing[] = listingsResult.data
+            .map((item: any) => {
+              const sellerRaw = item.seller;
+              const sellerMeta = Array.isArray(sellerRaw)
+                ? sellerRaw[0] ?? {}
+                : sellerRaw ?? {};
+              return { item, sellerMeta };
+            })
+            .filter(({ sellerMeta }) => !!sellerMeta.id)
+            .map(({ item, sellerMeta }) => {
             const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
             return {
               id: item.id,
@@ -72,7 +80,7 @@ function BrowseContent() {
               description: item.description || '',
               image: item.image_url || '/images/textbook.svg',
               seller: {
-                id: sellerMeta.id || '',
+                id: sellerMeta.id,
                 name: sellerName,
                 avatar: sellerMeta.avatar_url || '/avatars/1.jpg',
                 rating: 0,
@@ -93,9 +101,7 @@ function BrowseContent() {
   }, []);
 
   const filtered = useMemo(() => {
-    const dbIds = new Set(dbListings.map((l) => l.id));
-    const uniqueSample = sampleListings.filter((l) => !dbIds.has(l.id));
-    let results = [...dbListings, ...uniqueSample];
+    let results = [...dbListings];
 
     if (query.trim()) {
       const q = query.toLowerCase();
@@ -123,12 +129,12 @@ function BrowseContent() {
     return results;
   }, [query, selectedCat, sortBy, dbListings]);
 
-  const heroListing = filtered[0] ?? sampleListings[1];
+  const heroListing = filtered[0];
 
   const browseStats = [
     {
       label: 'Fresh today',
-      value: `${sampleListings.length} new drops`,
+      value: `${dbListings.length} listing${dbListings.length !== 1 ? 's' : ''}`,
       icon: <Sparkles size={14} />,
     },
     {
@@ -188,6 +194,8 @@ function BrowseContent() {
               </header>
 
               <aside className="browse-feature-card">
+                {heroListing ? (
+                  <>
                 <div className="browse-feature-media">
                   <Image
                     src={heroListing.image}
@@ -228,6 +236,23 @@ function BrowseContent() {
                     </Link>
                   </div>
                 </div>
+                  </>
+                ) : (
+                  <div className="browse-feature-body browse-feature-body--empty">
+                    <div className="browse-feature-copy">
+                      <span className="browse-feature-chip">Spotlight</span>
+                      <h2 className="browse-feature-title">No listings yet</h2>
+                      <p className="browse-feature-description">
+                        Be the first student to post an item on Darwin.
+                      </p>
+                    </div>
+                    <div className="browse-feature-footer">
+                      <Link href="/sell" className="pill-btn">
+                        Create a listing
+                      </Link>
+                    </div>
+                  </div>
+                )}
               </aside>
             </div>
           </motion.section>
@@ -339,11 +364,20 @@ function BrowseContent() {
                 <Search size={26} />
               </div>
               <p className="text-secondary text-xl font-medium mt-5">
-                No listings match your search.
+                {hasActiveFilters
+                  ? 'No listings match your search.'
+                  : 'No listings yet.'}
               </p>
               <p className="text-muted mt-2 text-sm">
-                Try a broader keyword or clear a category filter.
+                {hasActiveFilters
+                  ? 'Try a broader keyword or clear a category filter.'
+                  : 'Check back soon or post the first item for sale.'}
               </p>
+              {!hasActiveFilters && (
+                <Link href="/sell" className="pill-btn pill-btn-sm mt-6 inline-flex">
+                  Create a listing
+                </Link>
+              )}
               {hasActiveFilters && (
                 <button
                   className="pill-btn pill-btn-outline pill-btn-sm mt-6"

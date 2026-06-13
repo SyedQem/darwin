@@ -21,7 +21,9 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import PageTransition from '@/components/PageTransition';
-import { updateProfile, updateAvatarUrl } from './actions';
+import AvatarCropModal from '@/components/AvatarCropModal';
+import ImageLightbox from '@/components/ImageLightbox';
+import { updateProfile, updateAvatarUrl, sendPasswordResetEmail } from './actions';
 import { createClient } from '@/lib/supabase/client';
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -71,6 +73,10 @@ export default function ProfileClient({ user, profile, listings }: Props) {
 
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [sendingPasswordReset, setSendingPasswordReset] = useState(false);
+  const [cropModalOpen, setCropModalOpen] = useState(false);
+  const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [feedback, setFeedback] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -102,10 +108,27 @@ export default function ProfileClient({ user, profile, listings }: Props) {
       return;
     }
 
-    setAvatarFile(file);
     const reader = new FileReader();
-    reader.onload = () => setAvatarPreview(reader.result as string);
+    reader.onload = () => {
+      setCropImageSrc(reader.result as string);
+      setCropModalOpen(true);
+    };
     reader.readAsDataURL(file);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleCropComplete = (file: File, previewUrl: string) => {
+    setAvatarFile(file);
+    setAvatarPreview(previewUrl);
+    setCropImageSrc(null);
+  };
+
+  const handleCropClose = () => {
+    setCropModalOpen(false);
+    setCropImageSrc(null);
   };
 
   /* ── Upload avatar to Supabase Storage ── */
@@ -114,8 +137,7 @@ export default function ProfileClient({ user, profile, listings }: Props) {
     setUploadingAvatar(true);
     try {
       const supabase = createClient();
-      const ext = avatarFile.name.split('.').pop() ?? 'jpg';
-      const filePath = `${user.id}/avatar.${ext}`;
+      const filePath = `${user.id}/avatar.jpg`;
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
@@ -155,6 +177,33 @@ export default function ProfileClient({ user, profile, listings }: Props) {
   };
 
   /* ── Save profile info ── */
+  const handleChangePassword = async () => {
+    setSendingPasswordReset(true);
+    setFeedback(null);
+    try {
+      const result = await sendPasswordResetEmail();
+      if (result.error) {
+        setFeedback({ type: 'error', message: result.error });
+      } else {
+        setFeedback({
+          type: 'success',
+          message:
+            result.message ??
+            'Check your email for a password reset link.',
+        });
+      }
+      clearFeedback();
+    } catch {
+      setFeedback({
+        type: 'error',
+        message: 'Failed to send password reset email.',
+      });
+      clearFeedback();
+    } finally {
+      setSendingPasswordReset(false);
+    }
+  };
+
   const handleSaveProfile = async () => {
     setSaving(true);
     setFeedback(null);
@@ -185,6 +234,9 @@ export default function ProfileClient({ user, profile, listings }: Props) {
   });
 
   const displayAvatar = avatarPreview || avatarUrl;
+  const isLocalAvatarPreview =
+    !!avatarPreview &&
+    (avatarPreview.startsWith('blob:') || avatarPreview.startsWith('data:'));
 
   return (
     <PageTransition>
@@ -232,13 +284,21 @@ export default function ProfileClient({ user, profile, listings }: Props) {
             <div className="profile-avatar-section">
               <div className="profile-avatar-wrap">
                 {displayAvatar ? (
-                  <Image
-                    src={displayAvatar}
-                    alt="Profile avatar"
-                    fill
-                    sizes="128px"
-                    className="object-cover"
-                  />
+                  <button
+                    type="button"
+                    className="profile-avatar-view-btn"
+                    onClick={() => setLightboxOpen(true)}
+                    aria-label="View profile photo"
+                  >
+                    <Image
+                      src={displayAvatar}
+                      alt="Profile avatar"
+                      fill
+                      sizes="128px"
+                      className="object-cover"
+                      unoptimized={isLocalAvatarPreview}
+                    />
+                  </button>
                 ) : (
                   <User size={40} className="text-muted" />
                 )}
@@ -411,8 +471,18 @@ export default function ProfileClient({ user, profile, listings }: Props) {
                     Change your password to keep your account secure.
                   </p>
                 </div>
-                <button className="pill-btn pill-btn-outline pill-btn-sm" disabled>
-                  Change Password
+                <button
+                  type="button"
+                  className="pill-btn pill-btn-outline pill-btn-sm"
+                  onClick={handleChangePassword}
+                  disabled={sendingPasswordReset}
+                >
+                  {sendingPasswordReset ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : null}
+                  <span>
+                    {sendingPasswordReset ? 'Sending…' : 'Change Password'}
+                  </span>
                 </button>
               </div>
             </motion.section>
@@ -516,6 +586,31 @@ export default function ProfileClient({ user, profile, listings }: Props) {
           </div>
         </div>
       </div>
+
+      {cropImageSrc && (
+        <AvatarCropModal
+          imageSrc={cropImageSrc}
+          open={cropModalOpen}
+          onClose={handleCropClose}
+          onCropComplete={handleCropComplete}
+          onCropError={() => {
+            setFeedback({
+              type: 'error',
+              message: 'Failed to process image. Please try again.',
+            });
+            clearFeedback();
+          }}
+        />
+      )}
+
+      {displayAvatar && (
+        <ImageLightbox
+          src={displayAvatar}
+          alt="Profile photo"
+          open={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </PageTransition>
   );
 }
