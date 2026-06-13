@@ -5,6 +5,7 @@ import { Heart, MapPin, Star } from 'lucide-react';
 import { Listing, getConditionClass } from '@/lib/data';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -20,6 +21,7 @@ interface Props {
 }
 
 export default function ListingCard({ listing, index, variant = 'default', onSaveChange }: Props) {
+  const router = useRouter();
   const conditionClass = getConditionClass(listing.condition);
   const isBrowse = variant === 'browse';
   const [saved, setSaved] = useState(listing.saved);
@@ -121,8 +123,29 @@ export default function ListingCard({ listing, index, variant = 'default', onSav
             <div className={`mt-auto flex items-end justify-between gap-3 pt-2 ${isBrowse ? 'browse-listing-footer' : ''}`}>
               <span className={`price-tag ${isBrowse ? 'browse-listing-price' : 'text-lg'}`}>${listing.price}</span>
               {isBrowse ? (
-                <div className="card-seller-row">
-                  <div className="card-seller-avatar">{listing.seller.name.charAt(0)}</div>
+                <div
+                  className="card-seller-row hover:opacity-80 transition-opacity cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (listing.seller.id) {
+                      router.push(`/profile/${listing.seller.id}`);
+                    }
+                  }}
+                >
+                  <div className="card-seller-avatar relative overflow-hidden flex items-center justify-center">
+                    {listing.seller.avatar && listing.seller.avatar !== '/avatars/1.jpg' ? (
+                      <Image
+                        src={listing.seller.avatar}
+                        alt={listing.seller.name}
+                        fill
+                        sizes="24px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      listing.seller.name.charAt(0)
+                    )}
+                  </div>
                   <div className="card-seller-info">
                     <span className="card-seller-name">{listing.seller.name.split(' ')[0]}</span>
                     {hasRating && (

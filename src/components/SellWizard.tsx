@@ -3,7 +3,7 @@
 import { useState, useTransition, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
-import { createListing } from "@/app/sell/actions";
+import { createListing, updateListing } from "@/app/sell/actions";
 import { categories } from "@/lib/data";
 import ImageUploader from "@/components/ImageUploader";
 
@@ -89,23 +89,42 @@ const containerChildVariants = {
 
 /* ── Component ── */
 
+export interface InitialListingData {
+  title: string;
+  price: number;
+  imageUrls: string[];
+  condition: string;
+  category: string;
+  description: string;
+  campus: string;
+}
+
 export default function SellWizard({
   initialCampus = "",
+  mode = "create",
+  listingId,
+  initialData,
 }: {
   initialCampus?: string;
+  mode?: "create" | "edit";
+  listingId?: string;
+  initialData?: InitialListingData;
 }) {
+  const isEdit = mode === "edit";
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [isPending, startTransition] = useTransition();
 
   /* Listing state */
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState("");
-  const [condition, setCondition] = useState("");
-  const [category, setCategory] = useState("");
-  const [campus, setCampus] = useState(initialCampus);
-  const [description, setDescription] = useState("");
+  const [imageUrls, setImageUrls] = useState<string[]>(initialData?.imageUrls ?? []);
+  const [title, setTitle] = useState(initialData?.title ?? "");
+  const [price, setPrice] = useState(
+    initialData?.price != null ? String(initialData.price) : "",
+  );
+  const [condition, setCondition] = useState(initialData?.condition ?? "");
+  const [category, setCategory] = useState(initialData?.category ?? "");
+  const [campus, setCampus] = useState(initialData?.campus || initialCampus);
+  const [description, setDescription] = useState(initialData?.description ?? "");
 
   const [error, setError] = useState("");
 
@@ -153,7 +172,7 @@ export default function SellWizard({
     }
 
     startTransition(async () => {
-      const result = await createListing({
+      const payload = {
         title: title.trim(),
         price: priceNum,
         imageUrls,
@@ -161,7 +180,12 @@ export default function SellWizard({
         category,
         description: description.trim(),
         campus: campus.trim(),
-      });
+      };
+
+      const result = isEdit && listingId
+        ? await updateListing(listingId, payload)
+        : await createListing(payload);
+
       if (result?.error) {
         setError(result.error);
       }
@@ -175,6 +199,8 @@ export default function SellWizard({
     category,
     description,
     campus,
+    isEdit,
+    listingId,
   ]);
 
   /* ── Render ── */
@@ -231,9 +257,13 @@ export default function SellWizard({
                 className="onboarding-step-header"
                 variants={itemVariants}
               >
-                <p className="section-label">{STEP_META[step].label}</p>
+                <p className="section-label">
+                  {isEdit ? "Edit Listing" : STEP_META[step].label}
+                </p>
                 <h1 className="onboarding-title">
-                  {STEP_META[step].description}
+                  {isEdit
+                    ? "Update your listing details"
+                    : STEP_META[step].description}
                 </h1>
               </motion.div>
 
@@ -247,7 +277,10 @@ export default function SellWizard({
                     Photos{" "}
                     <span className="onboarding-optional">optional</span>
                   </label>
-                  <ImageUploader onUrlsChange={setImageUrls} />
+                  <ImageUploader
+                    onUrlsChange={setImageUrls}
+                    initialUrls={initialData?.imageUrls}
+                  />
                 </motion.div>
               )}
 
@@ -485,7 +518,13 @@ export default function SellWizard({
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                {isPending ? "Publishing…" : "Publish Listing"}
+                {isPending
+                  ? isEdit
+                    ? "Saving…"
+                    : "Publishing…"
+                  : isEdit
+                    ? "Save Changes"
+                    : "Publish Listing"}
                 {isPending ? (
                   <Check size={14} />
                 ) : (

@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 export async function updateProfile(input: {
@@ -49,6 +50,9 @@ export async function updateProfile(input: {
         return { error: error.message };
     }
 
+    revalidatePath("/profile");
+    revalidatePath("/", "layout");
+
     return { success: true };
 }
 
@@ -69,7 +73,41 @@ export async function updateAvatarUrl(avatarUrl: string) {
 
     if (error) {
         return { error: error.message };
+     }
+ 
+     revalidatePath("/profile");
+     revalidatePath("/", "layout");
+ 
+     return { success: true };
+ }
+
+function getSiteUrl() {
+    return (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(
+        /\/$/,
+        "",
+    );
+}
+
+export async function sendPasswordResetEmail() {
+    const supabase = await createClient();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user?.email) {
+        return { error: "Not authenticated" };
     }
 
-    return { success: true };
+    const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
+        redirectTo: `${getSiteUrl()}/auth/callback?next=/profile`,
+    });
+
+    if (error) {
+        return { error: error.message };
+    }
+
+    return {
+        success: true,
+        message: `Check your email (${user.email}) for a password reset link.`,
+    };
 }

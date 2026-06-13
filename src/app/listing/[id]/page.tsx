@@ -1,5 +1,5 @@
 'use client';
-import { use, useState, useEffect, useCallback } from 'react';
+import { use, useState, useEffect, useCallback, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -9,10 +9,12 @@ import {
   Share2,
   Shield,
   Clock,
+  Pencil,
 } from 'lucide-react';
 import MessageSellerButton from '@/components/MessageSellerButton';
+import ListingFeedback from '@/components/ListingFeedback';
 import Link from 'next/link';
-import { sampleListings, getConditionClass, Listing } from '@/lib/data';
+import { getConditionClass, Listing } from '@/lib/data';
 import Image from 'next/image';
 import PageTransition from '@/components/PageTransition';
 import { createClient } from '@/lib/supabase/client';
@@ -30,6 +32,8 @@ export default function ListingDetailPage({
 }) {
   const { id } = use(params);
   const [listing, setListing] = useState<Listing | null>(null);
+  const [listingUserId, setListingUserId] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaved, setIsSaved] = useState(false);
   const [savePending, setSavePending] = useState(false);
@@ -38,48 +42,56 @@ export default function ListingDetailPage({
   const isDbListing = UUID_RE.test(id);
 
   useEffect(() => {
-    // 1. Check sample listings first
-    const sample = sampleListings.find((l) => l.id === id);
-    if (sample) {
-      setListing(sample);
-      setLoading(false);
-      return;
-    }
-
-    // 2. Fetch from DB
     async function fetchDbListing() {
       try {
         const supabase = createClient();
-        const { data, error } = await supabase
-          .from('listings')
-          .select(`
-            id,
-            title,
-            description,
-            price,
-            category,
-            condition,
-            campus,
-            image_url,
-            created_at,
-            seller:profiles (
+        const [{ data, error }, { data: authData }] = await Promise.all([
+          supabase
+            .from('listings')
+            .select(`
               id,
-              first_name,
-              full_name,
-              avatar_url
-            )
-          `)
-          .eq('id', id)
-          .maybeSingle();
+              user_id,
+              title,
+              description,
+              price,
+              category,
+              condition,
+              campus,
+              image_url,
+              image_urls,
+              created_at,
+              seller:profiles (
+                id,
+                first_name,
+                full_name,
+                avatar_url
+              )
+            `)
+            .eq('id', id)
+            .maybeSingle(),
+          supabase.auth.getUser(),
+        ]);
 
         if (error) {
           console.error('Error fetching listing:', error);
           return;
         }
 
+        setCurrentUserId(authData.user?.id ?? null);
+
         if (data) {
-          const sellerMeta = (data as any).seller || {};
+          const sellerRaw = (data as any).seller;
+          const sellerMeta = Array.isArray(sellerRaw)
+            ? sellerRaw[0] ?? {}
+            : sellerRaw ?? {};
           const sellerName = sellerMeta.full_name || sellerMeta.first_name || 'Student';
+          const imageUrls = Array.isArray(data.image_urls) && data.image_urls.length > 0
+            ? data.image_urls
+            : data.image_url
+              ? [data.image_url]
+              : [];
+
+          setListingUserId(data.user_id);
           setListing({
             id: data.id,
             title: data.title,
@@ -87,7 +99,7 @@ export default function ListingDetailPage({
             category: (data.category as any) || 'Other',
             condition: (data.condition as any) || 'New',
             description: data.description || '',
-            image: data.image_url || '/images/textbook.svg',
+            image: imageUrls[0] || '/images/textbook.svg',
             seller: {
               id: sellerMeta.id || '',
               name: sellerName,
@@ -106,8 +118,12 @@ export default function ListingDetailPage({
       }
     }
 
-    fetchDbListing();
-  }, [id]);
+    if (isDbListing) {
+      fetchDbListing();
+    } else {
+      setLoading(false);
+    }
+  }, [id, isDbListing]);
 
   // Fetch saved state for DB listings
   useEffect(() => {
@@ -168,9 +184,13 @@ export default function ListingDetailPage({
   }
 
   const conditionClass = getConditionClass(listing.condition);
+  const isOwner = !!currentUserId && currentUserId === listingUserId;
 
   return (
     <PageTransition>
+      <Suspense>
+        <ListingFeedback />
+      </Suspense>
       <div className="container-vspr page-shell">
         {/* Back nav */}
         <motion.div
@@ -289,12 +309,22 @@ export default function ListingDetailPage({
               transition={stagger(7)}
               className="listing-detail-seller"
             >
-              <div className="flex items-center gap-4">
-                <div className="detail-avatar">
-                  {listing.seller.name.charAt(0)}
+              <Link href={`/profile/${listing.seller.id}`} className="flex items-center gap-4 group cursor-pointer">
+                <div className="detail-avatar relative overflow-hidden flex items-center justify-center group-hover:border-white/30 transition-colors">
+                  {listing.seller.avatar ? (
+                    <Image
+                      src={listing.seller.avatar}
+                      alt={listing.seller.name}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    listing.seller.name.charAt(0)
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-[15px]">
+                  <p className="font-semibold text-[15px] group-hover:text-white transition-colors">
                     {listing.seller.name}
                   </p>
                   <div className="flex items-center gap-3 mt-1">
@@ -313,7 +343,7 @@ export default function ListingDetailPage({
                     </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             </motion.div>
 
             {/* Action buttons */}
@@ -323,11 +353,21 @@ export default function ListingDetailPage({
               transition={stagger(8)}
               className="flex flex-col sm:flex-row gap-3 mt-8"
             >
-              <MessageSellerButton
-                listingId={listing.id}
-                sellerId={(listing.seller as { id?: string }).id ?? ''}
-                listingTitle={listing.title}
-              />
+              {isOwner ? (
+                <Link
+                  href={`/listing/${listing.id}/edit`}
+                  className="pill-btn ui-icon-label min-h-12"
+                >
+                  <Pencil size={17} />
+                  <span>Edit Listing</span>
+                </Link>
+              ) : (
+                <MessageSellerButton
+                  listingId={listing.id}
+                  sellerId={(listing.seller as { id?: string }).id ?? ''}
+                  listingTitle={listing.title}
+                />
+              )}
               <button
                 className="pill-btn pill-btn-outline ui-icon-label min-h-12 transition-colors hover:bg-white/5 hover:border-white/30"
                 onClick={handleSaveToggle}
