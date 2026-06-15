@@ -46,7 +46,8 @@ export default function NavbarClient({
               }
             }}
           >
-            darwin<span className="logo-dot">.</span>
+            <Image src="/images/Darwin-Logo-ClearBG.png" alt="" width={24} height={25} priority className="logo-mark" />
+            <span>darwin<span className="logo-dot">.</span></span>
           </Link>
 
           {!isWaitlist && (
@@ -141,7 +142,8 @@ export default function NavbarClient({
               <div className="mobile-menu-sheet">
                 <div className="flex items-center justify-between">
                   <Link href="/" className="logo-wordmark" onClick={() => setMobileOpen(false)}>
-                    darwin<span className="logo-dot">.</span>
+                    <Image src="/images/Darwin-Logo-ClearBG.png" alt="" width={24} height={25} className="logo-mark" />
+                    <span>darwin<span className="logo-dot">.</span></span>
                   </Link>
 
                   <button
