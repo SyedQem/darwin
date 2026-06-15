@@ -46,6 +46,7 @@ export default function NavbarClient({
               }
             }}
           >
+            <Image src="/images/logo.jpg" alt="Darwin logo" width={26} height={26} className="logo-mark" priority />
             darwin<span className="logo-dot">.</span>
           </Link>
 
@@ -141,6 +142,7 @@ export default function NavbarClient({
               <div className="mobile-menu-sheet">
                 <div className="flex items-center justify-between">
                   <Link href="/" className="logo-wordmark" onClick={() => setMobileOpen(false)}>
+                    <Image src="/images/logo.jpg" alt="Darwin logo" width={26} height={26} className="logo-mark" />
                     darwin<span className="logo-dot">.</span>
                   </Link>
 

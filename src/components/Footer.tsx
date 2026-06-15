@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
@@ -78,7 +79,8 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col gap-8 pt-6 pb-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-base font-bold tracking-tight">
+            <p className="inline-flex items-center gap-2 text-base font-bold tracking-tight">
+              <Image src="/images/logo.jpg" alt="Darwin logo" width={24} height={24} className="logo-mark logo-mark--sm" />
               darwin<span className="logo-dot">.</span>
             </p>
             <p className="text-muted mt-2 max-w-sm text-sm leading-6">
