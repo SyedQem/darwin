@@ -35,7 +35,7 @@ export default function NavbarClient({
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="container-vspr flex h-full items-center justify-between">
+        <div className={`${isWaitlist ? 'w-full px-6 md:px-12' : 'container-vspr'} flex h-full items-center justify-between`}>
           <Link 
             href={isWaitlist ? '#' : '/'} 
             className="logo-wordmark"
