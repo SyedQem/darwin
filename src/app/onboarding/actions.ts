@@ -5,6 +5,30 @@ import { createClient } from "@/lib/supabase/server";
 
 const EMAIL_ALREADY_REGISTERED = "Email already registered";
 
+/** Approved domains keyed by school ID */
+const SCHOOL_EMAIL_DOMAINS: Record<string, string> = {
+  carleton: "cmail.carleton.ca",
+  uottawa: "uottawa.ca",
+  algonquin: "algonquinlive.com",
+};
+
+/** Human-readable school names for error messages */
+const SCHOOL_NAMES: Record<string, string> = {
+  carleton: "Carleton University",
+  uottawa: "University of Ottawa",
+  algonquin: "Algonquin College",
+};
+
+/**
+ * Returns true when the email's domain exactly matches the required domain
+ * for the given school ID.
+ */
+function emailMatchesSchool(email: string, schoolId: string): boolean {
+  const domain = SCHOOL_EMAIL_DOMAINS[schoolId];
+  if (!domain) return false;
+  return email.trim().toLowerCase().endsWith("@" + domain);
+}
+
 // Only allow single-slash internal paths — no protocol-relative or absolute
 // URLs — to prevent open-redirect via `?next=`.
 function safeNext(raw: unknown): string | null {
@@ -52,6 +76,19 @@ interface OnboardingData {
 
 export async function createAccountAndProfile(data: OnboardingData) {
   const supabase = await createClient();
+
+  // ── Institution / email domain guard ─────────────────────────────────────
+  const requiredDomain = SCHOOL_EMAIL_DOMAINS[data.university];
+  if (!requiredDomain) {
+    return { error: "Please select a valid institution." };
+  }
+  if (!emailMatchesSchool(data.email, data.university)) {
+    const schoolName = SCHOOL_NAMES[data.university] ?? data.university;
+    return {
+      error: `The email address does not match the selected institution. ${schoolName} requires a @${requiredDomain} email address.`,
+    };
+  }
+  // ─────────────────────────────────────────────────────────────────────────
 
   if (data.magicCode && data.purchaseEmail) {
     const { data: isValid, error: rpcError } = await supabase.rpc("redeem_magic_code", {

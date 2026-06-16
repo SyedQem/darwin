@@ -57,6 +57,7 @@ h1, h2, h3, h4,
 /* ── Text Utilities ── */
 .text-secondary { color: var(--text-secondary); }
 .text-muted { color: var(--text-muted); }
+.text-error { color: #f87171; }
 .text-number-fade { color: rgba(255, 255, 255, 0.16); }
 
 /* ── Logo ── */
@@ -1256,6 +1257,14 @@ h1, h2, h3, h4,
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 .vspr-input::placeholder { color: var(--text-muted); }
+.vspr-input--error {
+  border-color: #f87171 !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15) !important;
+}
+.vspr-input--error:focus {
+  border-color: #f87171 !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.22) !important;
+}
 
 /* ── Auth Form ── */
 .auth-form-field {

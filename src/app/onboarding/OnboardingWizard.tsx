@@ -74,6 +74,21 @@ const SCHOOLS = [
   },
 ];
 
+/** Maps a school ID to its required email domain */
+const SCHOOL_EMAIL_DOMAINS: Record<string, string> = {
+  carleton: "cmail.carleton.ca",
+  uottawa: "uottawa.ca",
+  algonquin: "algonquinlive.com",
+};
+
+/** Returns true if the email domain matches the school's required domain */
+function emailMatchesSchool(email: string, schoolId: string): boolean {
+  const domain = SCHOOL_EMAIL_DOMAINS[schoolId];
+  if (!domain) return false;
+  const emailLower = email.trim().toLowerCase();
+  return emailLower.endsWith("@" + domain);
+}
+
 const STEP_META = [
   { label: "Your Name", description: "Let\u2019s get to know you" },
   { label: "Your University", description: "Where do you study?" },
@@ -208,9 +223,20 @@ export default function OnboardingWizard({ next }: { next?: string }) {
     );
   }, []);
 
+  /** True when the email domain matches the selected institution (or no school typed yet) */
+  const emailDomainValid =
+    email.trim() === "" || !university || emailMatchesSchool(email, university);
+
   const handleSubmit = useCallback(() => {
     if (!email.trim()) {
       setError("Email is required");
+      return;
+    }
+    if (!emailMatchesSchool(email, university)) {
+      const required = SCHOOL_EMAIL_DOMAINS[university];
+      setError(
+        `The email address does not match the selected institution. Please use a @${required} address.`,
+      );
       return;
     }
     if (!password || password.length < 6) {
@@ -585,8 +611,12 @@ export default function OnboardingWizard({ next }: { next?: string }) {
                     <input
                       id="ob-email"
                       type="email"
-                      className="vspr-input"
-                      placeholder="name@school.edu"
+                      className={`vspr-input${
+                        email.trim() && university && !emailDomainValid
+                          ? " vspr-input--error"
+                          : ""
+                      }`}
+                      placeholder={`name@${SCHOOL_EMAIL_DOMAINS[university] ?? "school.edu"}`}
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
@@ -595,9 +625,19 @@ export default function OnboardingWizard({ next }: { next?: string }) {
                       autoFocus
                       autoComplete="email"
                     />
-                    <p className="auth-form-helper text-secondary">
-                      Use your campus email.
-                    </p>
+                    {university && SCHOOL_EMAIL_DOMAINS[university] && (
+                      <p
+                        className={`auth-form-helper${
+                          email.trim() && !emailDomainValid
+                            ? " text-error"
+                            : " text-secondary"
+                        }`}
+                      >
+                        {email.trim() && !emailDomainValid
+                          ? `The email address does not match the selected institution. Use your @${SCHOOL_EMAIL_DOMAINS[university]} address.`
+                          : `Use your ${SCHOOLS.find((s) => s.id === university)?.name} email — @${SCHOOL_EMAIL_DOMAINS[university]}`}
+                      </p>
+                    )}
                   </motion.div>
 
                   <motion.div
@@ -724,7 +764,7 @@ export default function OnboardingWizard({ next }: { next?: string }) {
                 type="button"
                 className="pill-btn"
                 onClick={handleSubmit}
-                disabled={isPending}
+                disabled={isPending || !emailDomainValid || !email.trim() || !password || password.length < 6}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
