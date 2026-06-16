@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -78,8 +79,9 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col gap-8 pt-6 pb-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-base font-bold tracking-tight">
-              darwin<span className="logo-dot">.</span>
+            <p className="inline-flex items-center gap-2 text-base font-bold tracking-tight">
+              <Image src="/images/Darwin-Logo-ClearBG.png" alt="" width={24} height={25} className="logo-mark" />
+              <span>darwin<span className="logo-dot">.</span></span>
             </p>
             <p className="text-muted mt-2 max-w-sm text-sm leading-6">
               Campus marketplace for students.
