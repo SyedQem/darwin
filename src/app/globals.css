@@ -3049,7 +3049,7 @@ h1, h2, h3, h4,
   background: var(--bg-card);
   color: var(--text-secondary);
   font-size: 0.82rem;
-  font-family: var(--font-mono, monospace);
+  font-family: var(--font-body), sans-serif;
 }
 
 .referral-copy-btn {
