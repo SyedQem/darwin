@@ -32,6 +32,11 @@ function paymentIntentId(session: Stripe.Checkout.Session): string | null {
 }
 
 export async function POST(request: Request) {
+    if (!process.env.STRIPE_WEBHOOK_SECRET) {
+        console.error("[stripe webhook] STRIPE_WEBHOOK_SECRET is not configured");
+        return new Response("Server misconfigured", { status: 500 });
+    }
+
     const rawBody = await request.text();
     const signature = request.headers.get("stripe-signature");
 
@@ -91,6 +96,12 @@ export async function POST(request: Request) {
 
     if (rpcErr) {
         console.error("[stripe webhook] claim_founding_spot_guest", rpcErr);
+        // Roll back the idempotency row so Stripe retries will re-attempt
+        // processing instead of being permanently blocked.
+        await supabase
+            .from("webhook_events")
+            .delete()
+            .eq("event_id", event.id);
         return new Response("Claim failed", { status: 500 });
     }
 
